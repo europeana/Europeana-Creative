@@ -1,0 +1,9 @@
+[submodule "image-similarity"]
+	path = image-similarity
+	url = https://github.com/europeana/Europeana-Creative.git
+[submodule "image-similarity-client"]
+	path = image-similarity-client
+	url = https://github.com/europeana/Europeana-Creative.git
+[submodule "image-demo"]
+	path = image-demo
+	url = https://github.com/europeana/Europeana-Creative.git
