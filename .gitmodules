@@ -7,3 +7,6 @@
 [submodule "image-demo"]
 	path = image-demo
 	url = https://github.com/europeana/Europeana-Creative.git
+[submodule "api2-parent-pom"]
+	path = api2-parent-pom
+	url = https://github.com/europeana/Europeana-Creative.git
