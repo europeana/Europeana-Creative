@@ -1,0 +1,31 @@
+.clsHeaderCell {
+	font-size: 10pt;
+	background-color: #888888;
+	color: #FFFFFF;
+	border-right: 1px solid #AAAAAA;
+	overflow: hidden;
+	padding-left: 2pt;
+	padding-right: 2pt;
+}
+
+.clsCellBorder {
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+	padding-left: 3pt;
+	padding-right: 3pt;
+}
+
+.cls0_0 {
+	overflow: hidden;
+	font-family: Arial;
+	font-size: 10pt;
+	color: #000000;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+	background-color: #FFFFFF;
+	text-align: left;
+	vertical-align: top;
+	white-space: nowrap;
+	border-left: 1px solid #CCCCCC;
+}
