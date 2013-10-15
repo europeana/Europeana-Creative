@@ -1,5 +1,7 @@
 package eu.europeana.service.ir.image.api;
 
+import it.cnr.isti.feature.extraction.FeatureExtractionException;
+import it.cnr.isti.feature.extraction.Image2Features;
 import it.cnr.isti.melampo.index.searching.MelampoSearcherHub;
 import it.cnr.isti.melampo.vir.exceptions.BoFException;
 import it.cnr.isti.melampo.vir.exceptions.VIRException;
@@ -15,10 +17,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.service.ir.image.IRImageConfiguration;
-import eu.europeana.service.ir.image.domain.Image2Features;
+import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.domain.QueryResults;
-import eu.europeana.service.ir.image.exceptions.FeaturesExtractionException;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
 
 /**
@@ -30,7 +30,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	private Logger log = Logger.getLogger(getClass());
 
 	@Autowired
-	private IRImageConfiguration configuration;
+	private IRConfigurationImpl configuration;
 
 	private String dataset = null;
 
@@ -42,18 +42,19 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	private Image2Features img2ftx;
 
-	public ImageSearchingServiceImpl(IRImageConfiguration configuration) {
+	public ImageSearchingServiceImpl(IRConfigurationImpl configuration) {
 		this(configuration.getDefaultDataset(), configuration);
 	}
-	
-	public ImageSearchingServiceImpl(String dataset, IRImageConfiguration configuration) {
+
+	public ImageSearchingServiceImpl(String dataset,
+			IRConfigurationImpl configuration) {
 		this.configuration = configuration;
 		this.dataset = dataset;
 	}
 
-//	public ImageSearchingServiceImpl() {
-//		this(null);
-//	}
+	// public ImageSearchingServiceImpl() {
+	// this(null);
+	// }
 
 	@Override
 	public void init() {
@@ -65,60 +66,40 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 				index = new MelampoSearcherHub();
 				// File test = new File(".");
 				// System.out.println(">>>>>> " + test.getAbsolutePath());
-				File indexFolder = getConfiguration().getIndexFolder(getDataset());
-				File indexConfFolder = getConfiguration().getIndexConfFolder(getDataset());
+				File indexFolder = getConfiguration().getIndexFolder(
+						getDataset());
+				File indexConfFolder = getConfiguration().getIndexConfFolder(
+						getDataset());
 				if (indexFolder.exists()) {
 					log.trace("loading image index from following location: "
 							+ indexFolder.getAbsolutePath());
 					// the indices.properties and LIRE_MP7ALL properties
 					index.openIndices(indexConfFolder);
 					// System.out.println("test");
-				} else{ // prepare folder
+				} else { // prepare folder
 					indexFolder.mkdirs();
 				}
 
 			}
 		} catch (BoFException e) {
-			log.trace("No image index available!");
-			//e.printStackTrace();
+			log.warn("No image index available!", e);
+			// e.printStackTrace();
 		} catch (VIRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn("Cannot open image index!", e);
 		}
 
 		// init feature extraction bean
 		try {
 			if (img2ftx == null)
-				img2ftx = new Image2Features(getDataset(), getConfiguration());
-		} catch (FeaturesExtractionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				img2ftx = new Image2Features(getConfiguration()
+						.getIndexConfFolder(getDataset()));
+		} catch (Exception e) {
+			log.warn("Cannot instantiate feature extractor!", e);
 		}
 	}
 
 	public void searchSimilar(EuropeanaId imageQueryId)
 			throws ImageSearchingException {
-
-		// try {
-		// List<EuropeanaCollection> coll = dataManagement.getCollections();
-		// for (int j = 0; j < coll.size(); j++) {
-		// long collId = coll.get(j).getId();
-		//
-		// List<EuropeanaId> objects =
-		// dataManagement.getCollectionObjects(collId);
-		//
-		// for (int i = 0; i < objects.size(); i++) {
-		// EuropeanaId id = objects.get(i);
-		// System.out.println("uri " + i + ": " + id.getEuropeanaUri());
-		// }
-		// }
-		//
-		//
-		//
-		// } catch (AssetsClientException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
 
 		ArrayList<String> vals = new ArrayList<String>();
 		ArrayList<String> flds = new ArrayList<String>();
@@ -141,8 +122,21 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	public void searchSimilar(InputStream imageQueryObj)
 			throws ImageSearchingException {
 		log.info("searching by obj ");
+		
 		try {
-			String features = img2ftx.image2Features(imageQueryObj);
+			String features = img2ftx.extractFeatures(imageQueryObj);
+			searchByImageFeatures(features);
+
+		} catch (FeatureExtractionException e) {
+			throw new ImageSearchingException(
+					"Cannot extract features from (image) input stream! ", e);
+		}
+
+	}
+
+	private void searchByImageFeatures(String features)
+			throws ImageSearchingException {
+		try {
 			ArrayList<String> vals = new ArrayList<String>();
 			ArrayList<String> flds = new ArrayList<String>();
 
@@ -154,9 +148,6 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 			throw new ImageSearchingException("Error performing search by obj",
 					e);
 		} catch (IOException e) {
-			throw new ImageSearchingException("Error performing search by obj",
-					e);
-		} catch (FeaturesExtractionException e) {
 			throw new ImageSearchingException("Error performing search by obj",
 					e);
 		}
@@ -164,25 +155,15 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	public void searchSimilar(URL imageQueryURL) throws ImageSearchingException {
 		log.info("searching by URL " + imageQueryURL.toString());
-		try {
-			String features = img2ftx.image2Features(imageQueryURL);
-			ArrayList<String> vals = new ArrayList<String>();
-			ArrayList<String> flds = new ArrayList<String>();
+		try{
+			String features = img2ftx.extractFeatures(imageQueryURL);
+			searchByImageFeatures(features);
 
-			flds.add(it.cnr.isti.melampo.index.Parameters.LIRE_MP7ALL);
-			vals.add(features);
-			index.query(vals, flds, false);
-			queryResults.setResults(index.getResults(0, NUM_RESULTS));
-		} catch (VIRException e) {
-			throw new ImageSearchingException("Error performing search by URL "
-					+ imageQueryURL.toString(), e);
-		} catch (IOException e) {
-			throw new ImageSearchingException("Error performing search by URL "
-					+ imageQueryURL.toString(), e);
-		} catch (FeaturesExtractionException e) {
-			throw new ImageSearchingException("Error performing search by URL "
-					+ imageQueryURL.toString(), e);
+		} catch (FeatureExtractionException e) {
+			throw new ImageSearchingException(
+					"Cannot extract features from (image) input stream! ", e);
 		}
+
 	}
 
 	public List<EuropeanaId> getResults(int startFrom, int numResults) {
@@ -195,9 +176,9 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	}
 
 	@Override
-	public IRImageConfiguration getConfiguration() {
+	public IRConfigurationImpl getConfiguration() {
 		if (configuration == null)
-			configuration = new IRImageConfiguration();
+			configuration = new IRConfigurationImpl();
 		return configuration;
 	}
 
@@ -205,5 +186,4 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		return dataset;
 	}
 
-	
 }

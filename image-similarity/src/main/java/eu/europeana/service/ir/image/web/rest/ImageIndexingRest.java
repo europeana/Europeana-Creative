@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.europeana.api2.web.model.json.ApiError;
 import eu.europeana.api2.web.model.json.abstracts.ApiResponse;
 import eu.europeana.api2.web.model.json.abstracts.IndexingStatusResponse;
-import eu.europeana.service.ir.image.IRImageConfiguration;
+import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageIndexingService;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.model.IndexingStatus;
@@ -37,7 +37,7 @@ public class ImageIndexingRest extends BaseRestService {
 	ImageIndexingService imageIndexing;
 	
 	@Autowired
-	IRImageConfiguration configuration;
+	IRConfigurationImpl configuration;
 
 	public void setImageIndexingService(ImageIndexingService imageIndexing) {
 		this.imageIndexing = imageIndexing;
@@ -46,16 +46,16 @@ public class ImageIndexingRest extends BaseRestService {
 	/**
 	 * @param configuration
 	 */
-	public void setConfiguration(IRImageConfiguration configuration) {
+	public void setConfiguration(IRConfigurationImpl configuration) {
 		this.configuration = configuration;
 	}
 	
 	/**
 	 * @return
 	 */
-	public IRImageConfiguration getConfiguration() {
+	public IRConfigurationImpl getConfiguration() {
 		if (configuration == null)
-			configuration = new IRImageConfiguration();
+			configuration = new IRConfigurationImpl();
 
 		return configuration;
 	}

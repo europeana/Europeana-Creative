@@ -33,7 +33,7 @@
         http://www.springframework.org/schema/security/spring-security-3.0.xsd
         ">
     
-    <beans:bean id="configuration" class="eu.europeana.service.ir.image.IRImageConfiguration"  init-method="init"/>
+    <beans:bean id="configuration" class="eu.europeana.service.ir.image.IRConfigurationImpl"/>
    
    <!-- web service image index implementation:  eu.europeana.assets.service.ir.image.api.ImageSearchingServiceWsImpl --> 
    <!-- stand-alone image index implementation: eu.europeana.assets.service.ir.image.api.ImageSearchingServiceImpl -->

@@ -1,5 +1,7 @@
 package eu.europeana.assets.ir.image.api.evaluation;
 
+import it.cnr.isti.indexer.IndexHelper;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

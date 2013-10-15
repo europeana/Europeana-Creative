@@ -1,7 +1,9 @@
 package eu.europeana.assets.ir.image.api;
 
 import static org.junit.Assert.assertEquals;
+import it.cnr.isti.indexer.IndexHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -11,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.assets.ir.image.api.evaluation.IndexHelper;
-import eu.europeana.service.ir.image.IRImageConfiguration;
+import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageIndexingService;
 import eu.europeana.service.ir.image.api.ImageIndexingServiceImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
@@ -25,7 +26,7 @@ public class ImageIndexingServiceTest {
 	ImageIndexingService imageIndexingService;
 
 	@Autowired
-	IRImageConfiguration configuration;
+	IRConfigurationImpl configuration;
 
 	ImageIndexingService testImageIndexingService;
 
@@ -36,7 +37,7 @@ public class ImageIndexingServiceTest {
 		// TODO: - use config.getDefaultDataset();
 		int indexedImages = imageIndexingService.insertCollectionByUrls(
 				datasetName,
-				getTestThumbnails(configuration.getDefaultDataset()));
+				getThumbnailsMap(configuration.getDefaultDataset()));
 		System.out.println("successfully indexed images: " + indexedImages);
 		assertEquals(6, indexedImages);
 	}
@@ -49,16 +50,18 @@ public class ImageIndexingServiceTest {
 				configuration);
 
 		int indexedImages = testImageIndexingService.insertCollectionByUrls(
-				testDataset, getTestThumbnails(testDataset));
+				testDataset, getThumbnailsMap(testDataset));
+		
 		System.out.println("successfully indexed images: " + indexedImages);
 		assertEquals(42, indexedImages);
 		//TODO: check if indexing process introduces duplications
 	}
 
-	private Map<String, String> getTestThumbnails(String dataset)
+	
+	private Map<String, String> getThumbnailsMap(String dataset)
 			throws IOException {
-		String datasetFile = "./src/test/resources/datasets/" + dataset
-				+ ".csv";
+		
+		File datasetFile = configuration.getDatasetFile(dataset);
 
 		IndexHelper ixHelper = new IndexHelper();
 		return ixHelper.getThumbnailsMap(datasetFile);

@@ -1,10 +1,10 @@
 package eu.europeana.service.ir.image.api;
 
-import eu.europeana.service.ir.image.Configuration;
+import eu.europeana.service.ir.image.IRConfiguration;
 
 public interface ContentRetrievalService {
 
-	public Configuration getConfiguration();
+	public IRConfiguration getConfiguration();
 	
 	public void init();
 }

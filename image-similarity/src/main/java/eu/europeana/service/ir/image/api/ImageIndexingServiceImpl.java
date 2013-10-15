@@ -1,5 +1,6 @@
 package eu.europeana.service.ir.image.api;
 
+import it.cnr.isti.feature.extraction.Image2Features;
 import it.cnr.isti.melampo.index.indexing.LireIndexer;
 import it.cnr.isti.melampo.index.settings.LireSettings;
 import it.cnr.isti.melampo.vir.exceptions.VIRException;
@@ -26,8 +27,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessor;
-import eu.europeana.service.ir.image.IRImageConfiguration;
-import eu.europeana.service.ir.image.domain.Image2Features;
+import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.index.indexing.ExtendedLireIndexer;
 import eu.europeana.service.ir.image.model.IndexingStatus;
@@ -39,7 +39,7 @@ import eu.europeana.service.ir.image.model.IndexingStatus;
 public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 	@Autowired
-	private IRImageConfiguration configuration;
+	private IRConfigurationImpl configuration;
 
 	private final String dataset;
 
@@ -53,7 +53,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	private Logger log = Logger.getLogger(getClass());
 
 	public ImageIndexingServiceImpl(String dataset,
-			IRImageConfiguration configuration) {
+			IRConfigurationImpl configuration) {
 		this.configuration = configuration;
 
 		if (dataset == null)
@@ -62,7 +62,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			this.dataset = dataset;
 	}
 
-	public ImageIndexingServiceImpl(IRImageConfiguration configuration) {
+	public ImageIndexingServiceImpl(IRConfigurationImpl configuration) {
 		this(null, configuration);
 	}
 
@@ -73,14 +73,14 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	/**
 	 * @return
 	 */
-	public IRImageConfiguration getConfiguration() {
+	public IRConfigurationImpl getConfiguration() {
 		return configuration;
 	}
 
 	/**
 	 * @param configuration
 	 */
-	public void setConfiguration(IRImageConfiguration configuration) {
+	public void setConfiguration(IRConfigurationImpl configuration) {
 		this.configuration = configuration;
 	}
 
@@ -103,7 +103,8 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			featuresArchiveFile.getParentFile().mkdirs();
 
 		try {
-			img2Features = new Image2Features(dataset, configuration);
+			//img2Features = new Image2Features(dataset, configuration);
+			img2Features = new Image2Features(configuration.getIndexConfFolder(dataset));
 			// features archive, Feature classes, VirId, FeaturesCollection
 			// array
 			coll = new FeaturesCollectorsArchive(featuresArchiveFile,
@@ -121,8 +122,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		try {
 			mp7cIndex.closeIndex();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.trace("Unexpected exception thrown when closing image index: ", e);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			throws ImageIndexingException {
 		try {
 
-			String imgFeatures = img2Features.image2Features(imageURL);
+			String imgFeatures = img2Features.extractFeatures(imageURL);
 			InputStream is = new ByteArrayInputStream(imgFeatures.getBytes());
 
 			// read it with BufferedReader
@@ -162,7 +162,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			throws ImageIndexingException {
 
 		try {
-			String imgFeatures = img2Features.image2Features(imageObj);
+			String imgFeatures = img2Features.extractFeatures(imageObj);
 			InputStream is = new ByteArrayInputStream(imgFeatures.getBytes());
 
 			// read it with BufferedReader
@@ -179,11 +179,11 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			LireObject obj = new LireObject(features);
 			mp7cIndex.addDocument(obj, docID);
 		} catch (ArchiveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ImageIndexingException(
+					"Feature archive access exception:", e);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ImageIndexingException(
+					"Indexing image by URL thows exception:", e);
 		}
 
 	}

@@ -87,7 +87,7 @@
 
 		<dependency>
 			<groupId>it.cnr.isti.melampo</groupId>
-			<artifactId>melampo-index</artifactId>
+			<artifactId>melampo-index-builder</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
@@ -180,10 +180,7 @@
 		<version.core>2.0</version.core>
 		<version.springAop>3.1.2.RELEASE</version.springAop>
 		<version.spring.tx>3.1.2.RELEASE</version.spring.tx>
-		<image_index_location>/app/eucreative/imagedemo/index</image_index_location>
-		<!--  
-		<image_fx_config_location>/app/eucreative/imagedemo/conf/image-fx.properties</image_fx_config_location>
-		 -->
+		<image_index_location>./src/test/resources/imagesimilarityhome</image_index_location>
 		<europeana_api_key>HqHRSeD3j</europeana_api_key>
 		<version.spring>3.1.2.RELEASE</version.spring>
 		<version.springSecurityOauth>1.0.0.M6a</version.springSecurityOauth>

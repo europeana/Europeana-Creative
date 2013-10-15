@@ -1,6 +1,6 @@
 package eu.europeana.service.ir.image.web.rest;
 
-import eu.europeana.service.ir.image.BaseConfiguration;
+import eu.europeana.service.ir.image.IRConfiguration;
 
 public abstract class BaseRestService {
 
@@ -9,5 +9,5 @@ public abstract class BaseRestService {
 		return getConfiguration().getComponentName();
 	}
 	
-	public abstract BaseConfiguration getConfiguration(); 
+	public abstract IRConfiguration getConfiguration(); 
 }

@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
-import eu.europeana.service.ir.image.IRImageConfiguration;
+import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
 import eu.europeana.service.ir.image.api.ImageSearchingServiceImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
@@ -27,7 +27,7 @@ public class ImageSearchingServiceTest {
 	ImageSearchingService imageSearchingService;
 	
 	@Autowired
-	IRImageConfiguration configuration;
+	IRConfigurationImpl configuration;
 	
 	
 	@Test
