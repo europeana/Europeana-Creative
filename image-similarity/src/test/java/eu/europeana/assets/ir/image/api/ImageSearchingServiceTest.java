@@ -67,6 +67,26 @@ public class ImageSearchingServiceTest {
 		assertEquals(euId.getNewId(), results.get(0).getNewId());
 	}
 
+	@Test
+	public void testSearchById_DemoDs() throws ImageIndexingException, IOException, ImageSearchingException{
+		EuropeanaId euId = new EuropeanaId();
+		euId.setNewId("/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA");
+		
+		//create index searcher for test dataset
+		ImageSearchingService imageSearchingServiceTest = new ImageSearchingServiceImpl("demo", configuration);
+		//open index
+		imageSearchingServiceTest.init();
+		//perform search
+		imageSearchingServiceTest.searchSimilar(euId);
+		List<EuropeanaId> results = imageSearchingServiceTest.getResults(0, 5);
+		
+		for (EuropeanaId europeanaId : results) {
+			System.out.println(europeanaId.getNewId());
+		}
+		//verify results
+		assertTrue(results.size() > 0);
+		assertEquals(euId.getNewId(), results.get(0).getNewId());
+	}
 	
 
 
