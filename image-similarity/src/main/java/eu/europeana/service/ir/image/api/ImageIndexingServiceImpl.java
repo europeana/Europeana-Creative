@@ -234,6 +234,10 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 				log.warn("Wrong thumbnail URL format:" + imageUrl);
 				skipedFileCount++;
 				// e.printStackTrace();
+			}catch (ImageIndexingException e) {
+				log.warn("Cannot index thumbnail:" + imageUrl, e);
+				skipedFileCount++;
+				// e.printStackTrace();
 			}
 
 			if ((indexedImageCount % 1000) == 0) {

@@ -42,7 +42,7 @@ public class ImageIndexingServiceTest {
 		assertEquals(6, indexedImages);
 	}
 
-	@Test
+//	@Test
 	public void testIndexCollectionByUrls() throws ImageIndexingException,
 			IOException {
 		String testDataset = "test";
@@ -57,6 +57,21 @@ public class ImageIndexingServiceTest {
 		//TODO: check if indexing process introduces duplications
 	}
 
+	@Test
+	public void testIndexDemoDataset() throws ImageIndexingException,
+			IOException {
+		String demoDataset = "demo";
+		testImageIndexingService = new ImageIndexingServiceImpl(demoDataset,
+				configuration);
+
+		int indexedImages = testImageIndexingService.insertCollectionByUrls(
+				demoDataset, getThumbnailsMap(demoDataset));
+		
+		System.out.println("successfully indexed images: " + indexedImages);
+		
+		//assertEquals(42, indexedImages);
+		//TODO: check if indexing process introduces duplications
+	}
 	
 	private Map<String, String> getThumbnailsMap(String dataset)
 			throws IOException {
