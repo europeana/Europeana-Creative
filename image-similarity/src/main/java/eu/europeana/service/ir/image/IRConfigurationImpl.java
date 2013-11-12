@@ -2,6 +2,8 @@ package eu.europeana.service.ir.image;
 
 import it.cnr.isti.config.index.IndexConfigurationImpl;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 
@@ -84,7 +86,20 @@ public class IRConfigurationImpl extends IndexConfigurationImpl implements IRCon
 			apiKey = getConfigProperty(PROP_API_KEY);
 		return apiKey;
 	}
+
 	
+	/**
+	 * see also {@link #getDatasetFile(String)}
+	 * @param dataset
+	 * @return
+	 */
+	@Override
+	public File getDatasetUrlsFile(String dataset) {
+		if(dataset == null)
+			return new File(getDatasetsFolder(), getDefaultDataset() + ".urls.csv");
+		else
+			return new File(getDatasetsFolder(), dataset+".urls.csv");
+	}
 	
 
 }

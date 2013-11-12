@@ -2,6 +2,8 @@ package eu.europeana.service.ir.image;
 
 import it.cnr.isti.config.index.IndexConfiguration;
 
+import java.io.File;
+
 	/**
 	 * Common configuration facility for retrieval services.<br/>
 	 * @author Sergiu Gordea <sergiu.gordea_at_ait.ac.at>
@@ -20,4 +22,7 @@ import it.cnr.isti.config.index.IndexConfiguration;
 //		
 //		public void init();
 		public String getApiKey();
+		
+		public File getDatasetUrlsFile(String dataset);
+		
 }
