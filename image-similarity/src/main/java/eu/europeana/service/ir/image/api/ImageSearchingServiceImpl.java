@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
+import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.domain.QueryResults;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
@@ -30,7 +31,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	private Logger log = Logger.getLogger(getClass());
 
 	@Autowired
-	private IRConfigurationImpl configuration;
+	private IRConfiguration configuration;
 
 	private String dataset = null;
 
@@ -42,12 +43,12 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	private Image2Features img2ftx;
 
-	public ImageSearchingServiceImpl(IRConfigurationImpl configuration) {
+	public ImageSearchingServiceImpl(IRConfiguration configuration) {
 		this(configuration.getDefaultDataset(), configuration);
 	}
 
 	public ImageSearchingServiceImpl(String dataset,
-			IRConfigurationImpl configuration) {
+			IRConfiguration configuration) {
 		this.configuration = configuration;
 		this.dataset = dataset;
 	}
@@ -112,7 +113,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 			queryResults.setResults(index.getResults(0, NUM_RESULTS));
 		} catch (VIRException e) {
 			throw new ImageSearchingException("Error performing search by id "
-					+ imageQueryId, e);
+					+ imageQueryId.getNewId(), e);
 		} catch (IOException e) {
 			throw new ImageSearchingException("Error performing search by id "
 					+ imageQueryId, e);
@@ -171,12 +172,16 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	}
 
 	@Override
-	public int getTotalResults() {
-		return queryResults.getResults(0, -1).size();
+	public int getTotalResults() throws ImageSearchingException {
+		try{
+			return queryResults.getResults(0, -1).size();
+		}catch(NullPointerException e){
+			throw new ImageSearchingException(ImageSearchingException.MESSAGE_NO_RESULTS, e);
+		}
 	}
 
 	@Override
-	public IRConfigurationImpl getConfiguration() {
+	public IRConfiguration getConfiguration() {
 		if (configuration == null)
 			configuration = new IRConfigurationImpl();
 		return configuration;

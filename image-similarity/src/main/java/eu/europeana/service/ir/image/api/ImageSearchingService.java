@@ -50,8 +50,16 @@ public interface ImageSearchingService extends ContentRetrievalService {
 	 */
 	public List<EuropeanaId> getResults(int startFrom, int numResults) throws ImageSearchingException;
 
-	public abstract int getTotalResults();
+	/**
+	 * 
+	 * @return the total number of results
+	 * @throws ImageSearchingException if the search was not invoked (successfully) before asking the results
+	 */
+	public abstract int getTotalResults() throws ImageSearchingException;
 
+	/**
+	 * Initializes the Image searching service by opening the image indices
+	 */
 	public abstract void init();
 
 }
