@@ -17,11 +17,15 @@ import org.junit.Test;
 
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessorTest;
+import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
+import eu.europeana.service.ir.image.api.ImageSearchingService;
+import eu.europeana.service.ir.image.api.ImageSearchingServiceImpl;
+import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
 
 public class EvaluationDatasetBuilder extends
-		ThumbnailsForCollectionAccessorTest {
+		ThumbnailsForCollectionAccessorTest implements IRTestConfigurations {
 
 	public static String CLASS_PAINTINGS = "paintings";
 	public static String CLASS_OBJECTS = "objects";
@@ -53,6 +57,7 @@ public class EvaluationDatasetBuilder extends
 	
 	final String DATASET_DEMO = "demo";
 	private String dataset = null;
+	private ImageSearchingService imageSearchingService;
 
 	//@Test
 	public void createDemoDataset() throws IOException {
@@ -259,7 +264,7 @@ public class EvaluationDatasetBuilder extends
 		BufferedReader reader = null;
 		//String headerLine = null;
 		String line = null;
-		BufferedWriter datasetWriter = getDataSetFileWriter();
+		BufferedWriter datasetWriter = getDataSetFileWriter(false);
 		
 		
 		for (int i = 0; i < collectionFiles.length; i++) {
@@ -288,29 +293,28 @@ public class EvaluationDatasetBuilder extends
 		datasetWriter.close();
 	}
 
-	private BufferedWriter getDataSetFileWriter() throws IOException {
-		File datasetFile = getDataSetFile();
+	private BufferedWriter getDataSetFileWriter(boolean urls) throws IOException {
+		File datasetFile = getDataSetFile(urls);
 		datasetFile.getParentFile().mkdirs();
 		
 		return new BufferedWriter(new FileWriter(datasetFile));  
 	}
 		
-	private File getDataSetFile() {
-		IRConfiguration config = new IRConfigurationImpl();
-		return config.getDatasetFile(getDataset());		
+	private File getDataSetFile(boolean urls) {
+		IRConfiguration config = getConfig();
+		if(urls)
+			return config.getDatasetUrlsFile(getDataset());
+		else
+			return config.getDatasetFile(getDataset());		
 	}
 
+	
 	public void testGetThumbnailsForCollectionLimit() {
 		// avoid execution
 	}
 
 	public void testGetThumbnailsForCollectionAll() {
 		// avoid execution
-	}
-
-	@Override
-	protected String getCollectionsCvsFolder() {
-		return "./src/test/resources/collections/"+getDataset()+"/";
 	}
 
 	public String getDataset() {
@@ -321,11 +325,11 @@ public class EvaluationDatasetBuilder extends
 		this.dataset = dataset;
 	}
 	
-	@Test
+	//@Test
 	public void downloadThumbnails() throws FileNotFoundException, IOException{
 		
 		setDataset(DATASET_DEMO);
-		IRConfiguration config = new IRConfigurationImpl();
+		IRConfiguration config = getConfig();
 		File datasetFile = config.getDatasetFile(DATASET_DEMO);
 		
 		IndexHelper ixHelper = new IndexHelper();
@@ -341,4 +345,67 @@ public class EvaluationDatasetBuilder extends
 			System.out.println(itemId);
 		}
 	}
+
+	protected IRConfiguration getConfig() {
+		IRConfiguration config = new IRConfigurationImpl();
+		return config;
+	}
+	
+	@Test
+	public void buildIndexedUrlsFile() throws FileNotFoundException, IOException, ImageSearchingException{
+		
+		setDataset(DATASET_DEMO);
+		IRConfiguration config = getConfig();
+		File datasetFile = config.getDatasetFile(getDataset());
+		
+		IndexHelper ixHelper = new IndexHelper();
+		Map<String, String> thumbnailsMap = ixHelper.getThumbnailsMap(datasetFile);
+		BufferedWriter indexedUrlsWriter = getDataSetFileWriter(true);
+		EuropeanaId euId = new EuropeanaId();
+		int counter = 0;
+		
+		for (Map.Entry<String, String> thumbnail : thumbnailsMap.entrySet()) {
+			
+			
+			euId.setNewId(thumbnail.getKey());
+			try{
+				getImageSearchingService().searchSimilar(euId);
+			
+				if(getImageSearchingService().getTotalResults() > 0){
+					//write to file
+					indexedUrlsWriter.append(thumbnail.getKey()).append("; ");
+					indexedUrlsWriter.append(thumbnail.getValue()).append("\n");
+					counter++;
+				}else{
+					//not indexed yet
+					System.out.println("Skipped item: " + euId.getNewId());
+				}
+				
+			}catch(ImageSearchingException e){
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		System.out.println("correct items: " + counter);
+	}
+	
+	public ImageSearchingService getImageSearchingService() {
+		if (imageSearchingService == null){
+			imageSearchingService = new ImageSearchingServiceImpl(getDataset(),
+					getConfig());
+			imageSearchingService.init();
+		}
+		return imageSearchingService;
+	}
+
+	@Override
+	public String getCollectionsCvsFolder(String dataset) {
+		return COLLECTIONS_FOLDER + dataset +"/";
+	}
+	
+	@Override
+	protected String getCollectionsCvsFolder() {
+		return getCollectionsCvsFolder(getDataset());
+	}
+
 }
