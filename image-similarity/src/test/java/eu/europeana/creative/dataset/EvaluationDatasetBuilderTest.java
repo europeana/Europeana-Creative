@@ -24,7 +24,7 @@ import eu.europeana.service.ir.image.api.ImageSearchingService;
 import eu.europeana.service.ir.image.api.ImageSearchingServiceImpl;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
 
-public class EvaluationDatasetBuilder extends
+public class EvaluationDatasetBuilderTest extends
 		ThumbnailsForCollectionAccessorTest implements IRTestConfigurations {
 
 	public static String CLASS_PAINTINGS = "paintings";
@@ -192,7 +192,7 @@ public class EvaluationDatasetBuilder extends
 				null, // "butterflies",
 				"building", // what
 				null, // who
-				null, null, // provider
+				null, null, null, // provider
 				new String[] { "NOT gips", "NOT capitel" });// object type
 		assertEquals(192, objects19);
 
@@ -210,7 +210,7 @@ public class EvaluationDatasetBuilder extends
 				null, // "butterflies",
 				"\"clock tower\"", // what
 				null, // who
-				"IMAGE", "CultureGrid", new String[] { "NOT bridge",
+				"IMAGE", "CultureGrid", null, new String[] { "NOT bridge",
 						"NOT square" });// object type
 		assertEquals(296, objects21);
 
@@ -220,7 +220,7 @@ public class EvaluationDatasetBuilder extends
 				null, // "butterflies",
 				"palace", // what
 				null, // who
-				null, null, new String[] { "room", "interior", "NOT Mary",
+				null, null, null, new String[] { "room", "interior", "NOT Mary",
 						"NOT \"Veliko Tarnovo\"" });// object type
 		assertEquals(36, objects22);
 
@@ -229,7 +229,7 @@ public class EvaluationDatasetBuilder extends
 				null, // "butterflies",
 				"palace", // what
 				null, // who
-				null, null, new String[] { "room", "interior", "NOT Mary",
+				null, null, null, new String[] { "room", "interior", "NOT Mary",
 						"NOT \"Veliko Tarnovo\"" });// object type
 		assertEquals(95, objects23);
 
@@ -239,7 +239,7 @@ public class EvaluationDatasetBuilder extends
 				null, // "butterflies",
 				"\"Durham Cathedral\"", // what
 				null, // who
-				"IMAGE", null, new String[] { "NOT interior", "NOT Cloister",
+				"IMAGE", null, null, new String[] { "NOT interior", "NOT Cloister",
 						"NOT Sanctuary", "NOT roof", "NOT exhibit",
 						"NOT \"vibration tests\"" });// object type
 		assertEquals(154, objects24);
@@ -247,11 +247,10 @@ public class EvaluationDatasetBuilder extends
 		int objects25 = buildImageSet("OpenUp-butterfly",
 				"11617_Ag_EU_OpenUp*", // "2023901_Ag_EU_NaturalEurope_all",
 				new String[]{CLASS_INSECTS, SUB_CLASS_BUTTERFLIES},
-				400, 500, 
 				"\"Zoological collections of the University of Tartu\"", // "butterflies",
 				null, // what
 				null, // who
-				null, null, null);
+				null, null, null, null, 400, 500);
 		assertEquals(500, objects25);
 		
 		performDatasetAggregation();
