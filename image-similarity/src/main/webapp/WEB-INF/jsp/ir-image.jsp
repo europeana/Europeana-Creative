@@ -94,7 +94,7 @@
 	
 	<p>Build date: BUILD_DATE</p>
 	
-	<div id="footer">ASSETS is co-funded by the European Commission under the ICT Policy Support Programme </div>
+	<div id="footer">Europeana Creative project is co-funded by the European Commission under the ICT Policy Support Programme </div>
 
  							</div> <!-- end of container --> 
 </div> <!-- end of wrapper -->
