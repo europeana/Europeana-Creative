@@ -29,51 +29,11 @@ String test = "Geo-mapping-service";
 		</header>
 		<div id="mainblock">
 			<div id="content">
-				<!-- Box for the Service Description -->
-					<div class="">
-						<h3>Annotation</h3>
-						<div class="left">
-							<img src="img/indexing.png" height="64" />
-						</div>
-						<p>Annotation component is a service that implements the management and indexing of UserTags and ImageAnnotations</p>
-					</div>
-
-					<div id="table" style="width: 100%;">	
-					<table>
-						<thead>
-						<tr>
-							<td class="clsHeaderCell">Method</td>
-							<td class="clsHeaderCell">Response</td>
-							<td class="clsHeaderCell">Path</td>
-							<td class="clsHeaderCell">Function</td>
-						</tr>
-						</thead>
-						<tr>
-							<td class="clsCellBorder cls0_0">GET</td>
-							<td class="clsCellBorder">TEXT</td>
-							<td class="clsCellBorder"><%=test %></td>
-							<td class="clsCellBorder">Display the name of the current component</td>
-						</tr>
-						
-						
-						<tr>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-							<td>&nbsp;</td>
-						</tr>
-					</table>
+				<div id="map-canvas"><h3>Mozart Places in Vienna</h3></div>
+				<div id="mozart"><h3>Details about Mozart Places</h3>
+					<img src="img/mozart.jpeg" class="annotatable" alt="anno">
+				</div>
 					
-					</div>
-					<!--  end table div -->	
-					<table>
-						<tr>
-							<td><div id="map-canvas"><h3>Mozart Places in Vienna</h3></div></td>
-							<td><div id="mozart"><h3>Details about Mozart Places</h3>
-								<img src="img/mozart.jpeg" class="annotatable" alt="anno">
-							</div></td>
-						</tr>
-					</table>
 			</div>
 			<!-- end of content -->
 		</div>
@@ -98,7 +58,6 @@ String test = "Geo-mapping-service";
  		var mapOptions = {
  			mapTypeId: google.maps.MapTypeId.ROADMAP
  		};
- 		alert(document.getElementById('map-canvas'));
  		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
  		var kmlLayer = new google.maps.KmlLayer({
  			url: 'https://dl.dropboxusercontent.com/u/45528256/mozart.kml'
