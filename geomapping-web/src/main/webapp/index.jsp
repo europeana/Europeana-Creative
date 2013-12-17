@@ -29,11 +29,12 @@ String test = "Geo-mapping-service";
 		</header>
 		<div id="mainblock">
 			<div id="content">
-				<div id="map-canvas"><h3>Mozart Places in Vienna</h3></div>
-				<div id="mozart"><h3>Details about Mozart Places</h3>
+				<table><tr>
+				<td><div id="map-canvas" style="width: 800px; height: 700px"><h3>Mozart Places in Vienna</h3></div></td>
+				<td><div id="mozart"><h3>Details about Mozart Places</h3>
 					<img src="img/mozart.jpeg" class="annotatable" alt="anno">
-				</div>
-					
+				</div></td>
+				<tr></table>
 			</div>
 			<!-- end of content -->
 		</div>
