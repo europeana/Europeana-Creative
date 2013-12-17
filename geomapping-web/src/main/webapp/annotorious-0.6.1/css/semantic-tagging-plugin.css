@@ -1,0 +1,53 @@
+.semtagging-editor-container {
+  min-height:20px;
+  padding:3px 0px;
+  background:url('semtagging-editor-container.png');
+  padding:4px 10px;
+}
+
+.semtagging-tag {
+  margin:2px 4px 2px 0px;
+  line-height:140%;
+  font-family:'lucida grande',tahoma,verdana,arial,sans-serif;
+  font-size:12px;
+  background-color:#383838;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  -khtml-border-radius:3px;
+  border-radius:3px;
+  border:1px solid #888;
+  color:#ccc;
+  text-decoration:none;
+  display:inline-block;
+  padding:2px 4px;
+}
+
+.semtagging-editor-tag {
+
+}
+
+.semtagging-popup-tag {
+
+}
+
+.semtagging-editor-tag:hover {
+  background-color:#484848;
+}
+
+.accepted, .accepted:hover {
+  background-color:#009900;
+  background:-webkit-gradient(linear,left top,left bottom,from(#00aa00),to(#007700));
+  background:-moz-linear-gradient(top,#00aa00,#007700);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#00aa00',endColorstr='#007700');
+  border:1px solid #004400;
+  color:#fff;
+}
+
+.rejected, .rejected:hover {
+  background-color:#aa2222;
+  background:-webkit-gradient(linear,left top,left bottom,from(#662222),to(#bb2222));
+  background:-moz-linear-gradient(top,#662222,#bb2222);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#662222',endColorstr='#bb2222');
+  border:1px solid #440000;
+  color:#400;
+}
