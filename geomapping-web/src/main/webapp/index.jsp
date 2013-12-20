@@ -31,6 +31,10 @@ String test = "Geo-mapping-service";
 		</header>
 		<div id="mainblock">
 			<div id="content">
+				<form>
+					Search: <input type="text" name="europeana_search">
+					<input type="submit" value="Search">
+				</form>
 				<table><tr>
 				<td><div id="map-canvas" style="width: 800px; height: 700px"><h3>Mozart Places in Vienna</h3></div></td>
 				<td valign="top"><div id="mozart"><h3>Details about Mozart Places</h3>
