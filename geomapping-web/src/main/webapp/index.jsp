@@ -14,7 +14,7 @@
 <link href="annotorious-0.6.1/css/semantic-tagging-plugin.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/anno-parse-plugin.css" rel="stylesheet" type="text/css" />
 <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
 <script type="text/javascript" src="bootstrap/dist/js/bootstrap.js"></script>
@@ -32,8 +32,8 @@ String test = "Geo-mapping-service";
 		<div id="mainblock">
 			<div id="content">
 				<form>
-					Search: <input type="text" name="europeana_search">
-					<input type="submit" value="Search">
+					Search: <input id="europeana-search" type="text" name="europeana_search">
+					<input type="submit" value="Search" onclick="sendEuropeanaRequest(document.getElementById('europeana-search').value)">
 				</form>
 				<table><tr>
 				<td><div id="map-canvas" style="width: 800px; height: 700px"><h3>Mozart Places in Vienna</h3></div></td>
@@ -180,6 +180,29 @@ String test = "Geo-mapping-service";
 		else if(id == "theatermuseum") {
 			details.innerHTML += '<br><br><img src="http://bilddatenbank.khm.at/images/500/FS_PA108357.jpg" width="300" class="annotatable" alt="anno">';
 		}
+	}
+	function sendEuropeanaRequest(search_term) {
+		/*requestNumber = JSONRequest.post(
+			"http://www.europeana.eu/api/v2/search.json",
+			{
+				query: search_term,
+				wskey: "8L4bsJmc4",
+				start: 1,
+				rows: 1
+			},
+			function(requestNumber, value, exception) {
+				if(value) {
+					getEuropeanaResults(value);
+				} else {
+					alert(exception);
+				}
+			}
+		);*/
+		alert(JSON);
+		$.getJSON("http://europeana.eu/api//v2/search.json?wskey=8L4bsJmc4&query=%22Wolfgang+Amadeus+Mozart%22&start=1&rows=1", function(data){alert(data);});
+	}
+	function getEuropeanaResults(value) {
+		alert(value);
 	}
 	</script>
 	<script type="text/javascript" src="http://annotorious.github.io/latest/annotorious.dev.js"></script>
