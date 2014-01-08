@@ -16,6 +16,9 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+<script type="text/javascript" src="http://annotorious.github.io/latest/annotorious.dev.js"></script>
+<script type="text/javascript" src="http://annotorious.github.io/demos/semantic-tagging-plugin.js"></script>
+<script type="text/javascript" src="annotorious-0.6.1/anno-parse-plugin.js"></script>
 </head>
 <body>
 <% 
@@ -167,15 +170,11 @@ String test = "Geo-mapping-service";
 	function getEuropeanaResults(value) {
 		alert(value);
 	}
-	</script>
-	<script type="text/javascript" src="http://annotorious.github.io/latest/annotorious.dev.js"></script>
-	<script type="text/javascript" src="http://annotorious.github.io/demos/semantic-tagging-plugin.js"></script>
-	<script type="text/javascript" src="annotorious-0.6.1/anno-parse-plugin.js"></script>
-	<script type="text/javascript">
-		google.maps.event.addDomListener(window, 'load', initialize);	
-  		anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
-		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
-	</script>
+	
+	google.maps.event.addDomListener(window, 'load', initialize);	
+  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
+	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
+</script>
 
 </html>
 
