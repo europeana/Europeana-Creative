@@ -51,18 +51,28 @@ if(country != null && !"".equals(country.trim())){
 		<!-- Indicators -->
   		<ol class="carousel-indicators">
 		<%if (results != null){
-			for(int i = 0; i < results.getItemsCount(); i++) {%>
-				<li data-target="#mozart-carousel" data-slide-to="<%=i%>"></li>
-				<%links.add(results.getAllItems().get(i).getEdmPreview().get(0).split("&")[0]);
+			for(int i = 0; i < results.getItemsCount(); i++) {
+				if(i == 0) {%>
+					<li data-target="#mozart-carousel" data-slide-to="<%=i%>" class="active"></li>
+				<%}
+				else {%>
+					<li data-target="#mozart-carousel" data-slide-to="<%=i%>"></li>
+				<%}
+				links.add(results.getAllItems().get(i).getEdmPreview().get(0).split("&")[0]);
 			}
 		}%>		
   		</ol>
 
 		<!-- Wrapper for slides -->
-		<!--div class="carousel-inner">
+		<div class="carousel-inner">
 			<%if (results != null){
-				for(int i = 0; i < results.getItemsCount(); i++) {%>
-					<div class="item">
+				for(int i = 0; i < results.getItemsCount(); i++) {
+					if(i == 0) {%>
+						<div class="item active">
+					<%}
+					else {%>
+						<div class="item">
+					<%}%>
 						<img src="<%=links.get(i)%>" height="300">
 						<div class="carousel-caption">
 							<%=results.getAllItems().get(i).getTitle().get(0)+" in "+country %>
@@ -70,7 +80,7 @@ if(country != null && !"".equals(country.trim())){
 					</div>
 				<%}
 			}%>		
-  		</div-->
+  		</div>
 
   		<!-- Controls -->
   		<a class="left carousel-control" href="#mozart-carousel" data-slide="prev">
