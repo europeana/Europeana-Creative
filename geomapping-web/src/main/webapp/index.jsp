@@ -13,11 +13,9 @@
 <link href="http://annotorious.github.com/latest/themes/dark/annotorious-dark.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/semantic-tagging-plugin.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/anno-parse-plugin.css" rel="stylesheet" type="text/css" />
-<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
-<script type="text/javascript" src="bootstrap/dist/js/bootstrap.js"></script>
 </head>
 <body>
 <% 
@@ -31,54 +29,19 @@ String test = "Geo-mapping-service";
 		</header>
 		<div id="mainblock">
 			<div id="content">
-				<form>
-					Search: <input id="europeana-search" type="text" name="europeana_search">
-					<input type="submit" value="Search" onclick="sendEuropeanaRequest(document.getElementById('europeana-search').value)">
-				</form>
-				<table><tr>
-				<td><div id="map-canvas" style="width: 800px; height: 700px"><h3>Mozart Places in Vienna</h3></div></td>
-				<td valign="top"><div id="mozart"><h3>Details about Mozart Places</h3>
-      						<img src="img/mozart.jpeg" class="annotatable" alt="anno"></div>
-				<div id="mozart-carousel" class="carousel slide" data-ride="carousel"><h3>Europeana Results</h3>
-					<!-- Indicators -->
-  					<ol class="carousel-indicators">
-    					<li data-target="#mozart-carousel" data-slide-to="0" class="active"></li>
-    					<li data-target="#mozart-carousel" data-slide-to="1"></li>
-    					<li data-target="#mozart-carousel" data-slide-to="2"></li>
-  					</ol>
-
-  					<!-- Wrapper for slides -->
-  					<div class="carousel-inner">
-    					<div class="item active">
-      						<img src="img/mozart.jpeg" height="300">
-      						<div class="carousel-caption">
-        						Wolfgang Amadeus Mozart
+				<table>
+					<tr>
+						<td><div id="map-canvas" style="width: 800px; height: 700px"><h3>Mozart Places in Vienna</h3></div></td>
+						<td valign="top">
+							<div id="mozart"><h3>Details about Mozart Places</h3>
+      							<img src="img/mozart.jpeg" class="annotatable" alt="anno">
       						</div>
-    					</div>
-    					<div class="item">
-    						<img src="img/mozart2.jpg" height="300">
-    						<div class="carousel-caption">
-    							Mozart
-    						</div>
-    					</div>
-    					<div class="item">
-    						<img src="img/mozart3.jpg" height="300">
-    						<div class="carousel-caption">
-    							Young Mozart
-    						</div>
-    					</div>
-  					</div>
-
-  					<!-- Controls -->
-  					<a class="left carousel-control" href="#mozart-carousel" data-slide="prev">
-    					<span class="glyphicon glyphicon-chevron-left"></span>
-  					</a>
-  					<a class="right carousel-control" href="#mozart-carousel" data-slide="next">
-    					<span class="glyphicon glyphicon-chevron-right"></span>
-  					</a>
-				</div></td>
-				<tr></table>
-			</div>
+							<div id="iframe-wrapper">
+								<iframe src="europeanaCarousel.jsp" height="400"></iframe>
+							</div>
+						</td>
+					</tr>
+				</table>
 			<!-- end of content -->
 		</div>
 		<!-- end of mainblock -->
