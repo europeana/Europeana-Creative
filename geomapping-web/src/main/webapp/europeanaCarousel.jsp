@@ -53,19 +53,19 @@ if(country != null && !"".equals(country.trim())){
 			<div class="item active">
 				<img src="img/mozart.jpeg" height="300">
       			<div class="carousel-caption">
-        			Wolfgang Amadeus Mozart
+        			Wolfgang Amadeus Mozart in <%=country %>
       			</div>
     		</div>
     		<div class="item">
     			<img src="img/mozart2.jpg" height="300">
     			<div class="carousel-caption">
-    				Mozart
+    				Mozart in <%=country %>
     			</div>
     		</div>
     		<div class="item">
     			<img src="img/mozart3.jpg" height="300">
     			<div class="carousel-caption">
-    				Young Mozart
+    				Young Mozart in <%=country %>
     			</div>
     		</div>
   		</div>
