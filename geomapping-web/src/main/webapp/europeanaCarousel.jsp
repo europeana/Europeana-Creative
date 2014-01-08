@@ -24,10 +24,21 @@
 <script type="text/javascript" src="annotorious-0.6.1/anno-parse-plugin.js"></script>
 </head>
 <body>
+
+<% 
+String country = request.getParameter("country");
+if(country != null && !"".equals(country.trim())){
+	out.println("Country set to: " + country);
+}
+%>
 	
-	<form>
+	<form action="./europeanaCarousel.jsp" method="get">
 		Search: <input id="europeana-search" type="text" name="europeana_search">
-		<input type="submit" value="Search" onclick="sendEuropeanaRequest(document.getElementById('europeana-search').value)">
+		<input type="hidden" name="lang" value="de">
+		<input type="hidden" name="country" value="Austria">
+		<input type="hidden" name="city" value="Vienna">
+		
+		<input type="submit" value="Search">
 	</form>
 	<div id="mozart-carousel" class="carousel slide" data-ride="carousel"><h3>Europeana Results</h3>
 		<!-- Indicators -->
