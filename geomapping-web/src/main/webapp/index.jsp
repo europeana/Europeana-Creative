@@ -34,9 +34,9 @@ String test = "Geo-mapping-service";
 			<div id="content">
 				<table>
 					<tr>
-						<td><div id="map-canvas" style="width: 800px; height: 700px"><h3>Mozart Places in Vienna</h3></div></td>
-						<td valign="top">
-							<div id="mozart"><h3>Details about Mozart Places</h3>
+						<td><div id="map-canvas" style="width: 800px; height: 730px"><h3>Mozart Places in Vienna</h3></div></td>
+						<td valign="top" align="center">
+							<div id="mozart"><h5>Details about Mozart Places</h5>
       							<img src="img/mozart.jpeg" class="annotatable" alt="anno">
       						</div>
 							<div id="iframe-wrapper">

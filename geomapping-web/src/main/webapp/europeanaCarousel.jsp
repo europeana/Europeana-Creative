@@ -31,6 +31,12 @@
 <% 
 String searchTerms = request.getParameter("searchTerms");
 String country = request.getParameter("country");
+if(country == null)
+	country = "austria";
+
+if(searchTerms == null)
+	searchTerms = "Wolfgang Amadeus Mozart";
+
 EuropeanaApi2Results results = null;
 ArrayList<String> links = new ArrayList<String>();
 
@@ -39,15 +45,15 @@ if(country != null && !"".equals(country.trim())){
 }
 %>
 	
+	<h5 align="center">Europeana Items</h5>
 	<form action="./europeanaCarousel.jsp" method="get">
-		Search: <input id="searchTerms" type="text" name="searchTerms" value="Wolfgang Amadeus Mozart">
+		<input id="searchTerms" type="text" name="searchTerms" value="Wolfgang Amadeus Mozart" size="30">
 		<input type="hidden" name="lang" value="de">
 		<input type="hidden" name="country" value="austria">
 		<input type="hidden" name="city" value="Vienna">
-		
 		<input type="submit" value="Search">
 	</form>
-	<div id="mozart-carousel" class="carousel slide" data-ride="carousel"><h3>Europeana Results</h3>
+	<div id="mozart-carousel" class="carousel slide" data-ride="carousel">
 		<!-- Indicators -->
   		<ol class="carousel-indicators">
 		<%if (results != null){
@@ -68,14 +74,14 @@ if(country != null && !"".equals(country.trim())){
 			<%if (results != null){
 				for(int i = 0; i < results.getItemsCount(); i++) {
 					if(i == 0) {%>
-						<div class="item active">
+						<div class="item active" style="text-align:center; height: 300">
 					<%}
 					else {%>
-						<div class="item">
+						<div class="item" style="text-align:center; height: 300">
 					<%}%>
-						<img src="<%=links.get(i)%>" height="300">
+						<img src="<%=links.get(i)%>" height="300" style="margin: 0 auto;">
 						<div class="carousel-caption">
-							<%=results.getAllItems().get(i).getTitle().get(0)+" in "+country %>
+							<%=results.getAllItems().get(i).getTitle().get(0)%>
 						</div>
 					</div>
 				<%}
