@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>eu.europeana.creative</groupId>
 	<artifactId>geomapping-web</artifactId>
 	<version>1.0-SNAPSHOT</version>
@@ -20,20 +20,17 @@
 
 	<dependencies>
 
-		<!--
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-xc</artifactId>
-			<version>1.9.9</version>
+			<groupId>eu.europeana.api</groupId>
+			<artifactId>europeana-client</artifactId>
+			<version>0.2.0-SNAPSHOT</version>
+			<type>jar</type>
 		</dependency>
-	-->
-	<!-- 
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${version.servletJstl}</version>
-		</dependency>
- -->
+
+		<!-- <dependency> <groupId>org.codehaus.jackson</groupId> <artifactId>jackson-xc</artifactId> 
+			<version>1.9.9</version> </dependency> -->
+		<!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>jstl</artifactId> 
+			<version>${version.servletJstl}</version> </dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -49,54 +46,25 @@
 		</dependency>
 		<!-- <dependency> <groupId>com.sun.xml.bind</groupId> <artifactId>jaxb-impl</artifactId> 
 			<version>2.2.2</version> </dependency> -->
-		<!--
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${version.spring}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${version.spring}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${version.spring}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${version.spring.tx}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
-			<version>${version.spring}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${version.spring}</version>
-			<scope>test</scope>
-		</dependency>
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-aop</artifactId> 
+			<version>${version.spring}</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
+			<artifactId>spring-web</artifactId> <version>${version.spring}</version> 
+			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-webmvc</artifactId> 
+			<version>${version.spring}</version> <exclusions> <exclusion> <groupId>commons-logging</groupId> 
+			<artifactId>commons-logging</artifactId> </exclusion> </exclusions> </dependency> 
+			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-tx</artifactId> 
+			<version>${version.spring.tx}</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
+			<artifactId>spring-oxm</artifactId> <version>${version.spring}</version> 
+			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-test</artifactId> 
+			<version>${version.spring}</version> <scope>test</scope> </dependency> -->
 
-		-->
-		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>
 			<version>${version.slf4j}</version>
 		</dependency>
 
-				<!-- <dependency> <groupId>eu.europeana.api</groupId> <artifactId>europeana-client</artifactId> 
+		<!-- <dependency> <groupId>eu.europeana.api</groupId> <artifactId>europeana-client</artifactId> 
 			<version>0.2.0-SNAPSHOT</version> <type>jar</type> </dependency> -->
 		<!-- <dependency> <groupId>eu.europeana.api</groupId> <artifactId>europeana-client</artifactId> 
 			<version>0.2.0-SNAPSHOT</version> <classifier>tests</classifier> <type>jar</type> 
@@ -111,9 +79,7 @@
 		<finalName>${artifactId}-${version}</finalName>
 		<testOutputDirectory>target/test-classes</testOutputDirectory>
 		<sourceDirectory>src/main/java</sourceDirectory>
-		<!--
-		<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
-		-->
+		<!-- <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory> -->
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<resources>
 			<resource>
@@ -131,11 +97,13 @@
 		<plugins>
 			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>tomcat-maven-plugin</artifactId> 
 				<version>1.1</version> <configuration> <server>assetstest</server> <url>http://assetstest.atc.gr/manager</url> 
-				<path>/assets/ir-image</path> </configuration> </plugin>
--->				
-			<plugin> <artifactId>maven-war-plugin</artifactId> 
-				<version>2.4</version> 
-				<configuration> <attachClasses>true</attachClasses></configuration> 
+				<path>/assets/ir-image</path> </configuration> </plugin> -->
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<attachClasses>true</attachClasses>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -149,13 +117,9 @@
 	</build>
 
 	<properties>
-<!--
-	<version.core>2.0</version.core>
-		<version.springAop>3.1.4.RELEASE</version.springAop>
-		<version.spring.tx>3.1.4.RELEASE</version.spring.tx>
-		<version.spring>3.1.4.RELEASE</version.spring>
-		<version.springSecurityOauth>1.0.0.M6a</version.springSecurityOauth>
-		 -->
+		<!-- <version.core>2.0</version.core> <version.springAop>3.1.4.RELEASE</version.springAop> 
+			<version.spring.tx>3.1.4.RELEASE</version.spring.tx> <version.spring>3.1.4.RELEASE</version.spring> 
+			<version.springSecurityOauth>1.0.0.M6a</version.springSecurityOauth> -->
 		<version.slf4j>1.7.5</version.slf4j>
 		<!-- <europeana_api_key>HqHRSeD3j</europeana_api_key> -->
 	</properties>

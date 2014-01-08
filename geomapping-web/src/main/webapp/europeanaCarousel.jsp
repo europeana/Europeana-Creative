@@ -1,5 +1,7 @@
+<%@page import="eu.europeana.api.client.result.EuropeanaApi2Results"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:useBean id="searchBean" class="eu.europeana.creative.geomapping.EuropeanaSearchBean" scope="session"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -26,16 +28,20 @@
 <body>
 
 <% 
+String searchTerms = request.getParameter("searchTerms");
 String country = request.getParameter("country");
+EuropeanaApi2Results results = null;
+
 if(country != null && !"".equals(country.trim())){
 	out.println("Country set to: " + country);
+	results = searchBean.getEuropeanaResults(searchTerms, country);
 }
 %>
 	
 	<form action="./europeanaCarousel.jsp" method="get">
-		Search: <input id="europeana-search" type="text" name="europeana_search">
+		Search: <input id="searchTerms" type="text" name="searchTerms" value="Wolfgang Amadeus Mozart">
 		<input type="hidden" name="lang" value="de">
-		<input type="hidden" name="country" value="Austria">
+		<input type="hidden" name="country" value="austria">
 		<input type="hidden" name="city" value="Vienna">
 		
 		<input type="submit" value="Search">
@@ -45,8 +51,16 @@ if(country != null && !"".equals(country.trim())){
   		<ol class="carousel-indicators">
     		<li data-target="#mozart-carousel" data-slide-to="0" class="active"></li>
     		<li data-target="#mozart-carousel" data-slide-to="1"></li>
-    		<li data-target="#mozart-carousel" data-slide-to="2"></li>
+    		<li data-target="#mozart-carousel" data-slide-to="2"></li>  		
   		</ol>
+
+		<% 
+		if (results != null){
+			out.println("items found" + results.getItemsCount());
+			if(results.getItemsCount() > 0)
+				out.println("firstItem: " + results.getAllItems().get(0).getTitle());
+		}
+		%>
 
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner">
