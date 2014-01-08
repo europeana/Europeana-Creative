@@ -1,5 +1,6 @@
 <%@page import="eu.europeana.api.client.result.EuropeanaApi2Results"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@page import="java.util.ArrayList"%>
+<%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <jsp:useBean id="searchBean" class="eu.europeana.creative.geomapping.EuropeanaSearchBean" scope="session"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -31,9 +32,9 @@
 String searchTerms = request.getParameter("searchTerms");
 String country = request.getParameter("country");
 EuropeanaApi2Results results = null;
+ArrayList<String> links = new ArrayList<String>();
 
 if(country != null && !"".equals(country.trim())){
-	out.println("Country set to: " + country);
 	results = searchBean.getEuropeanaResults(searchTerms, country);
 }
 %>
@@ -49,40 +50,27 @@ if(country != null && !"".equals(country.trim())){
 	<div id="mozart-carousel" class="carousel slide" data-ride="carousel"><h3>Europeana Results</h3>
 		<!-- Indicators -->
   		<ol class="carousel-indicators">
-    		<li data-target="#mozart-carousel" data-slide-to="0" class="active"></li>
-    		<li data-target="#mozart-carousel" data-slide-to="1"></li>
-    		<li data-target="#mozart-carousel" data-slide-to="2"></li>  		
+		<%if (results != null){
+			for(int i = 0; i < results.getItemsCount(); i++) {%>
+				<li data-target="#mozart-carousel" data-slide-to="<%=i%>"></li>
+				<%links.add(results.getAllItems().get(i).getEdmPreview().get(0).split("&")[0]);
+			}
+		}%>		
   		</ol>
 
-		<% 
-		if (results != null){
-			out.println("items found" + results.getItemsCount());
-			if(results.getItemsCount() > 0)
-				out.println("firstItem: " + results.getAllItems().get(0).getTitle());
-		}
-		%>
-
 		<!-- Wrapper for slides -->
-		<div class="carousel-inner">
-			<div class="item active">
-				<img src="img/mozart.jpeg" height="300">
-      			<div class="carousel-caption">
-        			Wolfgang Amadeus Mozart in <%=country %>
-      			</div>
-    		</div>
-    		<div class="item">
-    			<img src="img/mozart2.jpg" height="300">
-    			<div class="carousel-caption">
-    				Mozart in <%=country %>
-    			</div>
-    		</div>
-    		<div class="item">
-    			<img src="img/mozart3.jpg" height="300">
-    			<div class="carousel-caption">
-    				Young Mozart in <%=country %>
-    			</div>
-    		</div>
-  		</div>
+		<!--div class="carousel-inner">
+			<%if (results != null){
+				for(int i = 0; i < results.getItemsCount(); i++) {%>
+					<div class="item">
+						<img src="<%=links.get(i)%>" height="300">
+						<div class="carousel-caption">
+							<%=results.getAllItems().get(i).getTitle().get(0)+" in "+country %>
+						</div>
+					</div>
+				<%}
+			}%>		
+  		</div-->
 
   		<!-- Controls -->
   		<a class="left carousel-control" href="#mozart-carousel" data-slide="prev">
