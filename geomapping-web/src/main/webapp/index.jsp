@@ -32,15 +32,15 @@ String test = "Geo-mapping-service";
 		</header>
 		<div id="mainblock">
 			<div id="content">
-				<table>
+				<table width="100%"  margin="0" cellpadding="0" cellspacing="10">
 					<tr>
 						<td><div id="map-canvas" style="width: 800px; height: 730px"><h3>Mozart Places in Vienna</h3></div></td>
-						<td valign="top" align="center">
+						<td valign="top" align="center" width="250px">
 							<div id="mozart"><h5>Details about Mozart Places</h5>
       							<img src="img/mozart.jpeg" class="annotatable" alt="anno">
       						</div>
 							<div id="iframe-wrapper">
-								<iframe src="europeanaCarousel.jsp" height="400"></iframe>
+								<iframe id="iframe-carousel" src="europeanaCarousel.jsp" height="400" frameborder="0" scrolling="no"></iframe>
 							</div>
 						</td>
 					</tr>
@@ -126,49 +126,68 @@ String test = "Geo-mapping-service";
 		details = document.getElementById("mozart");
 		details.innerHTML = "<h3>" + name + "</h3>";
 		if(id == "mozarthaus") {
-			details.innerHTML += '<br><br><img src="http://www.viennaconcerts.com/img/concerts/mozarthaushall.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/Boesendorfer_Saal_Wien,_Mozart_House_Vienna.jpg" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Mozart Haydn Beethoven";
+			searchForm.submit();
 		} 
 		else if(id == "cementary") {
 			details.innerHTML += '<br><br><img src="http://bilddatenbank.khm.at/images/500/FS_PA84282alt.jpg" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Mozart-Grab";
+			searchForm.submit();
 		}
 		else if(id == "burggarten") {
-			details.innerHTML += '<br><br><img src="http://media-cdn.tripadvisor.com/media/photo-s/03/d8/54/dc/mozart-statue.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:WienBurggartenMozart.jpg" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Wien 1, Mozart-Denkmal";
+			searchForm.submit();
 		}
 		else if(id == "stadtpark") {
-			details.innerHTML += '<br><br><img src="http://viena.viajandopor.com/archivos/imagenes-nuevas/mozart-stadtpark.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Kursalon_Vienna_June_2006_462.jpg" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Wien 1, Stadtpark";
+			searchForm.submit();
 		}
 		else if(id == "stephens_cathedral") {
-			details.innerHTML += '<br><br><img src="http://www.huntsearch.gla.ac.uk/artimages/43746.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Costanze_Mozart_by_Lange_1782.jpg" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Stephansdom";
+			searchForm.submit();
 		}
 		else if(id == "rauhensteingasse") {
-			details.innerHTML += '<br><br><img src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Rauhensteingasse_z03.JPG" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Rauhensteingasse_z03.JPG" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Rauhensteingasse Mozart";
+			searchForm.submit();
 		}
 		else if(id == "theatermuseum") {
-			details.innerHTML += '<br><br><img src="http://bilddatenbank.khm.at/images/500/FS_PA108357.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Palais_Lobkowitz_Vienna_Oct._2006_006.jpg" width="300" class="annotatable" alt="anno">';
+			ifr = document.getElementById("iframe-carousel");
+			ifrDoc = ifr.contentDocument;
+			searchForm = ifrDoc.getElementById("search_form");
+			searchTerms = ifrDoc.getElementById("searchTerms");
+			searchTerms.value = "Österreichisches Theatermuseum Mozart";
+			searchForm.submit();
 		}
-	}
-	function sendEuropeanaRequest(search_term) {
-		/*requestNumber = JSONRequest.post(
-			"http://www.europeana.eu/api/v2/search.json",
-			{
-				query: search_term,
-				wskey: "8L4bsJmc4",
-				start: 1,
-				rows: 1
-			},
-			function(requestNumber, value, exception) {
-				if(value) {
-					getEuropeanaResults(value);
-				} else {
-					alert(exception);
-				}
-			}
-		);*/
-		alert(JSON);
-		$.getJSON("http://europeana.eu/api//v2/search.json?wskey=8L4bsJmc4&query=%22Wolfgang+Amadeus+Mozart%22&start=1&rows=1", function(data){alert(data);});
-	}
-	function getEuropeanaResults(value) {
-		alert(value);
 	}
 	
 	google.maps.event.addDomListener(window, 'load', initialize);	

@@ -46,12 +46,12 @@ if(country != null && !"".equals(country.trim())){
 %>
 	
 	<h5 align="center">Europeana Items</h5>
-	<form action="./europeanaCarousel.jsp" method="get">
+	<form id="search_form" class="form" action="./europeanaCarousel.jsp" method="get">
 		<input id="searchTerms" type="text" name="searchTerms" value="Wolfgang Amadeus Mozart" size="30">
 		<input type="hidden" name="lang" value="de">
 		<input type="hidden" name="country" value="austria">
 		<input type="hidden" name="city" value="Vienna">
-		<input type="submit" value="Search">
+		<input id="searchButton" name="submitButton"  type="submit" value="Search">
 	</form>
 	<div id="mozart-carousel" class="carousel slide" data-ride="carousel">
 		<!-- Indicators -->

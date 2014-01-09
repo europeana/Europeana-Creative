@@ -11,7 +11,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,
 
 table {
 	border-collapse: collapse;
-	border-spacing: 0;
+	border-spacing: 2;
 	clear: both;
 }
 
@@ -4082,7 +4082,8 @@ ul.navigation li:hover ul.subtopics li {
 }
 
 .twtr-widget .twtr-ft {
-	display: none;
+	display: none;table
+	
 }
 
 .twtr-widget .twtr-tweet {
