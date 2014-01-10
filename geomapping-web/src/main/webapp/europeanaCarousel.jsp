@@ -8,12 +8,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Europeana Carousel</title>
-<link href="css/css.css" rel="stylesheet" type="text/css" />
 <link href="css/css1.css" rel="stylesheet" type="text/css" />
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <link href="css/main_002.css" rel="stylesheet" type="text/css" />
-<link href="css/main_003.css" rel="stylesheet" type="text/css" />
-<link href="css/main_004.css" rel="stylesheet" type="text/css" />
 <link href="http://annotorious.github.com/latest/themes/dark/annotorious-dark.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/semantic-tagging-plugin.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/anno-parse-plugin.css" rel="stylesheet" type="text/css" />
@@ -47,7 +44,7 @@ if(country != null && !"".equals(country.trim())){
 	
 	<h5 align="center">Europeana Items</h5>
 	<form id="search_form" class="form" action="./europeanaCarousel.jsp" method="get">
-		<input id="searchTerms" type="text" name="searchTerms" value="Wolfgang Amadeus Mozart" size="30">
+		<input id="searchTerms" type="text" name="searchTerms" value="<%=searchTerms%>" size="30">
 		<input type="hidden" name="lang" value="de">
 		<input type="hidden" name="country" value="austria">
 		<input type="hidden" name="city" value="Vienna">
