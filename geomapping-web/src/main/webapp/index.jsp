@@ -128,7 +128,7 @@ String test = "Geo-mapping-service";
 		details = document.getElementById("mozart");
 		details.innerHTML = "<h3>" + name + "</h3>";
 		if(id == "mozarthaus") {
-			details.innerHTML += '<br><br><img src="img/Boesendorfer_Saal_Wien,_Mozart_House_Vienna.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/mozarthaus_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -137,7 +137,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		} 
 		else if(id == "cementary") {
-			details.innerHTML += '<br><br><img src="http://bilddatenbank.khm.at/images/500/FS_PA84282alt.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/cementary_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -146,7 +146,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "burggarten") {
-			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:WienBurggartenMozart.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/burggarten_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -155,7 +155,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stadtpark") {
-			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Kursalon_Vienna_June_2006_462.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/stadtpark_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -164,7 +164,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stephens_cathedral") {
-			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Costanze_Mozart_by_Lange_1782.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/stephens_cathedral_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -173,7 +173,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "rauhensteingasse") {
-			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Rauhensteingasse_z03.JPG" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/rauhensteingasse_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -182,7 +182,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "theatermuseum") {
-			details.innerHTML += '<br><br><img src="http://commons.wikimedia.org/wiki/File:Palais_Lobkowitz_Vienna_Oct._2006_006.jpg" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/theatermuseum_main.jpg" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
