@@ -36,10 +36,10 @@ String test = "Geo-mapping-service";
 			<div id="content">
 				<table width="100%"  margin="0" cellpadding="0" cellspacing="10">
 					<tr>
-						<td><div id="map-canvas" style="width: 800px; height: 730px"><h3>Mozart Places in Vienna</h3></div></td>
+						<td valign="top"><div id="map-canvas" style="width: 800px; height: 730px" valign="top"><h3>Mozart Places in Vienna</h3></div></td>
 						<td valign="top" align="center" width="250px">
 							<div id="mozart"><h5>Details about Mozart Places</h5>
-      							<img src="img/mozart.jpeg" class="annotatable" alt="anno">
+      							<img src="img/mozart.jpeg" valign="top" width="300" class="annotatable" alt="anno">
       						</div>
 							<div id="iframe-wrapper">
 								<iframe id="iframe-carousel" src="europeanaCarousel.jsp" height="400" frameborder="0" scrolling="no"></iframe>
@@ -51,9 +51,9 @@ String test = "Geo-mapping-service";
 		</div>
 		<!-- end of mainblock -->
 
-		<hr />
 		<!--Europeana Group Block-->
-		<footer id="footer">
+		<hr />
+		<footer id="footer" valign="top">
 			<div class="middle f-left">
 				<a href="http://www.pro.europeana.eu/web/guest/projects"
 					class="f-left">Europeana Network projects</a>
@@ -128,7 +128,7 @@ String test = "Geo-mapping-service";
 		details = document.getElementById("mozart");
 		details.innerHTML = "<h5>" + name + "</h5>";
 		if(id == "mozarthaus") {
-			details.innerHTML += '<br><br><img src="img/mozarthaus_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/mozarthaus_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -137,7 +137,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		} 
 		else if(id == "cementary") {
-			details.innerHTML += '<br><br><img src="img/cementary_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/cementary_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -146,7 +146,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "burggarten") {
-			details.innerHTML += '<br><br><img src="img/burggarten_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -155,7 +155,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stadtpark") {
-			details.innerHTML += '<br><br><img src="img/stadtpark_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -164,7 +164,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stephens_cathedral") {
-			details.innerHTML += '<br><br><img src="img/stephens_cathedral_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/stephens_cathedral_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -173,7 +173,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "rauhensteingasse") {
-			details.innerHTML += '<br><br><img src="img/rauhensteingasse_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/rauhensteingasse_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -182,7 +182,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "theatermuseum") {
-			details.innerHTML += '<br><br><img src="img/theatermuseum_main.jpg" height="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<br><br><img src="img/theatermuseum_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
