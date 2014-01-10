@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<%@page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <head>
@@ -185,7 +187,7 @@ String test = "Geo-mapping-service";
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
 			searchTerms = ifrDoc.getElementById("searchTerms");
-			searchTerms.value = "Österreichisches Theatermuseum Mozart";
+			searchTerms.value = "Ã–sterreichisches Theatermuseum Mozart";
 			searchForm.submit();
 		}
 	}
