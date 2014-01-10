@@ -6,12 +6,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Europeana Creative - Component Service</title>
-<link href="css/css.css" rel="stylesheet" type="text/css" />
 <link href="css/css1.css" rel="stylesheet" type="text/css" />
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <link href="css/main_002.css" rel="stylesheet" type="text/css" />
-<link href="css/main_003.css" rel="stylesheet" type="text/css" />
-<link href="css/main_004.css" rel="stylesheet" type="text/css" />
 <link href="http://annotorious.github.com/latest/themes/dark/annotorious-dark.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/semantic-tagging-plugin.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/anno-parse-plugin.css" rel="stylesheet" type="text/css" />
@@ -38,10 +35,11 @@ String test = "Geo-mapping-service";
 					<tr>
 						<td valign="top"><div id="map-canvas" style="width: 800px; height: 730px" valign="top"><h3>Mozart Places in Vienna</h3></div></td>
 						<td valign="top" align="center" width="250px">
-							<div id="mozart"><h5>Details about Mozart Places</h5>
-      							<img src="img/mozart.jpeg" valign="top" width="300" class="annotatable" alt="anno">
+							<div id="mozart" style="height: 330; vertical-align: top; position:relative; top:0; overflow:hidden;">
+								<h5>Details about Mozart Places</h5>
+      							<img src="img/mozart.jpeg" width="300" class="annotatable" alt="anno">
       						</div>
-							<div id="iframe-wrapper">
+							<div id="iframe-wrapper" style="height: 400; vertical-align: top; position:absolute; bottom:0; ">
 								<iframe id="iframe-carousel" src="europeanaCarousel.jsp" height="400" frameborder="0" scrolling="no"></iframe>
 							</div>
 						</td>
@@ -128,7 +126,7 @@ String test = "Geo-mapping-service";
 		details = document.getElementById("mozart");
 		details.innerHTML = "<h5>" + name + "</h5>";
 		if(id == "mozarthaus") {
-			details.innerHTML += '<br><br><img src="img/mozarthaus_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/mozarthaus_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -137,7 +135,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		} 
 		else if(id == "cementary") {
-			details.innerHTML += '<br><br><img src="img/cementary_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/cementary_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -146,7 +144,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "burggarten") {
-			details.innerHTML += '<br><br><img src="img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -155,7 +153,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stadtpark") {
-			details.innerHTML += '<br><br><img src="img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -164,7 +162,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stephens_cathedral") {
-			details.innerHTML += '<br><br><img src="img/stephens_cathedral_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/stephens_cathedral_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -173,7 +171,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "rauhensteingasse") {
-			details.innerHTML += '<br><br><img src="img/rauhensteingasse_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/rauhensteingasse_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -182,7 +180,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "theatermuseum") {
-			details.innerHTML += '<br><br><img src="img/theatermuseum_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="img/theatermuseum_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
