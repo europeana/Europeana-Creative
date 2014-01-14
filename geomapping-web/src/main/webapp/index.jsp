@@ -70,7 +70,7 @@ String test = "Geo-mapping-service";
  		};
  		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
  		var kmlLayer = new google.maps.KmlLayer({
- 			url: 'https://dl.dropboxusercontent.com/u/45528256/mozart.kml'
+ 			url: 'http://62.218.164.177:8080/geomapping/mozart.kml'
  		});
  		kmlLayer.setMap(map);
  		var start = new google.maps.LatLng(48.206615, 16.382010);
@@ -124,9 +124,9 @@ String test = "Geo-mapping-service";
 	}
 	function setDetails(id, name, text) {
 		details = document.getElementById("mozart");
-		details.innerHTML = "<h5>" + name + "</h5>";
 		if(id == "mozarthaus") {
-			details.innerHTML += '<img src="img/mozarthaus_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML = '<a href="http://de.wikipedia.org/w/index.php?title=Mozarthaus_Vienna" target="new"><h5>Mozarthaus Vienna</h5></a>';
+			details.innerHTML += '<img src="img/mozarthaus.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -135,7 +135,8 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		} 
 		else if(id == "cementary") {
-			details.innerHTML += '<img src="img/cementary_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Sankt_Marxer_Friedhof#Das_Mozartgrab" target="new"><h5>Mozart\'s Tomb</h5></a>';
+			details.innerHTML += '<img src="img/cemetery_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -144,6 +145,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "burggarten") {
+			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Burggarten_%28Wien%29" target="new"><h5>Burggarten (Palmenhaus)</h5></a>';
 			details.innerHTML += '<img src="img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
@@ -153,6 +155,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stadtpark") {
+			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Kursalon_H%C3%BCbner" target="new"><h5>Kursalon Hübner</h5></a>';
 			details.innerHTML += '<img src="img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
@@ -162,7 +165,8 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "stephens_cathedral") {
-			details.innerHTML += '<img src="img/stephens_cathedral_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Constanze_Mozart" target="new"><h5>Constanze Mozart</h5></a>';
+			details.innerHTML += '<img src="img/constanze.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -171,7 +175,8 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "rauhensteingasse") {
-			details.innerHTML += '<img src="img/rauhensteingasse_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Steffl_%28Kaufhaus%29" target="new"><h5>Steffl Store (Kaufhaus Steffl)</h5></a>';
+			details.innerHTML += '<img src="img/steffl.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -180,7 +185,8 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 		else if(id == "theatermuseum") {
-			details.innerHTML += '<img src="img/theatermuseum_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Palais_Lobkowitz_%28Wien%29#Geschichte" target="new"><h5>Lobkowitz Palace (1760)</h5></a>';
+			details.innerHTML += '<img src="img/palais_lobkowitz_1760.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
