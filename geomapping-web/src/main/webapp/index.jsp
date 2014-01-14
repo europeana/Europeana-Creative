@@ -18,10 +18,6 @@
 <script type="text/javascript" src="http://annotorious.github.io/latest/annotorious.dev.js"></script>
 <script type="text/javascript" src="http://annotorious.github.io/demos/semantic-tagging-plugin.js"></script>
 <script type="text/javascript" src="annotorious-0.6.1/anno-parse-plugin.js"></script>
-<script>
-anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
-anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
-</script>
 </head>
 <body>
 <% 
@@ -116,8 +112,6 @@ String test = "Geo-mapping-service";
  			setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description);
  			window.setTimeout( function(){setAnnotatableClasses(); anno.reset();}, 2000);
  		});
- 	  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
- 		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
 	}
 	function setAnnotatableClasses() {
 		var my_img = document.getElementsByTagName("img");
@@ -127,6 +121,8 @@ String test = "Geo-mapping-service";
 				my_img[i].setAttribute("class", "annotatable");
 			}
 		}
+	  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
+		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
 	}
 	function setDetails(id, name, text) {
 		details = document.getElementById("mozart");
@@ -205,8 +201,6 @@ String test = "Geo-mapping-service";
 	}
 
 	google.maps.event.addDomListener(window, 'load', initialize);	
-  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
-	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
 </script>
 
 </html>
