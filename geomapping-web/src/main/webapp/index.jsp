@@ -109,8 +109,8 @@ String test = "Geo-mapping-service";
  			}
  		});
  		google.maps.event.addListener(kmlLayer, 'click', function (kmlEvent) {
- 			window.setTimeout(function(){setAnnotatableClasses(); setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description); anno.reset();
- 			;},3000);
+ 			setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description);
+ 			window.setTimeout( function(){setAnnotatableClasses(); anno.reset();}, 2000);
  		});
 	}
 	function setAnnotatableClasses() {
