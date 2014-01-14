@@ -78,7 +78,7 @@ if(country != null && !"".equals(country.trim())){
 					<%}%>
 						<img src="<%=links.get(i)%>" height="300" style="margin: 0 auto;">
 						<div class="carousel-caption">
-							<%=results.getAllItems().get(i).getTitle().get(0)%>
+							<a href="<%=results.getAllItems().get(i).getObjectURL()%>" target="_blank"><%=results.getAllItems().get(i).getTitle().get(0)%></a>
 						</div>
 					</div>
 				<%}
