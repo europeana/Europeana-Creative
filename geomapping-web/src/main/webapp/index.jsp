@@ -64,6 +64,8 @@ String test = "Geo-mapping-service";
 </body>
 
 <script type="text/javascript">
+	var semanticPlugitInitialized = false;
+	
 	function initialize() {
  		var mapOptions = {
  			mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -122,7 +124,11 @@ String test = "Geo-mapping-service";
 			}
 		}
 	  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
-		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
+	  	if(!semanticPlugitInitialized){
+	  		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
+	  		semanticPlugitInitialized = true;
+	  	}
+	  	
 	}
 	function setDetails(id, name, text) {
 		details = document.getElementById("mozart");
@@ -200,7 +206,10 @@ String test = "Geo-mapping-service";
 		}
 	}
 
-	google.maps.event.addDomListener(window, 'load', initialize);	
+	google.maps.event.addDomListener(window, 'load', initialize);
+	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
+  	
+	
 </script>
 
 </html>
