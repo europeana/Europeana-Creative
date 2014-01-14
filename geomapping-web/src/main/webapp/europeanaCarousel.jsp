@@ -24,7 +24,6 @@
 <script type="text/javascript" src="annotorious-0.6.1/anno-parse-plugin.js"></script>
 </head>
 <body>
-
 <% 
 String searchTerms = request.getParameter("searchTerms");
 String country = request.getParameter("country");
