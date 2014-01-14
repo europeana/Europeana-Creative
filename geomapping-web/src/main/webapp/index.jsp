@@ -41,7 +41,7 @@ String test = "Geo-mapping-service";
 						<td valign="top" align="center" width="250px">
 							<div id="mozart" style="height: 330; vertical-align: top; position:relative; top:0; overflow:hidden;">
 								<h5>Details about Mozart Places</h5>
-      							<img src="img/mozart.jpeg" width="300" class="annotatable" alt="anno">
+      							<img src="http://62.218.164.177:8080/geomapping/img/mozart.jpeg" width="300" class="annotatable" alt="anno">
       						</div>
 							<div id="iframe-wrapper" style="height: 400; vertical-align: top; position:absolute; bottom:0; ">
 								<iframe id="iframe-carousel" src="europeanaCarousel.jsp" height="400" frameborder="0" scrolling="no"></iframe>
@@ -113,8 +113,8 @@ String test = "Geo-mapping-service";
  			}
  		});
  		google.maps.event.addListener(kmlLayer, 'click', function (kmlEvent) {
- 			window.setTimeout(function(){setAnnotatableClasses(); setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description); anno.reset();
- 			;},1000);
+ 			setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description);
+ 			window.setTimeout( function(){setAnnotatableClasses(); anno.reset();}, 2000);
  		});
  	  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
  		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
@@ -132,27 +132,29 @@ String test = "Geo-mapping-service";
 		details = document.getElementById("mozart");
 		if(id == "mozarthaus") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/w/index.php?title=Mozarthaus_Vienna" target="new"><h5>Mozarthaus Vienna</h5></a>';
-			details.innerHTML += '<img src="img/mozarthaus.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/mozarthaus.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
 			searchTerms = ifrDoc.getElementById("searchTerms");
 			searchTerms.value = "Mozart Haydn Beethoven";
 			searchForm.submit();
+			
 		} 
 		else if(id == "cementary") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Sankt_Marxer_Friedhof#Das_Mozartgrab" target="new"><h5>Mozart\'s Tomb</h5></a>';
-			details.innerHTML += '<img src="img/cemetery_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/cemetery_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
 			searchTerms = ifrDoc.getElementById("searchTerms");
 			searchTerms.value = "Mozart-Grab";
 			searchForm.submit();
+			
 		}
 		else if(id == "burggarten") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Burggarten_%28Wien%29" target="new"><h5>Burggarten (Palmenhaus)</h5></a>';
-			details.innerHTML += '<img src="img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -162,7 +164,7 @@ String test = "Geo-mapping-service";
 		}
 		else if(id == "stadtpark") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Kursalon_H%C3%BCbner" target="new"><h5>Kursalon Hübner</h5></a>';
-			details.innerHTML += '<img src="img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -172,7 +174,7 @@ String test = "Geo-mapping-service";
 		}
 		else if(id == "stephens_cathedral") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Constanze_Mozart" target="new"><h5>Constanze Mozart</h5></a>';
-			details.innerHTML += '<img src="img/constanze.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/constanze.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -182,7 +184,7 @@ String test = "Geo-mapping-service";
 		}
 		else if(id == "rauhensteingasse") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Steffl_%28Kaufhaus%29" target="new"><h5>Steffl Store (Kaufhaus Steffl)</h5></a>';
-			details.innerHTML += '<img src="img/steffl.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/steffl.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -192,7 +194,7 @@ String test = "Geo-mapping-service";
 		}
 		else if(id == "theatermuseum") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Palais_Lobkowitz_%28Wien%29#Geschichte" target="new"><h5>Lobkowitz Palace (1760)</h5></a>';
-			details.innerHTML += '<img src="img/palais_lobkowitz_1760.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/palais_lobkowitz_1760.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
