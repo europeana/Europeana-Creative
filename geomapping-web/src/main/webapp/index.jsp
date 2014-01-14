@@ -112,6 +112,8 @@ String test = "Geo-mapping-service";
  			window.setTimeout(function(){setAnnotatableClasses(); setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description); anno.reset();
  			;},1000);
  		});
+ 	  	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
+ 		anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
 	}
 	function setAnnotatableClasses() {
 		var my_img = document.getElementsByTagName("img");
@@ -195,7 +197,7 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 		}
 	}
-	
+
 	google.maps.event.addDomListener(window, 'load', initialize);	
   	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
 	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
