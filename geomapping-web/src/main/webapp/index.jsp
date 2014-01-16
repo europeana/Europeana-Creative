@@ -209,6 +209,8 @@ String test = "Geo-mapping-service";
 	google.maps.event.addDomListener(window, 'load', initialize);
 	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
   	
+	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
+	semanticPlugitInitialized = true;
 	
 </script>
 
