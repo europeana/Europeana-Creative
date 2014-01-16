@@ -14,7 +14,7 @@
 <link href="annotorious-0.6.1/css/anno-parse-plugin.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.8.min.js"></script>
 <script type="text/javascript" src="http://annotorious.github.io/latest/annotorious.dev.js"></script>
 <script type="text/javascript" src="http://annotorious.github.io/demos/semantic-tagging-plugin.js"></script>
 <script type="text/javascript" src="annotorious-0.6.1/anno-parse-plugin.js"></script>
