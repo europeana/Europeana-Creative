@@ -48,10 +48,22 @@ annotorious.plugin.Parse.prototype.initPlugin = function(anno) {
 };
 
 annotorious.plugin.Parse.prototype.onInitAnnotator = function(annotator) {
-  var spinner = this._newLoadIndicator();
-  annotator.element.appendChild(spinner);
-  this._loadIndicators.push(spinner);
-}
+	var spinner = this._newLoadIndicator();
+	annotator.element.appendChild(spinner);
+	this._loadIndicators.push(spinner);
+
+	for(var i=0; i<this._collection.size(); i++) {
+		annotation = this._collection.at(i);
+		
+		if (!annotation.get("shape") && annotation.get("shapes")[0].geometry) {
+			if(annotator.getItemURL() == annotation.get("src")) {
+				self._DEBUG && console.log("resetting annotation", annotation);
+				anno.addAnnotation(annotation.toJSON(), true);
+				alert("reset: " + annotation.toJSON());
+			}
+		}
+	}
+};
 
 annotorious.plugin.Parse.prototype._newLoadIndicator = function() {
   var outerDIV = document.createElement('div');
@@ -78,10 +90,14 @@ annotorious.plugin.Parse.prototype._loadAnnotations = function(anno) {
   this._collection.fetch({
     success: function(coll) {
       coll.each(function(annotation) {
-        self._DEBUG && console.log("load success", annotation);
-        if (!annotation.get("shape") && annotation.get("shapes")[0].geometry) {
-          anno.addAnnotation(annotation.toJSON());
-        }
+    	  self._DEBUG && console.log("load success", annotation);
+          if (!annotation.get("shape") && annotation.get("shapes")[0].geometry) {
+            
+          	if(annotation.get("src").indexOf("http://62.218.164.177:8080/geomapping/img") == 0) {
+          		anno.addAnnotation(annotation.toJSON());
+          		//alert("addAnnotation " + annotation.toJSON());
+          	}
+          }
       });
       removeSpinner();
     },
