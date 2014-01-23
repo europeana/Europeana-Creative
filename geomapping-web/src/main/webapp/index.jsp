@@ -140,7 +140,7 @@ String test = "Geo-mapping-service";
 			searchForm = ifrDoc.getElementById("search_form");
 			searchTerms = ifrDoc.getElementById("searchTerms");
 			searchTerms.value = "Mozart Haydn Beethoven";
-			searchForm.submit();;
+			searchForm.submit();
 			
 		} 
 		else if(id == "cementary") {
