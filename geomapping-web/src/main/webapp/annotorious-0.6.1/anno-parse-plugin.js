@@ -62,8 +62,7 @@ annotorious.plugin.Parse.prototype.onInitAnnotator = function(annotator) {
 			//alert("annotation: " + annotation.get("src"));
 			if(annotator.getItem()["src"] == annotation.get("src")) {
 				self._DEBUG && console.log("resetting annotation", annotation);
-				anno.addAnnotation(annotation.toJSON(), true);
-				alert("reset: " + annotation.toJSON());
+				anno.addAnnotation(annotation.toJSON(), true);			
 			}
 		}
 	}
