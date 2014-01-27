@@ -52,11 +52,15 @@ annotorious.plugin.Parse.prototype.onInitAnnotator = function(annotator) {
 	annotator.element.appendChild(spinner);
 	this._loadIndicators.push(spinner);
 
+	//alert("annotator item: " + );
+	
 	for(var i=0; i<this._collection.size(); i++) {
 		annotation = this._collection.at(i);
 		
+		//load annotations for the given image (annotator)
 		if (!annotation.get("shape") && annotation.get("shapes")[0].geometry) {
-			if(annotator.getItemURL() == annotation.get("src")) {
+			//alert("annotation: " + annotation.get("src"));
+			if(annotator.getItem()["src"] == annotation.get("src")) {
 				self._DEBUG && console.log("resetting annotation", annotation);
 				anno.addAnnotation(annotation.toJSON(), true);
 				alert("reset: " + annotation.toJSON());

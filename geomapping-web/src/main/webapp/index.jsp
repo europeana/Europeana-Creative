@@ -25,9 +25,11 @@ String test = "Geo-mapping-service";
 %>
 	<div id="wrapper" class="max-width">
 		<header id="banner"><!-- role="banner" ? -->
-			<img class="display-none" src="img/creative-logo.png" alt=""> <img
-				class="bg" src="img/creative-banner.jpg" alt="Europeana Projects">
-			<h2>Geographic Mapping Service  - Demo</h2>
+			<a href="./index.jsp">
+				<img class="display-none" src="img/creative-logo.png" alt=""> <img
+					class="bg" src="img/creative-banner.jpg" alt="Europeana Projects">
+				<h2>Geographic Mapping Service  - Demo</h2>
+			</a>
 		</header>
 		<div id="mainblock">
 			<div id="content">
@@ -111,8 +113,12 @@ String test = "Geo-mapping-service";
  			}
  		});
  		google.maps.event.addListener(kmlLayer, 'click', function (kmlEvent) {
+ 			//change right side content
  			setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description);
- 			window.setTimeout( function(){setAnnotatableClasses(); anno.reset();}, 2000);
+ 			//make waypoint images annotatable
+ 			//reset annotations
+ 			window.setTimeout( function(){setAnnotatableClasses(); window.setTimeout( function(){anno.reset();}, 500);}, 1000);
+ 			
  		});
 	}
 	function setAnnotatableClasses() {
@@ -208,8 +214,7 @@ String test = "Geo-mapping-service";
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
-  	
-	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
+  	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
 	//semanticPlugitInitialized = true;
 	
 </script>
