@@ -5,7 +5,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Europeana Creative - Component Service</title>
+<title>Europeana Creative - Geomapping Service</title>
 <link href="css/css1.css" rel="stylesheet" type="text/css" />
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <link href="css/main_002.css" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@ String test = "Geo-mapping-service";
 					<tr>
 						<td valign="top"><div id="map-canvas" style="width: 800px; height: 730px" valign="top"><h3>Mozart Places in Vienna</h3></div></td>
 						<td valign="top" align="center" width="250px">
-							<div id="mozart" style="height: 330; vertical-align: top; position:relative; top:0; overflow:hidden;">
+							<div id="mozart" style="height: 330; vertical-align: top; position:relative; top:0; overflow:auto;">
 								<h5>Details about Mozart Places</h5>
       							<img src="http://62.218.164.177:8080/geomapping/img/mozart.jpeg" width="300" class="annotatable" alt="anno">
       						</div>
