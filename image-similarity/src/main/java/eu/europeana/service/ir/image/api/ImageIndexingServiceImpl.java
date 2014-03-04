@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessor;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
@@ -211,7 +212,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 		ThumbnailsForCollectionAccessor tfca = new ThumbnailsForCollectionAccessor(
 				collectionName);
-		Map<String, String> thumbnails = tfca.getThumbnailsForCollection(0, -1);
+		Map<String, String> thumbnails = tfca.getThumbnailsForCollection(0, -1, ThumbnailsAccessor.ERROR_POLICY_RETHROW);
 		return insertCollectionByUrls(getDataset(), thumbnails);
 	}
 

@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import eu.europeana.api.client.Api2QueryInterface;
+import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessorTest;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
@@ -54,203 +56,284 @@ public class EvaluationDatasetBuilderTest extends
 	public static String SUB_CLASS_CHURCHES = "churches";
 	public static String SUB_CLASS_TRUMPETS = "musical trumpets";
 	public static String SUB_CLASS_CLOCK_TOWERS = "clock towers";
-	
+
 	final String DATASET_DEMO = "demo";
 	private String dataset = null;
 	private ImageSearchingService imageSearchingService;
 
-	//@Test
+	// @Test
 	public void createDemoDataset() throws IOException {
 		
 		setDataset(DATASET_DEMO);
 		
-		int objects0 = buildImageSet("Rijksmuseum-portrets",
+		//0
+		DatasetDescriptor dataset = new DatasetDescriptor("Rijksmuseum-portrets",
 				"90402_M_NL_Rijksmuseum", new String[] { CLASS_PAINTINGS,
-						SUB_CLASS_PORTRAINTS }, "portret", "schilderij");
+				SUB_CLASS_PORTRAINTS });
+		Api2QueryInterface query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "portret", "schilderij");
+		
+		int objects0 = buildImageSet(dataset, query);
 		assertEquals(1243, objects0);
 
-		int objects = buildImageSet("Rijksmuseum-miniatuur",
+		//
+		dataset = new DatasetDescriptor("Rijksmuseum-miniatuur",
 				"90402_M_NL_Rijksmuseum", new String[] { CLASS_OBJECTS,
-						SUB_CLASS_DECOR_MINIATURS }, "miniatuur beeld", null);
+				SUB_CLASS_DECOR_MINIATURS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "miniatuur beeld", null);
+		
+		int objects = buildImageSet(dataset, query);
 		assertEquals(68, objects);
 
-		int objects1 = buildImageSet("Rijksmuseum-landschap",
+		//1
+		dataset = new DatasetDescriptor("Rijksmuseum-landschap",
 				"90402_M_NL_Rijksmuseum", new String[] { CLASS_PAINTINGS,
-						SUB_CLASS_LANDSCAPES }, "landschap", "schilderij");
+				SUB_CLASS_LANDSCAPES });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "landschap", "schilderij");
+		int objects1 = buildImageSet(dataset, query);
 		assertEquals(424, objects1);
 
-		int objects2 = buildImageSet("Rijksmuseum-fles",
+		//2
+		dataset = new DatasetDescriptor("Rijksmuseum-fles",
 				"90402_M_NL_Rijksmuseum", new String[] { CLASS_OBJECTS,
-						SUB_CLASS_BOTTLES }, null, "fles");
+				SUB_CLASS_BOTTLES });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), null, "fles");
+		int objects2 = buildImageSet(dataset, query);
 		assertEquals(139, objects2);
 
-		int objects3 = buildImageSet("Rijksmuseum-drawing-lanschap",
+		//3
+		dataset = new DatasetDescriptor("Rijksmuseum-drawing-lanschap",
 				"90402_M_NL_Rijksmuseum", new String[] { CLASS_DRAWINGS,
-						SUB_CLASS_LANDSCAPES }, "landschap", "tekening");
+				SUB_CLASS_LANDSCAPES });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "landschap", "tekening");
+		int objects3 = buildImageSet(dataset, query);
 		assertEquals(701, objects3);
 
-		int objects4 = buildImageSet("Rijksmuseum-porselein",
+		//4
+		dataset = new DatasetDescriptor("Rijksmuseum-porselein",
 				"90402_M_NL_Rijksmuseum", new String[] { CLASS_OBJECTS,
-						SUB_CLASS_PORCELAIN }, "Hollands porselein", null);
+				SUB_CLASS_PORCELAIN });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "Hollands porselein", null);
+		int objects4 = buildImageSet(dataset, query);
 		assertEquals(145, objects4);
 
-		int objects5 = buildImageSet("Teylers-parrot", "10106_Ag_EU_STERNA_48",
-				new String[] { CLASS_BIRDS, SUB_CLASS_PARROTS }, "parrot", null);
+		//5
+		dataset = new DatasetDescriptor("Teylers-parrot", "10106_Ag_EU_STERNA_48",
+				new String[] { CLASS_BIRDS, SUB_CLASS_PARROTS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "parrot", null);
+		
+		int objects5 = buildImageSet(dataset, query);
 		assertEquals(105, objects5);
 
-		int objects6 = buildImageSet("Teylers-duck", "10106_Ag_EU_STERNA_48",
-				new String[] { CLASS_BIRDS, SUB_CLASS_DUCKS }, "duck", null);
+		//6
+		dataset = new DatasetDescriptor("Teylers-duck", "10106_Ag_EU_STERNA_48",
+				new String[] { CLASS_BIRDS, SUB_CLASS_DUCKS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "duck", null);
+		
+		int objects6 = buildImageSet(dataset, query);
 		assertEquals(120, objects6);
 
-		int objects7 = buildImageSet("Teylers-woodpecker",
+		//7
+		dataset = new DatasetDescriptor("Teylers-woodpecker",
 				"10106_Ag_EU_STERNA_48", new String[] { CLASS_BIRDS,
-						SUB_CLASS_WOODPECKERS }, "woodpecker", null);
+				SUB_CLASS_WOODPECKERS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "woodpecker", null);
+		
+		int objects7 = buildImageSet(dataset, query);
 		assertEquals(210, objects7);
 
-		int objects8 = buildImageSet("Teylers-falco", "10106_Ag_EU_STERNA_48",
-				new String[] { CLASS_BIRDS, SUB_CLASS_HAWKS_EAGLES }, "falco",
+		//8
+		dataset = new DatasetDescriptor("Teylers-falco", "10106_Ag_EU_STERNA_48",
+				new String[] { CLASS_BIRDS, SUB_CLASS_HAWKS_EAGLES });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "falco",
 				null);
+		
+		int objects8 = buildImageSet(dataset, query);
 		assertEquals(146, objects8);
 
-		int objects9 = buildImageSet("Galileo-elettrica",
+		//9
+		dataset = new DatasetDescriptor("Galileo-elettrica",
 				"02301_Ag_IT_MG_catalogue", new String[] { CLASS_OBJECTS,
-						SUB_CLASS_ELECTRICS }, "ingegneria elettrica", null);
+				SUB_CLASS_ELECTRICS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "ingegneria elettrica", null);
+		int objects9 = buildImageSet(dataset, query);
 		assertEquals(231, objects9);
 
-		int objects10 = buildImageSet("Galileo-optics",
+		//10
+		dataset = new DatasetDescriptor("Galileo-optics",
 				"02301_Ag_IT_MG_catalogue", new String[] { CLASS_OBJECTS,
-						SUB_CLASS_OPTICS }, "optics", null, "IMAGE");
+				SUB_CLASS_OPTICS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "optics", null, "IMAGE");
+		
+		int objects10 = buildImageSet(dataset, query);
 		assertEquals(195, objects10);
 
-		int objects11 = buildImageSet("MIMO-trompe", "09102_Ag_EU_MIMO_ESE",
-				new String[] { CLASS_OBJECTS, SUB_CLASS_TRUMPETS }, "trompe",
-				null);
+		//11
+		dataset = new DatasetDescriptor("MIMO-trompe", "09102_Ag_EU_MIMO_ESE",
+				new String[] { CLASS_OBJECTS, SUB_CLASS_TRUMPETS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "trompe", null);
+		int objects11 = buildImageSet(dataset, query);
 		assertEquals(1194, objects11);
 
-		int objects12 = buildImageSet("NHM-LISABON-butterflies",
+		//12
+		dataset = new DatasetDescriptor("NHM-LISABON-butterflies",
 				"2023901_Ag_EU_NaturalEurope_all", new String[] {
-						CLASS_INSECTS, SUB_CLASS_BUTTERFLIES }, "butterflies",
-				null, "IMAGE");
+				CLASS_INSECTS, SUB_CLASS_BUTTERFLIES });
+		
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "butterflies", null, "IMAGE");
+		int objects12 = buildImageSet(dataset, query);
 		assertEquals(376, objects12);
 
-		int objects13 = buildImageSet("Athena-icon",
+		//13
+		dataset = new DatasetDescriptor("Athena-icon",
 				"08515_Ag_EU_ATHENA_ChouvashiaStateArtMuseum",
 				// "2023901_Ag_EU_NaturalEurope_all",
-				new String[] { CLASS_PAINTINGS, SUB_CLASS_ICONS }, null, // "butterflies",
+				new String[] { CLASS_PAINTINGS, SUB_CLASS_ICONS });
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), null, // "butterflies",
 				null, // what
 				"Неизвестный иконописец", // who
 				null);
+		int objects13 = buildImageSet(dataset, query);
 		assertEquals(117, objects13);
 
-		int objects14 = buildImageSet("Athena-icon",
+		//14
+		dataset = new DatasetDescriptor("Athena-icon",
 				"08559_Ag_EU_ATHENA_The_State_Tretyakov_Gallery",
 				// "2023901_Ag_EU_NaturalEurope_all",
-				new String[] { CLASS_PAINTINGS, SUB_CLASS_ICONS }, null, // "butterflies",
+				new String[] { CLASS_PAINTINGS, SUB_CLASS_ICONS });
+		
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), null, // "butterflies",
 				null, // what
 				"Неизвестный иконописец", // who
 				null);
+		int objects14 = buildImageSet(dataset, query);
 		assertEquals(33, objects14);
 
-		int objects15 = buildImageSet("Cimec-icoana", "05812_L_RO_CIMEC_ese", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_PAINTINGS, SUB_CLASS_ICONS},
+		//15
+		dataset = new DatasetDescriptor("Cimec-icoana", "05812_L_RO_CIMEC_ese", // "2023901_Ag_EU_NaturalEurope_all",
+				new String[]{CLASS_PAINTINGS, SUB_CLASS_ICONS});
+		
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), 
 				"icoana", // "butterflies",
 				null, // what
 				null, // who
 				null, "cIMeC - Institutul de Memorie Culturală");
+		int objects15 = buildImageSet(dataset, query);
 		assertEquals(244, objects15);
 
-		int objects16 = buildImageSet("Cimec-icoana", "05811_L_RO_CIMEC_ese", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_PAINTINGS, SUB_CLASS_ICONS},
+		//16
+		dataset = new DatasetDescriptor("Cimec-icoana", "05811_L_RO_CIMEC_ese", // "2023901_Ag_EU_NaturalEurope_all",
+				new String[]{CLASS_PAINTINGS, SUB_CLASS_ICONS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), 
 				"icoana", // "butterflies",
 				null, // what
 				null, // who
-				null, "cIMeC - Institutul de Memorie Culturală");
+				null, "cIMeC - Institutul de Memorie Culturală"); 
+		int objects16 = buildImageSet(dataset, query);
 		assertEquals(57, objects16);
 
-		int objects17 = buildImageSet("Tel-muralpainting",
-				"9200170_Ag_EU_TEL_a1019d_EU_Libraries_Vienna", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_PAINTINGS, SUB_CLASS_MURALPAINTINGS},
+		//17
+		dataset = new DatasetDescriptor("Tel-muralpainting",
+				"9200170_Ag_EU_TEL_a1019d_EU_Libraries_Vienna", 
+				new String[]{CLASS_PAINTINGS, SUB_CLASS_MURALPAINTINGS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), 
 				"church", // "butterflies",
-				"mural paintings", // what
-				null, // who
-				null);// object type
+				"mural paintings");
+				
+		int objects17 = buildImageSet(dataset, query);
 		assertEquals(1088, objects17);
 
-		int objects18 = buildImageSet("Romania-building",
-				"2022404_Ag_RO_Elocal_clujulin", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_BUILDINGS, SUB_CLASS_CIVILS},
-				null, // "butterflies",
-				"building", // what
-				null, // who
-				null);// object type
+		//18
+		dataset = new DatasetDescriptor("Romania-building",
+				"2022404_Ag_RO_Elocal_clujulin", 
+				new String[]{CLASS_BUILDINGS, SUB_CLASS_CIVILS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(),null, 
+				"building");
+				
+		int objects18 = buildImageSet(dataset, query);// object type
 		assertEquals(134, objects18);
 
-		int objects19 = buildImageSet(
-				"Romania-building",
+		//19
+		dataset = new DatasetDescriptor("Romania-building",
 				"08511_Ag_EU_ATHENA_InstituteforCulturalMemory*", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_BUILDINGS, SUB_CLASS_PEASANT_HOUSES},
-				null, // "butterflies",
+				new String[]{CLASS_BUILDINGS, SUB_CLASS_PEASANT_HOUSES});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), null, // "butterflies",
 				"building", // what
 				null, // who
 				null, null, null, // provider
-				new String[] { "NOT gips", "NOT capitel" });// object type
+				new String[] { "NOT gips", "NOT capitel" });
+		
+		int objects19 = buildImageSet(dataset, query);
 		assertEquals(192, objects19);
 
-		int objects20 = buildImageSet("Judaica-spicetower",
+		//20
+		dataset = new DatasetDescriptor("Judaica-spicetower",
 				"09307_Ag_EU_Judaica_Jewish_Museum_London", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_OBJECTS, SUB_CLASS_DECOR_MINIATURS},
-				"\"spice tower\"", // "butterflies",
-				null, // what
-				null, // who
-				null);// object type
+				new String[]{CLASS_OBJECTS, SUB_CLASS_DECOR_MINIATURS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), "\"spice tower\"", null); 
+				
+		int objects20 = buildImageSet(dataset, query);
 		assertEquals(121, objects20);
 
-		int objects21 = buildImageSet("CultureGrid-clocktower", "2022*", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_BUILDINGS, SUB_CLASS_CLOCK_TOWERS},
-				null, // "butterflies",
-				"\"clock tower\"", // what
-				null, // who
-				"IMAGE", "CultureGrid", null, new String[] { "NOT bridge",
-						"NOT square" });// object type
+		//21
+		dataset = new DatasetDescriptor("CultureGrid-clocktower", "2022*", // "2023901_Ag_EU_NaturalEurope_all",
+				new String[]{CLASS_BUILDINGS, SUB_CLASS_CLOCK_TOWERS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(),
+				null, "\"clock tower\"", null,	"IMAGE", "CultureGrid", null, 
+				new String[] { "NOT bridge","NOT square" });
+				
+		int objects21 = buildImageSet(dataset, query);// object type
 		assertEquals(296, objects21);
 
-		int objects22 = buildImageSet("TEL-palace",
+		//22
+		dataset = new DatasetDescriptor("TEL-palace",
 				"92037_Ag_EU_TEL_a0444_BritishLibrary", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_BUILDINGS, SUB_CLASS_INTERIORS},
+				new String[]{CLASS_BUILDINGS, SUB_CLASS_INTERIORS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(),
 				null, // "butterflies",
 				"palace", // what
 				null, // who
 				null, null, null, new String[] { "room", "interior", "NOT Mary",
-						"NOT \"Veliko Tarnovo\"" });// object type
+						"NOT \"Veliko Tarnovo\"" });
+				
+		int objects22 = buildImageSet(dataset, query);
 		assertEquals(36, objects22);
 
-		int objects23 = buildImageSet("TEL-palace", "2022*", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_BUILDINGS, SUB_CLASS_INTERIORS},
+		//23
+		dataset = new DatasetDescriptor("TEL-palace", "2022*", // "2023901_Ag_EU_NaturalEurope_all",
+				new String[]{CLASS_BUILDINGS, SUB_CLASS_INTERIORS});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(),
 				null, // "butterflies",
 				"palace", // what
 				null, // who
 				null, null, null, new String[] { "room", "interior", "NOT Mary",
-						"NOT \"Veliko Tarnovo\"" });// object type
+						"NOT \"Veliko Tarnovo\"" });
+		
+		int objects23 = buildImageSet(dataset, query);// object type
 		assertEquals(95, objects23);
 
-		int objects24 = buildImageSet("EU_LOCAL_Durhamcathedral",
+		//24
+		dataset = new DatasetDescriptor("EU_LOCAL_Durhamcathedral",
 				"2022316_Ag_UK_ELocal_DurhamCountyCouncil", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_BUILDINGS, SUB_CLASS_CHURCHES},
+				new String[]{CLASS_BUILDINGS, SUB_CLASS_CHURCHES});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(),
 				null, // "butterflies",
 				"\"Durham Cathedral\"", // what
 				null, // who
 				"IMAGE", null, null, new String[] { "NOT interior", "NOT Cloister",
 						"NOT Sanctuary", "NOT roof", "NOT exhibit",
-						"NOT \"vibration tests\"" });// object type
+						"NOT \"vibration tests\"" });
+				
+		int objects24 = buildImageSet(dataset, query);// object type
 		assertEquals(154, objects24);
 
-		int objects25 = buildImageSet("OpenUp-butterfly",
+		//25
+		dataset = new DatasetDescriptor("OpenUp-butterfly",
 				"11617_Ag_EU_OpenUp*", // "2023901_Ag_EU_NaturalEurope_all",
-				new String[]{CLASS_INSECTS, SUB_CLASS_BUTTERFLIES},
-				"\"Zoological collections of the University of Tartu\"", // "butterflies",
-				null, // what
-				null, // who
-				null, null, null, null, 400, 500);
+				new String[]{CLASS_INSECTS, SUB_CLASS_BUTTERFLIES});
+		query = getQueryBuilder().buildQuery(dataset.getCollectionName(), 
+				"\"Zoological collections of the University of Tartu\"", null);
+				
+		int objects25 = buildImageSet(dataset, query, 400, 500, ThumbnailsAccessor.ERROR_POLICY_RETHROW);
 		assertEquals(500, objects25);
 		
 		performDatasetAggregation();
@@ -261,53 +344,53 @@ public class EvaluationDatasetBuilderTest extends
 		File cvsFolder = new File(getCollectionsCvsFolder());
 		File[] collectionFiles = cvsFolder.listFiles();
 		BufferedReader reader = null;
-		//String headerLine = null;
+		// String headerLine = null;
 		String line = null;
 		BufferedWriter datasetWriter = getDataSetFileWriter(false);
-		
-		
+
 		for (int i = 0; i < collectionFiles.length; i++) {
 			reader = new BufferedReader(new FileReader(collectionFiles[i]));
 			boolean firstLine = true;
 			while ((line = reader.readLine()) != null) {
-				//write headers to sysout
-				if(firstLine){
+				// write headers to sysout
+				if (firstLine) {
 					System.out.println(line);
 					firstLine = false;
 				}
-				//write all data to dataset
+				// write all data to dataset
 				datasetWriter.write(line);
 				datasetWriter.write("\n");
 
 			}
 			datasetWriter.flush();
-			//close reader
-			try{
+			// close reader
+			try {
 				reader.close();
-			}catch(IOException e){
-				System.out.println("cannot close reader for: " + collectionFiles[i]);
+			} catch (IOException e) {
+				System.out.println("cannot close reader for: "
+						+ collectionFiles[i]);
 				e.printStackTrace();
 			}
 		}
 		datasetWriter.close();
 	}
 
-	private BufferedWriter getDataSetFileWriter(boolean urls) throws IOException {
+	private BufferedWriter getDataSetFileWriter(boolean urls)
+			throws IOException {
 		File datasetFile = getDataSetFile(urls);
 		datasetFile.getParentFile().mkdirs();
-		
-		return new BufferedWriter(new FileWriter(datasetFile));  
-	}
-		
-	private File getDataSetFile(boolean urls) {
-		IRConfiguration config = getConfig();
-		if(urls)
-			return config.getDatasetUrlsFile(getDataset());
-		else
-			return config.getDatasetFile(getDataset());		
+
+		return new BufferedWriter(new FileWriter(datasetFile));
 	}
 
-	
+	private File getDataSetFile(boolean urls) {
+		IRConfiguration config = getConfig();
+		if (urls)
+			return config.getDatasetUrlsFile(getDataset());
+		else
+			return config.getDatasetFile(getDataset());
+	}
+
 	public void testGetThumbnailsForCollectionLimit() {
 		// avoid execution
 	}
@@ -323,22 +406,22 @@ public class EvaluationDatasetBuilderTest extends
 	public void setDataset(String dataset) {
 		this.dataset = dataset;
 	}
-	
-	//@Test
-	public void downloadThumbnails() throws FileNotFoundException, IOException{
-		
+
+	// @Test
+	public void downloadThumbnails() throws FileNotFoundException, IOException {
+
 		setDataset(DATASET_DEMO);
 		IRConfiguration config = getConfig();
 		File datasetFile = config.getDatasetFile(DATASET_DEMO);
-		
+
 		IndexHelper ixHelper = new IndexHelper();
-		Map<String, String> thumbnailsMap = ixHelper.getThumbnailsMap(datasetFile);
-		
-		
-		
+		Map<String, String> thumbnailsMap = ixHelper
+				.getThumbnailsMap(datasetFile);
+
 		ThumbnailsAccessor ta = new ThumbnailsAccessor();
-		List<String> skippedItems = ta.copyThumbnails(thumbnailsMap, config.getIndexImagesFolder(DATASET_DEMO));
-		
+		List<String> skippedItems = ta.copyThumbnails(thumbnailsMap,
+				config.getIndexImagesFolder(DATASET_DEMO));
+
 		System.out.println("Skipped items: " + skippedItems.size());
 		for (String itemId : skippedItems) {
 			System.out.println(itemId);
@@ -349,47 +432,48 @@ public class EvaluationDatasetBuilderTest extends
 		IRConfiguration config = new IRConfigurationImpl();
 		return config;
 	}
-	
+
 	@Test
-	public void buildIndexedUrlsFile() throws FileNotFoundException, IOException, ImageSearchingException{
-		
+	public void buildIndexedUrlsFile() throws FileNotFoundException,
+			IOException, ImageSearchingException {
+
 		setDataset(DATASET_DEMO);
 		IRConfiguration config = getConfig();
 		File datasetFile = config.getDatasetFile(getDataset());
-		
+
 		IndexHelper ixHelper = new IndexHelper();
-		Map<String, String> thumbnailsMap = ixHelper.getThumbnailsMap(datasetFile);
+		Map<String, String> thumbnailsMap = ixHelper
+				.getThumbnailsMap(datasetFile);
 		BufferedWriter indexedUrlsWriter = getDataSetFileWriter(true);
 		EuropeanaId euId = new EuropeanaId();
 		int counter = 0;
-		
+
 		for (Map.Entry<String, String> thumbnail : thumbnailsMap.entrySet()) {
-			
-			
+
 			euId.setNewId(thumbnail.getKey());
-			try{
+			try {
 				getImageSearchingService().searchSimilar(euId);
-			
-				if(getImageSearchingService().getTotalResults() > 0){
-					//write to file
+
+				if (getImageSearchingService().getTotalResults() > 0) {
+					// write to file
 					indexedUrlsWriter.append(thumbnail.getKey()).append("; ");
 					indexedUrlsWriter.append(thumbnail.getValue()).append("\n");
 					counter++;
-				}else{
-					//not indexed yet
+				} else {
+					// not indexed yet
 					System.out.println("Skipped item: " + euId.getNewId());
 				}
-				
-			}catch(ImageSearchingException e){
+
+			} catch (ImageSearchingException e) {
 				System.out.println(e.getMessage());
 			}
 		}
-		
+
 		System.out.println("correct items: " + counter);
 	}
-	
+
 	public ImageSearchingService getImageSearchingService() {
-		if (imageSearchingService == null){
+		if (imageSearchingService == null) {
 			imageSearchingService = new ImageSearchingServiceImpl(getDataset(),
 					getConfig());
 			imageSearchingService.init();
@@ -399,9 +483,9 @@ public class EvaluationDatasetBuilderTest extends
 
 	@Override
 	public String getCollectionsCvsFolder(String dataset) {
-		return COLLECTIONS_FOLDER + dataset +"/";
+		return COLLECTIONS_FOLDER + dataset + "/";
 	}
-	
+
 	@Override
 	protected String getCollectionsCvsFolder() {
 		return getCollectionsCvsFolder(getDataset());
