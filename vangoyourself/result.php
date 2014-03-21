@@ -52,6 +52,8 @@ $th_width = $_POST['th_width'];
 $image1 = new Imagick($target_path1);
 $image2 = new Imagick($target_path2);
 
+$httppath = 'http://' . $_SERVER['SERVER_NAME'] . dirname($_SERVER['REQUEST_URI']);
+
 $geo1 = $image1->getimagegeometry();
 $image2->cropimage($width, $height, $x, $y);
 $geo2 = $image2->getimagegeometry();
@@ -66,6 +68,8 @@ if(!is_dir(getcwd() . "/" . $base_path . $datedir . "/" . $sessioniddir)) {
 	mkdir(getcwd() . "/" . $base_path . $datedir . "/" . $sessioniddir);
 }
 $target_path3 = $base_path . $datedir . "/" . $sessioniddir . "/" . time() . "-large.jpg";
+$resulturi = $httppath . $datedir . "/" . $sessioniddir . "/" . time() . "-large.jpg";
+
 $icol = new Imagick();
 if($_POST['hv'] == 'Vertical') {
 	if($geo1['width'] > $geo2['width']) {
@@ -94,12 +98,13 @@ if($_POST['hv'] == 'Vertical') {
 $result->writeimage($target_path3);
 $result->resizeimage($th_width, 0, Imagick::FILTER_POINT, 1);
 $thumbpath = $base_path . $datedir . "/" . $sessioniddir . "/" . time() . "-small.jpg";
+$resultthumburi = $httppath . $datedir . "/" . $sessioniddir . "/" . time() . "-small.jpg";
 $result->writeimage($thumbpath);
 
 if(move_uploaded_file($_FILES['file1']['tmp_name'], $target_path1) && move_uploaded_file($_FILES['file2']['tmp_name'], $target_path2)) {
 	echo "<img src=$target_path3><img src=$thumbpath><br><br>";
-	echo "Image URI: " . getcwd() . "/" . $target_path3 . "<br>";
-	echo "Thumbnail URI: " . getcwd() . "/" . $thumbpath;
+	echo "Image URI: " . $resulturi . "<br>";
+	echo "Thumbnail URI: " . $resultthumburi;
 } 
 else {
 	echo 'There was an error uploading the file, please try again!';
