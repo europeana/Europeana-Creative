@@ -49,6 +49,8 @@ $width = $_POST['width'];
 $height = $_POST['height'];
 $th_width = $_POST['th_width'];
 
+if(move_uploaded_file($_FILES['file1']['tmp_name'], $target_path1) && move_uploaded_file($_FILES['file2']['tmp_name'], $target_path2)) {
+
 $image1 = new Imagick($target_path1);
 $image2 = new Imagick($target_path2);
 
@@ -101,7 +103,6 @@ $thumbpath = $base_path . $datedir . "/" . $sessioniddir . "/" . time() . "-smal
 $resultthumburi = $httppath . $datedir . "/" . $sessioniddir . "/" . time() . "-small.jpg";
 $result->writeimage($thumbpath);
 
-if(move_uploaded_file($_FILES['file1']['tmp_name'], $target_path1) && move_uploaded_file($_FILES['file2']['tmp_name'], $target_path2)) {
 	echo "<img src=$target_path3><img src=$thumbpath><br><br>";
 	echo "Image URI: " . $resulturi . "<br>";
 	echo "Thumbnail URI: " . $resultthumburi;
