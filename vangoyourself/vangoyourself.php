@@ -92,6 +92,12 @@ function selection() {
 <input type="radio" name="hv" value="Horizontal">Landscape<br>
 <input type="radio" name="hv" value="Vertical">Portrait
 <hr>
+Color code: <input type="text" name="color_code"><br>
+Thickness: <input type="text" name="thickness"><br>
+<input type="radio" name="frame" value="Color Frame">Color Frame<br>
+<input type="radio" name="frame" value="Standard Frame">Standard Frame<br>
+<input type="radio" name="frame" value="Image Frame">Image Frame
+<hr>
 <input type="submit" value="Load">
 </form>
 <?php 

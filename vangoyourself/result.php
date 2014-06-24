@@ -97,6 +97,28 @@ if($_POST['hv'] == 'Vertical') {
 	$result =$icol->appendimages(false);
 }
 
+if($_POST['frame'] == 'Color Frame') {
+	$result->frameimage($_POST['color_code'], $_POST['thickness'], $_POST['thickness'], 5, 5);
+} else if($_POST['frame'] == 'Standard Frame') {
+	$result->borderimage('#000000', 2, 2); // Black
+	$result->borderimage('#A0522D', 3, 3); // Siena
+	$result->borderimage('#000000', 1, 1); // Black
+	$result->borderimage('#000000', 2, 2); // Black
+	$result->borderimage('#000000', 2, 2); // Black
+	$result->borderimage('#CD853F', 3, 3); // Peru
+	$result->borderimage('#000000', 1, 1); // Black
+	$frame = new Imagick("/home/bojan/Pictures/fancy_add.gif");
+	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, 0, 0);
+	$frame->flipImage();
+	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, 0, $result->getimagegeometry()['height']-48);
+	$frame->flopimage();
+	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, $result->getimagegeometry()['width']-48, $result->getimagegeometry()['height']-48);
+	$frame->flipimage();
+	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, $result->getimagegeometry()['width']-48, 0);
+} else if($_POST['frame'] == 'Image Frame') {
+	
+}
+
 $result->writeimage($target_path3);
 $result->resizeimage($th_width, 0, Imagick::FILTER_POINT, 1);
 $thumbpath = $base_path . $datedir . "/" . $sessioniddir . "/" . time() . "-small.jpg";
