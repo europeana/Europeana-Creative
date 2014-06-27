@@ -94,6 +94,8 @@ function selection() {
 <hr>
 Color code: <input type="text" name="color_code"><br>
 Thickness: <input type="text" name="thickness"><br>
+Frame Image: <input type="file" name="frame_image" onchange="fileupload(this.value)"><br>
+Top right corner: <input type="file" name="top_right" onchange="fileupload(this.value)"><br>
 <input type="radio" name="frame" value="Color Frame">Color Frame<br>
 <input type="radio" name="frame" value="Standard Frame">Standard Frame<br>
 <input type="radio" name="frame" value="Image Frame">Image Frame
@@ -105,7 +107,7 @@ Thickness: <input type="text" name="thickness"><br>
  * Creates an input form for image uploads
  */
 function image_uploads() {
-	//echo "image_uploads invokation";
+	//echo "image_uploads invocation";
 }
 
 // add_filter('the_content', 'image_uploads');

@@ -107,7 +107,7 @@ if($_POST['frame'] == 'Color Frame') {
 	$result->borderimage('#000000', 2, 2); // Black
 	$result->borderimage('#CD853F', 3, 3); // Peru
 	$result->borderimage('#000000', 1, 1); // Black
-	$frame = new Imagick("/home/bojan/Pictures/fancy_add.gif");
+	$frame = new Imagick("uploads/fancy_add.gif");
 	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, 0, 0);
 	$frame->flipImage();
 	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, 0, $result->getimagegeometry()['height']-48);
@@ -116,7 +116,32 @@ if($_POST['frame'] == 'Color Frame') {
 	$frame->flipimage();
 	$result->compositeimage($frame, Imagick::COMPOSITE_OVER, $result->getimagegeometry()['width']-48, 0);
 } else if($_POST['frame'] == 'Image Frame') {
-	
+	$frame_image = new Imagick($base_path . basename($_FILES['frame_image']['name']));
+	$geo_frame = $frame_image->getimagegeometry();
+	$geo_result = $result->getimagegeometry();
+	$framed_result = new Imagick();
+	for($i = 0; $i < $geo_result['width']; $i += $geo_frame['width']) {
+		$result->compositeimage($frame_image, imagick::COMPOSITE_DEFAULT, $i, 0);
+		$frame_image->flipimage();
+		$result->compositeimage($frame_image, imagick::COMPOSITE_DEFAULT, $i, $geo_result['height']-$geo_frame['height']);
+		$frame_image->flipimage();
+	}
+	for($i = 0; $i < $geo_result['height']; $i += $geo_frame['width']) {
+		$frame_image->rotateimage(new ImagickPixel('none'), 270);
+		$result->compositeimage($frame_image, imagick::COMPOSITE_DEFAULT, 0, $i);
+		$frame_image->rotateimage(new ImagickPixel('none'), -180);
+		$result->compositeimage($frame_image, imagick::COMPOSITE_DEFAULT, $geo_result['width']-$geo_frame['height'], $i);
+		$frame_image->rotateimage(new ImagickPixel('none'), -90);
+	}
+	$top_right = new Imagick($base_path . basename($_FILES['top_right']['name']));
+	$geo_topright = $top_right->getimagegeometry();
+	$result->compositeimage($top_right, imagick::COMPOSITE_DEFAULT, $geo_result['width']-$geo_topright['width'], 0);
+	$top_right->flipimage();
+	$result->compositeimage($top_right, imagick::COMPOSITE_DEFAULT, $geo_result['width']-$geo_topright['width'], $geo_result['height']-$geo_topright['height']);
+	$top_right->flopimage();
+	$result->compositeimage($top_right, imagick::COMPOSITE_DEFAULT, 0, $geo_result['height']-$geo_topright['height']);
+	$top_right->flipimage();
+	$result->compositeimage($top_right, imagick::COMPOSITE_DEFAULT, 0, 0);
 }
 
 $result->writeimage($target_path3);
