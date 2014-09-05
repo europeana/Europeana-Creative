@@ -6,24 +6,16 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
+import eu.europeana.api.client.config.ThumbnailAccessConfiguration;
 
-public class IRConfigurationImpl extends IndexConfigurationImpl implements IRConfiguration {
+
+public class IRConfigurationImpl extends IndexConfigurationImpl implements IRConfiguration, ThumbnailAccessConfiguration {
 
 	protected static final String COMPONENT_NAME = "image-similarity";
 	protected static final String PROP_API_KEY = "europeana.api.key";
 	
 	protected Logger log = Logger.getLogger(getClass());
 	
-//	protected static final String LIRE_SETTINGS = "LIRE_MP7ALL.properties";
-//	protected static final String FEATURES_ARCHIVE_FILE = "FCArchive-lire.dat";
-//	protected static final String IMAGE_FX_FILE = "image-fx.properties";
-//	protected static final String CONF_FOLDER = "conf";
-//	protected static final String PROP_IMAGE_INDEX_HOME = "image.index.home";
-//	protected static final String PROP_DATA_SET_DEFAULT = "dataset.default";
-	
-//	File indexHome;
-//	LireSettings lireSettings;
-//	File featuresArchiveFile = null;
 	String apiKey = null;
 	
 	@Override
@@ -36,50 +28,7 @@ public class IRConfigurationImpl extends IndexConfigurationImpl implements IRCon
 		//init();
 	}
 
-//	File getIndexHomeFolder() {
-//		if (indexHome == null) {
-//			indexHome = new File(getConfigProperty(PROP_IMAGE_INDEX_HOME));
-//		}
-//		return indexHome;
-//	}
-//
-//	public File getIndexFolder(String dataset) {
-//		if (indexHome == null) {
-//			indexHome = new File(getConfigProperty(PROP_IMAGE_INDEX_HOME));
-//		}
-//		
-//		if (dataset != null)
-//			return new File(indexHome, dataset);
-//		else
-//			return new File(indexHome, getDefaultDataset());
-//	}
-//	
-//	public File getIndexConfFolder(String dataset) {
-//		return new File(getIndexFolder(dataset), CONF_FOLDER);
-//	}
-//	
-//	public LireSettings getLireSettings(String dataset) throws IOException, VIRException {
-//		if (lireSettings == null)
-//			lireSettings = new LireSettings(new File(getIndexConfFolder(dataset),
-//					LIRE_SETTINGS));
-//		return lireSettings;
-//	}
-//
-//	public File getFeaturesArchiveFile(String dataset) {
-//
-//		return new File(getIndexFolder(dataset),
-//				FEATURES_ARCHIVE_FILE);
-//	}
-//
-//	public File getImageFxFile(String dataset) {
-//
-//		return new File(getIndexConfFolder(dataset),
-//				IMAGE_FX_FILE);
-//	}
-//	
-//	public String getDefaultDataset(){
-//		return getConfigProperty(PROP_DATA_SET_DEFAULT);
-//	}
+
 	
 	public String getApiKey() {
 		if (apiKey == null)
@@ -96,9 +45,32 @@ public class IRConfigurationImpl extends IndexConfigurationImpl implements IRCon
 	@Override
 	public File getDatasetUrlsFile(String dataset) {
 		if(dataset == null)
-			return new File(getDatasetsFolder(), getDefaultDataset() + ".urls.csv");
+			return new File(getDatasetsFolderAsFile(), getDefaultDataset() + ".urls.csv");
 		else
-			return new File(getDatasetsFolder(), dataset+".urls.csv");
+			return new File(getDatasetsFolderAsFile(), dataset+".urls.csv");
+	}
+
+	@Override
+	public String getBaseFolder() {
+		//redirect to INDEXHOME folder
+		return getIndexHomeFolder().getAbsolutePath();
+	}
+
+	/**
+	 * @see #getDatasetsFolderAsFile()
+	 */
+	@Override
+	public String getDatasetsFolder() {
+		//the datasets folder is hardcoded
+		return getDatasetsFolderAsFile().getAbsolutePath();
+	}
+
+	/**
+	 * @see #getImageFolderAsFile(String)
+	 */
+	@Override
+	public String getImageFolder(String dataset) {
+		return null;
 	}
 	
 

@@ -1,4 +1,4 @@
-package eu.europeana.creative.dataset.pt;
+package eu.europeana.creative.dataset.demo;
 
 import it.cnr.isti.indexer.IndexHelper;
 
@@ -11,9 +11,11 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
+import eu.europeana.api.client.config.ThumbnailAccessConfiguration;
+import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
 import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
-import eu.europeana.api.client.thumbnails.processing.ThumbnailDownloader;
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
+import eu.europeana.creative.dataset.BaseCreativeDatasetUtil;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
@@ -26,6 +28,9 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 
 	// public static String CLASS_WW1 = "ww1";
 
+	ImageSearchingService imageSearchingService;
+	IRConfiguration config = new IRConfigurationImpl();
+	
 	public static void main(String[] args) throws Exception {                    
 	       JUnitCore.main(
 	         "eu.europeana.creative.dataset.pt.EuCreativeDemoDatasetThumbnailsTest");            
@@ -35,9 +40,8 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 	@Test
 	public void downloadThumbnails() throws FileNotFoundException, IOException {
 
-		IRConfiguration config = getConfig();
-		File datasetFile = config.getDatasetFile(DATASET_EU_CREATIVE);
-		File downloadFolder = config.getIndexImagesFolder(DATASET_EU_CREATIVE);
+		File datasetFile = getConfig().getDatasetFile(DATASET_EU_CREATIVE);
+		File downloadFolder = getConfig().getImageFolderAsFile(DATASET_EU_CREATIVE);
 
 		LargeThumbnailsetProcessing datasetDownloader = new LargeThumbnailsetProcessing(datasetFile);
 		datasetDownloader.addObserver(new ThumbnailDownloader(downloadFolder));
@@ -50,7 +54,6 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 	}
 
 	protected IRConfiguration getConfig() {
-		IRConfiguration config = new IRConfigurationImpl();
 		return config;
 	}
 
@@ -100,5 +103,5 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 		}
 		return imageSearchingService;
 	}
-
+	
 }

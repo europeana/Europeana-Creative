@@ -1,6 +1,5 @@
 package eu.europeana.creative.dataset;
 
-import static org.junit.Assert.assertEquals;
 import it.cnr.isti.indexer.IndexHelper;
 
 import java.io.BufferedReader;
@@ -119,15 +118,16 @@ public class HistorianaDatasetBuilderTest extends
 		datasetWriter.close();
 	}
 
-	private BufferedWriter getDataSetFileWriter(boolean urls)
-			throws IOException {
-		File datasetFile = getDataSetFile(urls);
-		datasetFile.getParentFile().mkdirs();
+	
+//	private BufferedWriter getDataSetFileWriter(boolean urls)
+//			throws IOException {
+//		File datasetFile = getDataSetFile(urls);
+//		datasetFile.getParentFile().mkdirs();
+//
+//		return new BufferedWriter(new FileWriter(datasetFile));
+//	}
 
-		return new BufferedWriter(new FileWriter(datasetFile));
-	}
-
-	private File getDataSetFile(boolean urls) {
+	public File getDataSetFile(boolean urls) {
 		IRConfiguration config = getConfig();
 		if (urls)
 			return config.getDatasetUrlsFile(getDataset());
@@ -155,8 +155,7 @@ public class HistorianaDatasetBuilderTest extends
 	public void downloadThumbnails() throws FileNotFoundException, IOException {
 
 		setDataset(DATASET_HISTORIANA);
-		IRConfiguration config = getConfig();
-		File datasetFile = config.getDatasetFile(DATASET_HISTORIANA);
+		File datasetFile = getConfig().getDatasetFile(DATASET_HISTORIANA);
 
 		IndexHelper ixHelper = new IndexHelper();
 		Map<String, String> thumbnailsMap = ixHelper
@@ -164,7 +163,7 @@ public class HistorianaDatasetBuilderTest extends
 
 		ThumbnailsAccessor ta = new ThumbnailsAccessor();
 		List<String> skippedItems = ta.copyThumbnails(thumbnailsMap,
-				config.getIndexImagesFolder(DATASET_HISTORIANA));
+				getConfig().getImageFolderAsFile(DATASET_HISTORIANA));
 
 		System.out.println("Skipped items: " + skippedItems.size());
 		for (String itemId : skippedItems) {

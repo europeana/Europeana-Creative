@@ -1,5 +1,6 @@
 package eu.europeana.service.ir.image.api;
 
+import it.cnr.isti.feature.extraction.FeatureExtractionException;
 import it.cnr.isti.feature.extraction.Image2Features;
 import it.cnr.isti.melampo.index.indexing.LireIndexer;
 import it.cnr.isti.melampo.index.settings.LireSettings;
@@ -15,6 +16,8 @@ import it.cnr.isti.vir.similarity.metric.LireMetric;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,12 +25,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.xml.stream.FactoryConfigurationError;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessor;
+import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.index.indexing.ExtendedLireIndexer;
@@ -40,11 +47,15 @@ import eu.europeana.service.ir.image.model.IndexingStatus;
 public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 	@Autowired
-	private IRConfigurationImpl configuration;
+	private IRConfiguration configuration;
 
 	private final String dataset;
 
-	private FeaturesCollectorsArchive coll;
+	private FeaturesCollectorsArchive featuresArchive;
+
+	public FeaturesCollectorsArchive getFeatureCollectorArchive() {
+		return featuresArchive;
+	}
 
 	private LireIndexer mp7cIndex;
 
@@ -54,7 +65,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	private Logger log = Logger.getLogger(getClass());
 
 	public ImageIndexingServiceImpl(String dataset,
-			IRConfigurationImpl configuration) {
+			IRConfiguration configuration) {
 		this.configuration = configuration;
 
 		if (dataset == null)
@@ -74,7 +85,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	/**
 	 * @return
 	 */
-	public IRConfigurationImpl getConfiguration() {
+	public IRConfiguration getConfiguration() {
 		return configuration;
 	}
 
@@ -108,7 +119,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			img2Features = new Image2Features(configuration.getIndexConfFolder(dataset));
 			// features archive, Feature classes, VirId, FeaturesCollection
 			// array
-			coll = new FeaturesCollectorsArchive(featuresArchiveFile,
+			featuresArchive = new FeaturesCollectorsArchive(featuresArchiveFile,
 					new LireMetric().getRequestedFeaturesClasses(),
 					IDString.class, FeaturesCollectorArr.class);
 			setVariables();
@@ -127,26 +138,50 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see eu.europeana.service.ir.image.api.ImageIndexingService#insertImage(java.lang.String, java.net.URL)
+	 */
+	@Override
 	public void insertImage(String docID, URL imageURL)
 			throws ImageIndexingException {
-		try {
 
-			String imgFeatures = img2Features.extractFeatures(imageURL);
+
+		String imgFeatures;
+		try {
+			imgFeatures = img2Features.extractFeatures(imageURL);
+		} catch (FeatureExtractionException e) {
+			throw new ImageIndexingException(
+					"Cannot extract features for image:" + imageURL, e);
+		}
+		
+		String thumbnailUrl= imageURL.toString();
+		insertFeatures(docID, thumbnailUrl, imgFeatures);
+
+	}
+
+	protected void insertFeatures(String docID, String thumbnailUrl,
+			String imgFeatures) throws FactoryConfigurationError,
+			ImageIndexingException {
+		
+		BufferedReader br = null;
+		try {
 			InputStream is = new ByteArrayInputStream(imgFeatures.getBytes());
 
 			// read it with BufferedReader
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			br = new BufferedReader(new InputStreamReader(is));
 			FeaturesCollectorArr features = CoPhIRv2Reader.getObj(br);
 			features.setID(new IDString(docID));
-			if (coll != null)
-				coll.add(features);
-
+			if (featuresArchive != null)
+				featuresArchive.add(features);
+			
+			//settings || indexer = null?
 			if (settings == null) {
 				setVariables();
 			}
 
 			LireObject obj = new LireObject(features);
-			obj.setThmbURL(imageURL.toString());
+			obj.setThmbURL(thumbnailUrl);
 
 			mp7cIndex.addDocument(obj, docID);
 		} catch (ArchiveException e) {
@@ -155,38 +190,50 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		} catch (Exception e) {
 			throw new ImageIndexingException(
 					"Indexing image by URL thows exception:", e);
+		}finally{
+			if(br != null)
+				try {
+					br.close();
+				} catch (IOException e) {
+					//this exception should not occur
+					//if it occurs nothing harmful should occur
+					System.out.println("warning: exception occured when closing buffered reader of image features for image " 
+					+ docID + "\nError message"+ e.getLocalizedMessage());
+				}
 		}
-
+		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see eu.europeana.service.ir.image.api.ImageIndexingService#insertImage(java.lang.String, java.io.InputStream)
+	 */
+	@Override
 	public void insertImage(String docID, InputStream imageObj)
 			throws ImageIndexingException {
 
+		String imgFeatures;
 		try {
-			String imgFeatures = img2Features.extractFeatures(imageObj);
-			InputStream is = new ByteArrayInputStream(imgFeatures.getBytes());
-
-			// read it with BufferedReader
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			FeaturesCollectorArr features = CoPhIRv2Reader.getObj(br);
-			features.setID(new IDString(docID));
-			if (coll != null)
-				coll.add(features);
-
-			if (settings != null) {
-				setVariables();
-			}
-
-			LireObject obj = new LireObject(features);
-			mp7cIndex.addDocument(obj, docID);
-		} catch (ArchiveException e) {
+			imgFeatures = img2Features.extractFeatures(imageObj);
+		} catch (FeatureExtractionException e) {
 			throw new ImageIndexingException(
-					"Feature archive access exception:", e);
-		} catch (Exception e) {
-			throw new ImageIndexingException(
-					"Indexing image by URL thows exception:", e);
+					"Cannot extract features from input stream. docId" + docID, e);
 		}
+		
+		String thumbnailUrl="image/"+docID;
+		insertFeatures(docID, thumbnailUrl, imgFeatures);
 
+	}
+	
+	public void insertImage(String docID, File imageFile)
+			throws ImageIndexingException {
+	
+		try {
+			insertImage(docID, new FileInputStream(imageFile));
+		} catch (FileNotFoundException e) {
+			throw new ImageIndexingException(
+					"Cannot access file:" + imageFile, e);
+		}
 	}
 
 	private void setVariables() throws IOException, VIRException {
@@ -195,8 +242,10 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		// TODO: check if this code is not redundant
 		settings = this.configuration.getLireSettings(getDataset());
 		//TODO: verify the correctness of this implementations. Is this redundant or not?
-		if (coll== null && settings.getFCArchives().size() > 0)
-			coll = settings.getFCArchives().getArchive(0);
+		if (featuresArchive== null && settings.getFCArchives().size() > 0)
+			featuresArchive = settings.getFCArchives().getArchive(0);
+		
+		//TODO: move to method open new indexer
 		// mp7cIndex = new LireIndexer();
 		mp7cIndex = new ExtendedLireIndexer();
 		mp7cIndex.OpenIndex(settings);
@@ -263,6 +312,42 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 	public String getDataset() {
 		return dataset;
+	}
+
+	@Override
+	public int insertDatasetByIds(Set<String> ids)
+			throws ImageIndexingException {
+		
+		int indexedImageCount = 0;
+		int skipedFileCount = 0;
+		File imageFile;
+		
+		// open index
+		openIndex(dataset);
+		
+		for (String imageId: ids) {
+			try {
+				imageFile = getConfiguration().getImageFile(dataset, imageId);
+				insertImage(imageId, imageFile);
+				indexedImageCount++;
+			}catch (ImageIndexingException e) {
+				log.warn("Cannot index thumbnail with id:" + imageId, e);
+				skipedFileCount++;
+				// e.printStackTrace();
+			}
+
+			if ((indexedImageCount % 1000) == 0) {
+				// mp7cIndex.commit(); - not needed. auto flush is used
+				System.out.println("Processed items count: "
+						+ indexedImageCount);
+			}
+		}
+
+		log.info("Skiped wrong thumbnail URLs :" + skipedFileCount);
+		log.info("Successfully indexed thumbnail URLs :" + indexedImageCount);
+
+		closeIndex();
+		return indexedImageCount;
 	}
 
 }

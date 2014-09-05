@@ -17,12 +17,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import eu.europeana.api2.web.model.json.ApiError;
 import eu.europeana.api2.web.model.json.abstracts.ApiResponse;
 import eu.europeana.api2.web.model.json.abstracts.IndexingStatusResponse;
+import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageIndexingService;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.model.IndexingStatus;
 
 /**
+ * This is the class implementing the write functionality of this component.
+ * It provides web URLs as access points for remote invocation of the image analysis and indexing service. 
+ * @see ImageIndexingService
+ * @see IRConfiguration   
  * @author  paolo
  * @author Sergiu Gordea <sergiu.gordea_at_ait.ac.at>
  */
@@ -65,6 +70,11 @@ public class ImageIndexingRest extends BaseRestService {
 		return getConfiguration().getComponentName();
 	}
 	
+	/**
+	 * This method returns the name of the current component. This is the basic method to test if the deployment was completed correctly 
+	 * and the service is able to accept answer web requests. 
+	 * @return the name of the current web component 
+	 */
 	@RequestMapping(value = "/index/component", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String displayComponentName() {
@@ -93,6 +103,15 @@ public class ImageIndexingRest extends BaseRestService {
 //		}
 //	}
 	
+	/**
+	 * This method is used to insert into the index the image identified by the given europeanaId and located at the imageUrl location 
+	 * @param imageUrl
+	 * @param europeanaId
+	 * @param wskey
+	 * @param profile
+	 * @param response 
+	 * @return - the notification of successful execution of the indexing operation or the appropriate error message  
+	 */
 	@RequestMapping(value = "/index/imageUrl", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public @ResponseBody String insertImgUrl(
 			@RequestParam(value = "imageUrl", required = true) String imageUrl,
@@ -117,6 +136,16 @@ public class ImageIndexingRest extends BaseRestService {
 		
 	}
 	
+	/**
+	 * This method is used to insert into the index all image found within the collection identified by the given collectionId 
+	 *  
+	 * @param imageUrl
+	 * @param europeanaId
+	 * @param wskey
+	 * @param profile
+	 * @param response 
+	 * @return - the notification of successful execution of the indexing operation or the appropriate error message  
+	 */
 	@RequestMapping(value = "/index/collection", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public @ResponseBody String insertCollection(
 			@RequestParam(value = "collectionId", required = true) String collectionId,
@@ -132,7 +161,14 @@ public class ImageIndexingRest extends BaseRestService {
 					REQUEST_NUMBER_NOT_ACTIVE)).toString();
 		}
 	}
-	
+	/**
+	 * This method is used to check the progress of indexing by collectionId
+	 * @param collectionId
+	 * @param wskey
+	 * @param profile
+	 * @param response
+	 * @return - the status of the indexing process. See also {@link IndexingStatus}
+	 */
 	@RequestMapping(value = "/index/progress", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	public @ResponseBody ApiResponse getProgressStatus(
 			@RequestParam(value = "collectionId", required = true) String collectionId,

@@ -8,12 +8,13 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
 import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
+import eu.europeana.creative.dataset.BaseCreativeDatasetUtil;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 import eu.europeana.creative.dataset.pt.classification.GrayScaleSepiaDetector;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 
-public class EuCreativeThumbnailsCategorizationTest extends
+public class ThumbnailsCategorizationTest extends
 		BaseCreativeDatasetUtil implements IRTestConfigurations {
 
 	private static int blockSize=-2;
@@ -25,6 +26,7 @@ public class EuCreativeThumbnailsCategorizationTest extends
 	public static final String PREFIX_BLOCKSIZE="blockSize=";
 	public static final int DEFAULT_BLOCKSIZE = 1000;
 	
+	IRConfiguration config = new IRConfigurationImpl();
 	
 	// public static String CLASS_WW1 = "ww1";
 
@@ -32,28 +34,9 @@ public class EuCreativeThumbnailsCategorizationTest extends
 	    parseParams(args);   
 		
 		JUnitCore.main(
-	         "eu.europeana.creative.dataset.pt.EuCreativeThumbnailsCategorizationTest");            
+				ThumbnailsCategorizationTest.class.getCanonicalName());            
 	}
 	
-	
-	private static void parseParams(String[] args) {
-		for (int i = 0; i < args.length; i++) {
-			
-			if(args[i].startsWith(PREFIX_START)){
-				start = getValue(PREFIX_START, args[i]);
-				continue;
-			}else if(args[i].startsWith(PREFIX_LIMIT)){
-				limit = getValue(PREFIX_LIMIT, args[i]);
-				continue;
-			}else if(args[i].startsWith(PREFIX_BLOCKSIZE)){
-				blockSize = getValue(PREFIX_BLOCKSIZE, args[i]);
-				//continue;
-			}
-		}
-		
-	}
-
-
 	protected static int getValue(String argPrefix, final String arg) {
 		return Integer.parseInt(arg.substring(argPrefix.length()));
 	}
@@ -69,7 +52,7 @@ public class EuCreativeThumbnailsCategorizationTest extends
 		File outputFile = config.getDatasetFile(DATASET_EU_CREATIVE_CLASSIFIED);
 
 		LargeThumbnailsetProcessing datasetCategorization = new LargeThumbnailsetProcessing(datasetFile);
-		File imageFolder = config.getIndexImagesFolder(DATASET_EU_CREATIVE);
+		File imageFolder = config.getImageFolderAsFile(DATASET_EU_CREATIVE);
 		GrayScaleSepiaDetector observer = new GrayScaleSepiaDetector(imageFolder, 85, 3);
 		observer.setOutputFile(outputFile);
 		
@@ -88,7 +71,6 @@ public class EuCreativeThumbnailsCategorizationTest extends
 
 
 	protected IRConfiguration getConfig() {
-		IRConfiguration config = new IRConfigurationImpl();
 		return config;
 	}
 

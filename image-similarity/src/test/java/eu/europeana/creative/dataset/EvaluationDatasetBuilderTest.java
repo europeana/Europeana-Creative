@@ -375,15 +375,16 @@ public class EvaluationDatasetBuilderTest extends
 		datasetWriter.close();
 	}
 
-	private BufferedWriter getDataSetFileWriter(boolean urls)
-			throws IOException {
-		File datasetFile = getDataSetFile(urls);
-		datasetFile.getParentFile().mkdirs();
+//	BufferedWriter getDataSetFileWriter(boolean urls)
+//			throws IOException {
+//		super.getDataSetFileWriter(urls)();
+//		File datasetFile = getDataSetFile(urls);
+//		datasetFile.getParentFile().mkdirs();
+//
+//		return new BufferedWriter(new FileWriter(datasetFile));
+//	}
 
-		return new BufferedWriter(new FileWriter(datasetFile));
-	}
-
-	private File getDataSetFile(boolean urls) {
+	public File getDataSetFile(boolean urls) {
 		IRConfiguration config = getConfig();
 		if (urls)
 			return config.getDatasetUrlsFile(getDataset());
@@ -411,8 +412,7 @@ public class EvaluationDatasetBuilderTest extends
 	public void downloadThumbnails() throws FileNotFoundException, IOException {
 
 		setDataset(DATASET_DEMO);
-		IRConfiguration config = getConfig();
-		File datasetFile = config.getDatasetFile(DATASET_DEMO);
+		File datasetFile = getConfig().getDatasetFile(DATASET_DEMO);
 
 		IndexHelper ixHelper = new IndexHelper();
 		Map<String, String> thumbnailsMap = ixHelper
@@ -420,7 +420,7 @@ public class EvaluationDatasetBuilderTest extends
 
 		ThumbnailsAccessor ta = new ThumbnailsAccessor();
 		List<String> skippedItems = ta.copyThumbnails(thumbnailsMap,
-				config.getIndexImagesFolder(DATASET_DEMO));
+				getConfig().getImageFolderAsFile(DATASET_DEMO));
 
 		System.out.println("Skipped items: " + skippedItems.size());
 		for (String itemId : skippedItems) {

@@ -67,12 +67,29 @@ public class ImageSearchingRest extends BaseRestService {
 		return getConfiguration().getComponentName();
 	}
 
+	/**
+	 * This method returns the name of the current component. This is the basic method to test if the deployment was completed correctly 
+	 * and the service is able to accept answer web requests. 
+	 * @return the name of the current web component 
+	 */
 	@RequestMapping(value = "/component", method = RequestMethod.GET, produces = "text/*")
 	@ResponseBody
 	public String displayComponentName() {
 		return getComponentName();
 	}
 
+	/**
+	 * This method retrieves the list or similar images for the image already available in the index being identified by the given queryImageId
+	 * If start and rows parameters are used, the subset of items with the size of <code>rows<code> items starting with the <code>start<code> position will be retrieved.
+	 *   
+	 * @param queryImageId - the europeanaId for the query image
+	 * @param start - start position in the result set
+	 * @param rows - size of the retrieved items set
+	 * @param wskey
+	 * @param profile
+	 * @param response
+	 * @return - the result set containing the similar items, or the appropriate error message in case of failure. See also {@link ApiResponse}
+	 */
 	@RequestMapping(value = "/searchById.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ApiResponse searchById(
 			@RequestParam(value = "queryImageId", required = true) String queryImageId,
@@ -106,11 +123,19 @@ public class ImageSearchingRest extends BaseRestService {
 		return results;
 	}
 
+	/**
+	 * This method retrieves the list or similar images for the image embedded in the HTTP request. 
+	 * If start and rows parameters are used, the subset of items with the size of <code>rows<code> items starting with the <code>start<code> position will be retrieved.
+	 *
+	 * @param queryImage the input stream used to read the image content
+	 * @param start - start position in the result set
+	 * @param rows - size of the retrieved items set
+	 * @param wskey
+	 * @param profile
+	 * @param response
+	 * @return the result set containing the similar items, or the appropriate error message in case of failure. See also {@link ApiResponse}
+	 */
 	@RequestMapping(value = "/searchByObj.json", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	// @POST
-	// @Path("/searchByObj")
-	// @Consumes(MediaType.MULTIPART_FORM_DATA)
-	// @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public @ResponseBody
 	ApiResponse searchByImageFile(
 			@RequestParam(value = "imgFile", required = true) InputStream queryImage,
@@ -140,6 +165,18 @@ public class ImageSearchingRest extends BaseRestService {
 		}
 	}
 
+		
+	/**
+	 * This method retrieves the list or similar images for the image embedded in the HTTP request. 
+	 * If start and rows parameters are used, the subset of items with the size of <code>rows<code> items starting with the <code>start<code> position will be retrieved.
+	 * @param queryImageUrl
+	 * @param start - start position in the result set
+	 * @param rows - size of the retrieved items set
+	 * @param wskey
+	 * @param profile
+	 * @param response
+	 * @return the result set containing the items, or the appropriate error message in case of failure. See also {@link ApiResponse}
+	 */
 	@RequestMapping(value = "/searchByUrl.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody ApiResponse searchByUrl(
 			@RequestParam(value = "queryImageUrl", required = true) String queryImageUrl,

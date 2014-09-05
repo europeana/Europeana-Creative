@@ -1,7 +1,6 @@
 package eu.europeana.creative.dataset.pt.classification;
 
 import it.cnr.isti.vir.features.mpeg7.imageanalysis.ScalableColorPlusImpl;
-import it.cnr.isti.vir.features.mpeg7.imageanalysis.ScalableColorPlusImpl.ImageType;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;

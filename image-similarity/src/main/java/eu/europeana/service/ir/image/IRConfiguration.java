@@ -10,19 +10,14 @@ import java.io.File;
 	 */
 	public interface IRConfiguration extends IndexConfiguration{
 
-//		public static final String PROP_SERVER_URL = "server.url";
-//		public static final String PROP_APPLICATION_NAME = "application.name";
+
+		//public String getApiKey();
 		
-//		public static final String DEFAULT_SERVER_URL = "http://localhost";
-//		public static final String DEFAULT_APPLICATION_NAME = "image-similarity";
-		
-		//public static final String PATH_SEPARATOR = "/";
-		
-//		public String getComponentName();
-//		
-//		public void init();
-		public String getApiKey();
-		
+		/**
+		 * Return the (.csv.url) file containing the euopeanaID-thumbnailUrl map for the given dataset.
+		 * @param dataset
+		 * @return the physical location of the (dataset.csv.urls) file  
+		 */
 		public File getDatasetUrlsFile(String dataset);
 		
 }

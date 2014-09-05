@@ -57,6 +57,10 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	// this(null);
 	// }
 
+	/*
+	 * (non-Javadoc)
+	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#init()
+	 */
 	@Override
 	public void init() {
 		// ensure initialization of configuration attribute
@@ -99,6 +103,10 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar(eu.europeana.corelib.tools.lookuptable.EuropeanaId)
+	 */
 	public void searchSimilar(EuropeanaId imageQueryId)
 			throws ImageSearchingException {
 
@@ -120,6 +128,10 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar(java.io.InputStream)
+	 */
 	public void searchSimilar(InputStream imageQueryObj)
 			throws ImageSearchingException {
 		log.info("searching by obj ");
@@ -135,6 +147,11 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	}
 
+	/**
+	 * this method is the basis for index searching 
+	 * @param features
+	 * @throws ImageSearchingException
+	 */
 	private void searchByImageFeatures(String features)
 			throws ImageSearchingException {
 		try {
@@ -154,6 +171,10 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar(java.net.URL)
+	 */
 	public void searchSimilar(URL imageQueryURL) throws ImageSearchingException {
 		log.info("searching by URL " + imageQueryURL.toString());
 		try{
