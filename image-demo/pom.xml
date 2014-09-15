@@ -11,12 +11,11 @@
 	<dependencies>
 		
 		<dependency>
-			<artifactId>melampo-demo</artifactId>
+			<artifactId>melampo-demo-servlets</artifactId>
 			<groupId>it.cnr.isti.melampo</groupId>
 			<version>0.0.1-SNAPSHOT</version>
-			<classifier>classes</classifier>
 		</dependency>
-		
+		<!--  
 		<dependency>
 			<groupId>it.cnr.isti.melampo</groupId>
 			<artifactId>melampo-index</artifactId>
@@ -86,7 +85,7 @@
 			<artifactId>commons-logging-api</artifactId>
 			<version>1.0.4</version>
 		</dependency>
-		
+		-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
