@@ -1,4 +1,4 @@
-# ID;# image path (URL - absolute or relative to proj root)
+# ID;# image path (relative to proj root)
 # Rijksmuseum - portraits
 /90402/E253DA5B2EE24C891204CB5BC12E3B5885B511E4;http://europeanastatic.eu/api/image?uri=http%3A%2F%2Fwww.rijksmuseum.nl%2Fmedia%2Fassets%2FSK-A-3961&size=LARGE&type=IMAGE
 /90402/3E03526D1739B323AEE0FB3D9F6833576E616423;http://europeanastatic.eu/api/image?uri=http%3A%2F%2Fwww.rijksmuseum.nl%2Fmedia%2Fassets%2FSK-A-1953&size=LARGE&type=IMAGE
