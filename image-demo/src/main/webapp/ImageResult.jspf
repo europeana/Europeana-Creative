@@ -1,7 +1,7 @@
 <%@page import="it.cnr.isti.cophir.ui.index.IndexSupport"%>
 <%  String id = imageResults[i][1];
     String score = imageResults[i][0];
-    String objectUrlSmall = randomImages.getThumbnailUrl(id);%>
+    String objectUrlSmall = imageDispatcher.getThumbnailUrl(id, "./");%>
 
 <div>
 <%
@@ -9,20 +9,25 @@ StringBuilder tooltip = new StringBuilder();
 %>
 
 <div>
+<!--  the search similar  link-->
 <a href="<%=url%>?id=<%=id%>&features=<%=advOptions.getFeaturesAsString()%>&src=res" title="search similar images">similar</a> &nbsp;
+<!--  the score bar -->
 <img style="background-color: white; border-color: black; border-width: 10;" src="./images/<%=imageSearchBean.getScoreBar(score)%>" title="score: <%=score%>"> 
 <br>
+<!--  the image -->
 <span>
-
 <%if (objectUrlSmall.startsWith("./")) {%>
-<a href="objectUrlSmall" title="Full Size View" target="_blank"><img
+<a href="<%=objectUrlSmall%>" title="Full Size View" target="_blank"><img
 							src="<%=objectUrlSmall%>" border="0" alt="" width="200"></a>
 <%} else { %>
 <img style="border-color: #AACCE1;" src="<%=objectUrlSmall%>" border="0" title="<%=id %>">
 <%} %>
-
-
 </span>
+</div>
+<!--  view at europeana -->
+<div align="right">
+	<a href="http://europeana.eu/portal/record<%=id%>.html" title="View image from original location"
+								target="_new">@europeana</a>
 </div>
 
 </div>                 

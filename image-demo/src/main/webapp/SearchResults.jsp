@@ -1,9 +1,21 @@
 <%@page import="it.cnr.isti.cophir.ui.tools.UITools"%>
+<jsp:useBean id="configuration" scope="application"
+	class="it.cnr.isti.config.index.ImageDemoConfigurationImpl" />
 <jsp:useBean id="imageSearchBean" scope ="session" class="it.cnr.isti.cophir.ui.bean.SearchBean"/>
 <jsp:useBean id="advOptions" scope="session"
     class="it.cnr.isti.cophir.ui.bean.Parameters" />
 <jsp:useBean id="randomImages" scope="session"
-	class="it.cnr.isti.cophir.ui.bean.RandomImages" />
+	class="it.cnr.isti.cophir.ui.bean.image.RandomImages" />
+<jsp:useBean id="imageDispatcher" scope="session"
+	class="it.cnr.isti.cophir.ui.bean.image.ImageDispatcher" />
+<%
+	//Initialize image dispatcher
+//GET FILES FOR THE DEFAULT DATASET
+//TODO: move the business logic to java class
+//randomImages.openProps(configuration.getDatasetUrlsFile(null));
+imageDispatcher.setRandomImageGeneratorIfNull(randomImages);
+imageDispatcher.setConfigurationIfNull(configuration);
+%>
 	
 <html>
     <head>
@@ -30,7 +42,7 @@ System.out.println("imgQueryID: " + imgQueryID);
 //TODO:move this business code to the right place
 if(imgQueryID != null && !imgQueryID.equals(imageSearchBean.getImageQueryURL())){
 	//search by ID
-	imageQueryURL = randomImages.getThumbnailUrl(imgQueryID);
+	imageQueryURL = imageDispatcher.getThumbnailUrl(imgQueryID, "./");
 }else{
 	//search by URL
 	imageQueryURL = imageSearchBean.getImageQueryURL();
