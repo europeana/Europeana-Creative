@@ -1,0 +1,5 @@
+# The server URL path 
+europeana.api.ir.image.uri = http://localhost:8081/image-similarity
+	
+# The name of application
+europeana.api.ir.image.key = 
