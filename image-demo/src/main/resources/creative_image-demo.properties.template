@@ -2,11 +2,12 @@
 #image.index.home = ./src/test/resources/imagedemohome
 image.index.home = /app/eucreative/imagesimilarityhome
 
-#the image controller to be used
-#it.cnr.isti.cophir.ui.bean.image.RemoteImageController - serving images from remote (http) servers
-#it.cnr.isti.cophir.ui.bean.image.LocalImageController - serving images from local file system
-image.controller.class = it.cnr.isti.cophir.ui.bean.image.LocalImageController
-#image.controller.class = it.cnr.isti.cophir.ui.bean.image.RemoteImageController
+#the image locator to be used
+#it.cnr.isti.melampo.tools.thumbnail.locator.RemoteImageController - serving images from remote (http) servers
+#it.cnr.isti.melampo.tools.thumbnail.locator.LocalImageController - serving images from local file system
+thumbnail.locator.class = it.cnr.isti.melampo.tools.thumbnail.locator.LocalImageLocator
+thumbnail.locator.local.repository.url = http://image-similarity.ait.ac.at/eucreative
+#thumbnail.locator.class = it.cnr.isti.melampo.tools.thumbnail.locator.RemoteImageLocator
 
 # The name of the default dataset, see IndexConfiguration
 #dataset.default = test

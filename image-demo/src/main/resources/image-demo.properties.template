@@ -6,7 +6,7 @@ image.index.home = ./src/test/resources/imagedemohome
 #it.cnr.isti.cophir.ui.bean.image.RemoteImageController - serving images from remote (http) servers
 #it.cnr.isti.cophir.ui.bean.image.LocalImageController - serving images from local file system
 #image.controller.class = it.cnr.isti.cophir.ui.bean.image.LocalImageController
-image.controller.class = it.cnr.isti.cophir.ui.bean.image.RemoteImageController
+#image.controller.class = it.cnr.isti.cophir.ui.bean.image.RemoteImageController
 
 # The name of the default dataset, see IndexConfiguration
 #dataset.default = test
