@@ -11,10 +11,8 @@ import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 
-import eu.europeana.api.client.config.ThumbnailAccessConfiguration;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
 import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.creative.dataset.BaseCreativeDatasetUtil;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 import eu.europeana.service.ir.image.IRConfiguration;
@@ -68,14 +66,14 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 		Map<String, String> thumbnailsMap = ixHelper
 				.getThumbnailsMap(datasetFile);
 		BufferedWriter indexedUrlsWriter = getDataSetFileWriter(true);
-		EuropeanaId euId = new EuropeanaId();
+		//EuropeanaId euId = new EuropeanaId();
 		int counter = 0;
 
 		for (Map.Entry<String, String> thumbnail : thumbnailsMap.entrySet()) {
 
-			euId.setNewId(thumbnail.getKey());
+			//euId.setNewId(thumbnail.getKey());
 			try {
-				getImageSearchingService().searchSimilar(euId);
+				getImageSearchingService().searchSimilar(thumbnail.getKey());
 
 				if (getImageSearchingService().getTotalResults() > 0) {
 					// write to file
@@ -84,7 +82,7 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 					counter++;
 				} else {
 					// not indexed yet
-					System.out.println("Skipped item: " + euId.getNewId());
+					System.out.println("Skipped item: " + thumbnail.getKey());
 				}
 
 			} catch (ImageSearchingException e) {

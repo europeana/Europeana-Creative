@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
 import eu.europeana.service.ir.image.api.ImageSearchingServiceImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
+import eu.europeana.service.ir.image.web.model.json.SearchResultItem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/image-similarity-context.xml" })
@@ -31,24 +31,22 @@ public class ImageSearchingServiceTest {
 	
 	@Test
 	public void testSearchById() throws ImageIndexingException, IOException, ImageSearchingException{
-		EuropeanaId euId = new EuropeanaId();
-		euId.setNewId("/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA");
+		String euId = "/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA";
 		
 		imageSearchingService.searchSimilar(euId);
-		List<EuropeanaId> results = imageSearchingService.getResults(0, 5);
+		List<SearchResultItem> results = imageSearchingService.getResults(0, 5);
 		
-		for (EuropeanaId europeanaId : results) {
-			System.out.println(europeanaId.getNewId());
+		for (SearchResultItem resultItem : results) {
+			System.out.println(resultItem.getResourceId());
 		}
 		assertTrue(results.size() > 0);
-		assertEquals(euId.getNewId(), results.get(0).getNewId());
+		assertEquals(euId, results.get(0).getResourceId());
 	}
 
 	
 	@Test
 	public void testSearchById_TestDs() throws ImageIndexingException, IOException, ImageSearchingException{
-		EuropeanaId euId = new EuropeanaId();
-		euId.setNewId("/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA");
+		String euId = "/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA";
 		
 		//create index searcher for test dataset
 		ImageSearchingService imageSearchingServiceTest = new ImageSearchingServiceImpl("test", configuration);
@@ -56,20 +54,19 @@ public class ImageSearchingServiceTest {
 		imageSearchingServiceTest.init();
 		//perform search
 		imageSearchingServiceTest.searchSimilar(euId);
-		List<EuropeanaId> results = imageSearchingServiceTest.getResults(0, 5);
+		List<SearchResultItem> results = imageSearchingServiceTest.getResults(0, 5);
 		
-		for (EuropeanaId europeanaId : results) {
-			System.out.println(europeanaId.getNewId());
+		for (SearchResultItem resultItem : results) {
+			System.out.println(resultItem.getResourceId());
 		}
 		//verify results
 		assertTrue(results.size() > 0);
-		assertEquals(euId.getNewId(), results.get(0).getNewId());
+		assertEquals(euId, results.get(0).getResourceId());
 	}
 
 	@Test
 	public void testSearchById_DemoDs() throws ImageIndexingException, IOException, ImageSearchingException{
-		EuropeanaId euId = new EuropeanaId();
-		euId.setNewId("/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA");
+		String euId = "/10106/2C2A2B381740CC28B01445B9256E11AF9EFCEECA";
 		
 		//create index searcher for test dataset
 		ImageSearchingService imageSearchingServiceTest = new ImageSearchingServiceImpl("demo", configuration);
@@ -77,14 +74,14 @@ public class ImageSearchingServiceTest {
 		imageSearchingServiceTest.init();
 		//perform search
 		imageSearchingServiceTest.searchSimilar(euId);
-		List<EuropeanaId> results = imageSearchingServiceTest.getResults(0, 5);
+		List<SearchResultItem> results = imageSearchingServiceTest.getResults(0, 5);
 		
-		for (EuropeanaId europeanaId : results) {
-			System.out.println(europeanaId.getNewId());
+		for (SearchResultItem resultItem : results) {
+			System.out.println(resultItem.getResourceId());
 		}
 		//verify results
 		assertTrue(results.size() > 0);
-		assertEquals(euId.getNewId(), results.get(0).getNewId());
+		assertEquals(euId, results.get(0).getResourceId());
 	}
 	
 

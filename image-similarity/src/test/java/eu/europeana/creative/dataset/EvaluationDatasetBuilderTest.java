@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import eu.europeana.api.client.Api2QueryInterface;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessorTest;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
@@ -445,14 +443,14 @@ public class EvaluationDatasetBuilderTest extends
 		Map<String, String> thumbnailsMap = ixHelper
 				.getThumbnailsMap(datasetFile);
 		BufferedWriter indexedUrlsWriter = getDataSetFileWriter(true);
-		EuropeanaId euId = new EuropeanaId();
+		//EuropeanaId euId = new EuropeanaId();
 		int counter = 0;
 
 		for (Map.Entry<String, String> thumbnail : thumbnailsMap.entrySet()) {
 
-			euId.setNewId(thumbnail.getKey());
+			//euId.setNewId(thumbnail.getKey());
 			try {
-				getImageSearchingService().searchSimilar(euId);
+				getImageSearchingService().searchSimilar(thumbnail.getKey());
 
 				if (getImageSearchingService().getTotalResults() > 0) {
 					// write to file
@@ -461,7 +459,7 @@ public class EvaluationDatasetBuilderTest extends
 					counter++;
 				} else {
 					// not indexed yet
-					System.out.println("Skipped item: " + euId.getNewId());
+					System.out.println("Skipped item: " + thumbnail.getKey());
 				}
 
 			} catch (ImageSearchingException e) {

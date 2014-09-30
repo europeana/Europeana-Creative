@@ -13,13 +13,13 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.creative.dataset.evaluation.om.CategorizedCollection;
 import eu.europeana.creative.dataset.evaluation.om.EuropeanaImage;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
 import eu.europeana.service.ir.image.api.ImageSearchingServiceImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
+import eu.europeana.service.ir.image.web.model.json.SearchResultItem;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations = { "/image-similarity-context.xml" })
@@ -31,7 +31,7 @@ public class ComputeSearchResults extends BaseResultComputation {
 	Map<String, EuropeanaImage> europeanaImages = new HashMap<String, EuropeanaImage>(
 			8000);
 	// queryId, resultsList
-	Map<String, List<EuropeanaId>> allSearchResults = new HashMap<String, List<EuropeanaId>>(
+	Map<String, List<SearchResultItem>> allSearchResults = new HashMap<String, List<SearchResultItem>>(
 			8000);
 	List<String> skippedItems = new ArrayList<String>();
 
@@ -44,13 +44,13 @@ public class ComputeSearchResults extends BaseResultComputation {
 		return imageSearchingService;
 	}
 
-	public List<EuropeanaId> searchById(String id)
+	public List<SearchResultItem> searchById(String id)
 			throws ImageIndexingException, IOException, ImageSearchingException {
-		EuropeanaId euId = new EuropeanaId();
-		// euId.setNewId("/07501/332954D43E8FF3E38D0AED668488886CC91CEDFB");
-		euId.setNewId(id);
+//		EuropeanaId euId = new EuropeanaId();
+//		// euId.setNewId("/07501/332954D43E8FF3E38D0AED668488886CC91CEDFB");
+//		euId.setNewId(id);
 
-		getImageSearchingService().searchSimilar(euId);
+		getImageSearchingService().searchSimilar(id);
 		return getImageSearchingService().getResults(0, 26);
 	}
 
@@ -158,7 +158,7 @@ public class ComputeSearchResults extends BaseResultComputation {
 		String dataset = DEMO_DATASET;
 		loadEuropeanaImages(dataset);
 		// search results for each
-		List<EuropeanaId> results = null;
+		List<SearchResultItem> results = null;
 		for (String id : europeanaImages.keySet()) {
 			try{
 				results = searchById(id);
@@ -203,11 +203,11 @@ public class ComputeSearchResults extends BaseResultComputation {
 		int cnt = 0;
 
 		// get object category
-		for (EuropeanaId europeanaId : allSearchResults.get(id)) {
+		for (SearchResultItem searchResult : allSearchResults.get(id)) {
 
-			builder.append(europeanaId.getNewId()).append(";");
+			builder.append(searchResult.getResourceId()).append(";");
 			// get categories
-			currentImage = europeanaImages.get(europeanaId.getNewId());
+			currentImage = europeanaImages.get(searchResult.getResourceId());
 			if (currentImage == null)
 				continue;
 
