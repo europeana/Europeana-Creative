@@ -6,6 +6,7 @@ import java.util.List;
 
 import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
+import eu.europeana.service.ir.image.web.model.json.SearchResultItem;
 
 /**
  * This interface specifies the methods available to perform an image similarity search on the image index.
@@ -21,7 +22,7 @@ public interface ImageSearchingService extends ContentRetrievalService {
 	 * @param imageQueryId  {@link EuropeanaId} of the query image 
 	 * @throws ImageSearchingException if something went wrong
 	 */
-	public void searchSimilar(EuropeanaId imageQueryId) throws ImageSearchingException;
+	public void searchSimilar(String imageQueryId) throws ImageSearchingException;
 	
 	/**
 	 * Search similar images by using a sample image accessible through the given input stream. 
@@ -46,10 +47,10 @@ public interface ImageSearchingService extends ContentRetrievalService {
 	 * Returns the results of the previously executed search query.    
 	 * @param startFrom index to start
 	 * @param numResults number of results to return. If the value is set to -1, it returns all the query results.
-	 * @return {@link List} of {@link EuropeanaId} containing the ids of the query results
+	 * @return {@link List} of {@link SearchResultItem} containing the ids of the query results
 	 * @throws ImageSearchingException 
 	 */
-	public List<EuropeanaId> getResults(int startFrom, int numResults) throws ImageSearchingException;
+	public List<SearchResultItem> getResults(int startFrom, int numResults) throws ImageSearchingException;
 
 	/**
 	 * This method returns the number of the results fetched with the previously invoked  

@@ -1,8 +1,10 @@
 package eu.europeana.service.ir.image.api;
 
+import it.cnr.isti.exception.TechnicalRuntimeException;
 import it.cnr.isti.feature.extraction.FeatureExtractionException;
 import it.cnr.isti.feature.extraction.Image2Features;
 import it.cnr.isti.melampo.index.searching.MelampoSearcherHub;
+import it.cnr.isti.melampo.tools.thumbnail.locator.ImageLocator;
 import it.cnr.isti.melampo.vir.exceptions.BoFException;
 import it.cnr.isti.melampo.vir.exceptions.VIRException;
 
@@ -16,11 +18,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.domain.QueryResults;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
+import eu.europeana.service.ir.image.web.model.json.ImageSearchResultItem;
+import eu.europeana.service.ir.image.web.model.json.SearchResultItem;
 
 /**
  * @author Paolo Bolettieri <paolo.bolettieri@isti.cnr.it>
@@ -43,6 +46,8 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	private Image2Features img2ftx;
 
+	private ImageLocator imageLocator;
+
 	public ImageSearchingServiceImpl(IRConfiguration configuration) {
 		this(configuration.getDefaultDataset(), configuration);
 	}
@@ -59,6 +64,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#init()
 	 */
 	@Override
@@ -105,37 +111,46 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	/*
 	 * (non-Javadoc)
-	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar(eu.europeana.corelib.tools.lookuptable.EuropeanaId)
+	 * 
+	 * @see
+	 * eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar
+	 * (java.lang.String)
 	 */
-	public void searchSimilar(EuropeanaId imageQueryId)
-			throws ImageSearchingException {
+	public void searchSimilar(String resourceId) throws ImageSearchingException {
 
 		ArrayList<String> vals = new ArrayList<String>();
 		ArrayList<String> flds = new ArrayList<String>();
 
 		flds.add(it.cnr.isti.melampo.index.Parameters.LIRE_MP7ALL);
-		vals.add(imageQueryId.getNewId());
+		vals.add(resourceId);
 
 		try {
 			index.query(vals, flds, true);
-			queryResults.setResults(index.getResults(0, NUM_RESULTS));
+			queryResults = new QueryResults();
+			List<SearchResultItem> results = getSearchResultsList(index
+					.getResults(0, NUM_RESULTS));
+			queryResults.setResults(results);
+
 		} catch (VIRException e) {
 			throw new ImageSearchingException("Error performing search by id "
-					+ imageQueryId.getNewId(), e);
+					+ resourceId, e);
 		} catch (IOException e) {
 			throw new ImageSearchingException("Error performing search by id "
-					+ imageQueryId, e);
+					+ resourceId, e);
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar(java.io.InputStream)
+	 * 
+	 * @see
+	 * eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar
+	 * (java.io.InputStream)
 	 */
 	public void searchSimilar(InputStream imageQueryObj)
 			throws ImageSearchingException {
 		log.info("searching by obj ");
-		
+
 		try {
 			String features = img2ftx.extractFeatures(imageQueryObj);
 			searchByImageFeatures(features);
@@ -148,7 +163,8 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	}
 
 	/**
-	 * this method is the basis for index searching 
+	 * this method is the basis for index searching
+	 * 
 	 * @param features
 	 * @throws ImageSearchingException
 	 */
@@ -161,7 +177,11 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 			flds.add(it.cnr.isti.melampo.index.Parameters.LIRE_MP7ALL);
 			vals.add(features);
 			index.query(vals, flds, false);
-			queryResults.setResults(index.getResults(0, NUM_RESULTS));
+
+			queryResults = new QueryResults();
+			List<SearchResultItem> results = getSearchResultsList(index
+					.getResults(0, NUM_RESULTS));
+			queryResults.setResults(results);
 		} catch (VIRException e) {
 			throw new ImageSearchingException("Error performing search by obj",
 					e);
@@ -171,13 +191,48 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		}
 	}
 
+	protected ArrayList<SearchResultItem> getSearchResultsList(String[][] retval) {
+		ArrayList<SearchResultItem> results = new ArrayList<SearchResultItem>(
+				retval.length);
+
+		for (int i = 0; i < retval.length; i++) {
+			SearchResultItem resultItem = new ImageSearchResultItem();
+			resultItem.setScore(retval[i][0]);
+			resultItem.setResourceId(retval[i][1]);
+			resultItem.setThmbUrl(retval[i][2]);
+			resultItem.setCachedThmbUrl(getCachedThumbnailUrl(resultItem));
+
+			if (resultItem.getResourceId() == null)
+				break; // in the case that the search returns less than
+						// retval.length results
+
+			results.add(resultItem);
+			log.info("add to results: " + resultItem.getResourceId());
+			log.info("score:" + resultItem.getScore());
+		}
+		log.debug("results from index service: " + results.toString());
+
+		return results;
+	}
+
+	private String getCachedThumbnailUrl(SearchResultItem resultItem) {
+		if(getThumbnailLocator() == null)
+			return null;
+		else{
+			return getThumbnailLocator().getImageUrl(getDataset(), resultItem.getResourceId());
+		}
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar(java.net.URL)
+	 * 
+	 * @see
+	 * eu.europeana.service.ir.image.api.ImageSearchingService#searchSimilar
+	 * (java.net.URL)
 	 */
 	public void searchSimilar(URL imageQueryURL) throws ImageSearchingException {
 		log.info("searching by URL " + imageQueryURL.toString());
-		try{
+		try {
 			String features = img2ftx.extractFeatures(imageQueryURL);
 			searchByImageFeatures(features);
 
@@ -188,16 +243,17 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 
 	}
 
-	public List<EuropeanaId> getResults(int startFrom, int numResults) {
+	public List<SearchResultItem> getResults(int startFrom, int numResults) {
 		return queryResults.getResults(startFrom, numResults);
 	}
 
 	@Override
 	public int getTotalResults() throws ImageSearchingException {
-		try{
+		try {
 			return queryResults.getResults(0, -1).size();
-		}catch(NullPointerException e){
-			throw new ImageSearchingException(ImageSearchingException.MESSAGE_NO_RESULTS, e);
+		} catch (NullPointerException e) {
+			throw new ImageSearchingException(
+					ImageSearchingException.MESSAGE_NO_RESULTS, e);
 		}
 	}
 
@@ -212,4 +268,23 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		return dataset;
 	}
 
+	public ImageLocator getThumbnailLocator() {
+		if (imageLocator == null) {
+			String imageLocatorClass = getConfiguration()
+					.getImageLocatorClass();
+			if (imageLocatorClass != null) {
+				try {
+					imageLocator = (ImageLocator) Class.forName(
+							imageLocatorClass).newInstance();
+					imageLocator.setConfigParams(getConfiguration().getLocatorConfigurations());
+				} catch (Exception e) {
+					throw new TechnicalRuntimeException(
+							"Cannot instantiate image controller! check project configurations!",
+							e);
+				}
+			}
+		}
+
+		return imageLocator;
+	}
 }
