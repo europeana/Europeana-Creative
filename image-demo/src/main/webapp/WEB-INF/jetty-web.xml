@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+ 
+
+<Configure class="org.eclipse.jetty.server.Server">
+      <Call name="setAttribute">
+      <Arg>org.eclipse.jetty.server.Request.maxFormContentSize</Arg>
+      <Set name="maxFormContentSize">200000</Set>  
+    </Call>
+</Configure>
+

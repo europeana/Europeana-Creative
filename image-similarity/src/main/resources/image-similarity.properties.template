@@ -1,0 +1,21 @@
+#image index web service address (old remote index version)
+#image_index_address = http://virserv.isti.cnr.it:8080/assetsIRService/
+
+#path of the ir-image index folder (stand-alone index version)
+#image.index.home = ${image_index_location}
+image.index.home = /app/eucreative/imagesimilarityhome
+#image.index.home = /app/eucreative/imagedemo/index
+#image.index.home = ./src/test/resources/imagesimilarityhome
+
+#the image locator to be used
+#it.cnr.isti.melampo.tools.thumbnail.locator.RemoteImageController - serving images from remote (http) servers
+#it.cnr.isti.melampo.tools.thumbnail.locator.LocalImageController - serving images from local file system
+thumbnail.locator.class = it.cnr.isti.melampo.tools.thumbnail.locator.LocalImageLocator
+thumbnail.locator.local.repository.url = http://image-similarity.ait.ac.at/eucreative
+#thumbnail.locator.class = it.cnr.isti.melampo.tools.thumbnail.locator.RemoteImageLocator
+
+# The name of the default dataset, see IrImageConfiguration
+dataset.default = eucreative
+
+# The key used for the invocation of the Europeana APi (wskey query param)
+europeana.api.key = ${europeana_api_key}
