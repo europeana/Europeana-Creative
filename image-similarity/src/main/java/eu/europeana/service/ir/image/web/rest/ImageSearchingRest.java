@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.europeana.api2.web.model.json.ApiError;
 import eu.europeana.api2.web.model.json.abstracts.ApiResponse;
-import eu.europeana.corelib.tools.lookuptable.EuropeanaId;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
 import eu.europeana.service.ir.image.domain.Tools;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
 import eu.europeana.service.ir.image.web.model.json.ImageSimilaritySearchResults;
+import eu.europeana.service.ir.image.web.model.json.SearchResultItem;
 
 /**
  * @author paolo
@@ -72,7 +73,7 @@ public class ImageSearchingRest extends BaseRestService {
 	 * and the service is able to accept answer web requests. 
 	 * @return the name of the current web component 
 	 */
-	@RequestMapping(value = "/component", method = RequestMethod.GET, produces = "text/*")
+	@RequestMapping(value = "/component", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String displayComponentName() {
 		return getComponentName();
@@ -99,11 +100,8 @@ public class ImageSearchingRest extends BaseRestService {
 			@RequestParam(value = "profile", required = false, defaultValue="similarimage") String profile,
 			HttpServletResponse response) {
 
-		EuropeanaId id = new EuropeanaId();
-		id.setNewId(queryImageId);
-
 		try {
-			imageSearching.searchSimilar(id);
+			imageSearching.searchSimilar(queryImageId);
 			return prepareSearchResults(start, rows, wskey, "/image/searchById.json");
 			
 		} catch (ImageSearchingException e) {
@@ -116,7 +114,7 @@ public class ImageSearchingRest extends BaseRestService {
 
 	private ApiResponse prepareSearchResults(int start, int rows, String wskey, String action)
 			throws ImageSearchingException {
-		ImageSimilaritySearchResults<EuropeanaId> results = new ImageSimilaritySearchResults<EuropeanaId>(wskey, action); 
+		ImageSimilaritySearchResults<SearchResultItem> results = new ImageSimilaritySearchResults<SearchResultItem>(wskey, action); 
 		results.setSearchResults(imageSearching.getResults(start, rows));
 		results.setTotalResults(imageSearching.getTotalResults());
 		
@@ -186,19 +184,20 @@ public class ImageSearchingRest extends BaseRestService {
 			@RequestParam(value = "profile", required = false, defaultValue="similarimage") String profile,
 			HttpServletResponse response) {
 		
-		String encodedUrl = null;
+		//String encodedUrl = null;
 		try {
-			encodedUrl = Tools.encodeUrl(queryImageUrl);
-			imageSearching.searchSimilar(new URL(encodedUrl));
+			//encodedUrl = Tools.encodeUrl(queryImageUrl);
+			//URLEncoder.
+			imageSearching.searchSimilar(new URL(queryImageUrl));
 			return prepareSearchResults(start, rows, wskey, "/image/searchByUrl.json");
 					
 		} catch (ImageSearchingException e) {
-			log.error("error searching by URL " + encodedUrl, e);
+			log.error("error searching by URL " + queryImageUrl, e);
 			// throw new WebApplicationException(e1);
 			return new ApiError(wskey, "/searchByUrl.json", e.getMessage(),
 					REQUEST_NUMBER_NOT_ACTIVE);
 		} catch (MalformedURLException e) {
-			log.error("error searching by URL " + encodedUrl, e);
+			log.error("error searching by URL " + queryImageUrl, e);
 			// throw new WebApplicationException(e);
 			return new ApiError(wskey, "/searchByUrl.json", e.getMessage(),
 					REQUEST_NUMBER_NOT_ACTIVE);

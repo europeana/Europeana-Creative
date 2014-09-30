@@ -3,6 +3,8 @@ package eu.europeana.service.ir.image;
 import it.cnr.isti.config.index.IndexConfigurationImpl;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -12,7 +14,6 @@ import eu.europeana.api.client.config.ThumbnailAccessConfiguration;
 public class IRConfigurationImpl extends IndexConfigurationImpl implements IRConfiguration, ThumbnailAccessConfiguration {
 
 	protected static final String COMPONENT_NAME = "image-similarity";
-	protected static final String PROP_API_KEY = "europeana.api.key";
 	
 	protected Logger log = Logger.getLogger(getClass());
 	
@@ -71,6 +72,14 @@ public class IRConfigurationImpl extends IndexConfigurationImpl implements IRCon
 	@Override
 	public String getImageFolder(String dataset) {
 		return null;
+	}
+
+	@Override
+	public Map<String, String> getLocatorConfigurations() {
+		Map<String, String> thmbLocatorConfig = new HashMap<String, String>();
+		
+		thmbLocatorConfig.put(PROP_LOCATOR_REPOSITORY_URL, getConfigProperty(PROP_LOCATOR_REPOSITORY_URL, "./"));
+		return thmbLocatorConfig;
 	}
 	
 

@@ -1,8 +1,10 @@
 package eu.europeana.service.ir.image;
 
 import it.cnr.isti.config.index.IndexConfiguration;
+import it.cnr.isti.melampo.tools.thumbnail.locator.ImageLocator;
 
 import java.io.File;
+import java.util.Map;
 
 	/**
 	 * Common configuration facility for retrieval services.<br/>
@@ -10,7 +12,9 @@ import java.io.File;
 	 */
 	public interface IRConfiguration extends IndexConfiguration{
 
-
+		public static final String PROP_API_KEY = "europeana.api.key";
+		public static final String PROP_LOCATOR_REPOSITORY_URL = ImageLocator.PROP_LOCATOR_REPOSITORY_URL;
+		
 		//public String getApiKey();
 		
 		/**
@@ -19,5 +23,7 @@ import java.io.File;
 		 * @return the physical location of the (dataset.csv.urls) file  
 		 */
 		public File getDatasetUrlsFile(String dataset);
+		
+		public Map<String, String> getLocatorConfigurations(); 
 		
 }
