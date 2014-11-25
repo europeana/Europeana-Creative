@@ -1,5 +1,6 @@
 package eu.europeana.creative.dataset.demo;
 
+import static org.junit.Assert.assertEquals;
 import it.cnr.isti.indexer.IndexHelper;
 
 import java.io.BufferedWriter;
@@ -46,6 +47,7 @@ public class EuCreativeDemoDatasetThumbnailsTest extends
 		datasetDownloader.processThumbnailset(0, -1, 1000);
 		
 		System.out.println("Skipped items: " + datasetDownloader.getFailureCount());
+		assertEquals(0, datasetDownloader.getFailureCount());
 //		for (String itemId : skippedItems) {
 //			System.out.println(itemId);
 //		}
