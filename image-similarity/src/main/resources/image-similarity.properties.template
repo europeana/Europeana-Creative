@@ -7,6 +7,8 @@ image.index.home = /app/eucreative/imagesimilarityhome
 #image.index.home = /app/eucreative/imagedemo/index
 #image.index.home = ./src/test/resources/imagesimilarityhome
 
+image.index.pivots.archive = FCArchive-pivots.dat
+
 #the image locator to be used
 #it.cnr.isti.melampo.tools.thumbnail.locator.RemoteImageController - serving images from remote (http) servers
 #it.cnr.isti.melampo.tools.thumbnail.locator.LocalImageController - serving images from local file system
