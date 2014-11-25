@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageIndexingService;
 import eu.europeana.service.ir.image.api.ImageIndexingServiceImpl;
@@ -21,7 +22,7 @@ import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 public class HistorianaImageIndexingTest {
 
 	
-	IRConfigurationImpl configuration;
+	IRConfiguration configuration;
 
 	ImageIndexingService testImageIndexingService;
 
