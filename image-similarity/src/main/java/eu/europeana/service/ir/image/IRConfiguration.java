@@ -14,7 +14,8 @@ import java.util.Map;
 
 		public static final String PROP_API_KEY = "europeana.api.key";
 		public static final String PROP_LOCATOR_REPOSITORY_URL = ImageLocator.PROP_LOCATOR_REPOSITORY_URL;
-		
+		public static final String PROP_IR_IMAGE_PIVOTS_ARCHIVE = "image.index.pivots.archive";
+
 		//public String getApiKey();
 		
 		/**
@@ -24,6 +25,12 @@ import java.util.Map;
 		 */
 		public File getDatasetUrlsFile(String dataset);
 		
-		public Map<String, String> getLocatorConfigurations(); 
+		public Map<String, String> getLocatorConfigurations();
+
+		public String getPivotsCsvFile(String dataset);
+
+		public String getPivotsFolder(String dataset);
+		
+		public String getPivotsFCArchive(String dataset);
 		
 }

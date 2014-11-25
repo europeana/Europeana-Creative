@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessor;
 import eu.europeana.service.ir.image.IRConfiguration;
-import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.exceptions.ImageIndexingException;
 import eu.europeana.service.ir.image.index.indexing.ExtendedLireIndexer;
 import eu.europeana.service.ir.image.model.IndexingStatus;
@@ -74,7 +73,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 			this.dataset = dataset;
 	}
 
-	public ImageIndexingServiceImpl(IRConfigurationImpl configuration) {
+	public ImageIndexingServiceImpl(IRConfiguration configuration) {
 		this(null, configuration);
 	}
 
@@ -92,7 +91,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	/**
 	 * @param configuration
 	 */
-	public void setConfiguration(IRConfigurationImpl configuration) {
+	public void setConfiguration(IRConfiguration configuration) {
 		this.configuration = configuration;
 	}
 

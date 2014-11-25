@@ -82,5 +82,19 @@ public class IRConfigurationImpl extends IndexConfigurationImpl implements IRCon
 		return thmbLocatorConfig;
 	}
 	
+	@Override
+	public String getPivotsFolder(String dataset) {
+		return getBaseFolder()+"/pivots/"+ dataset;
+	}
+	
+	@Override
+	public String getPivotsCsvFile(String dataset) {
+		return getBaseFolder()+"/pivots/"+ dataset +"/pivots.csv";
+	}
+
+	@Override
+	public String getPivotsFCArchive(String dataset) {
+		return getPivotsFolder(dataset) + "/" + getConfigProperty(PROP_IR_IMAGE_PIVOTS_ARCHIVE, "FCArchivePivots-default.dat");
+	}
 
 }
