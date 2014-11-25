@@ -34,7 +34,7 @@ public class BaseIrApiConnection {
 		this.apiKey = apiKey;
 	}
 
-	public String getAnnotationServiceUri() {
+	public String getIrServiceUri() {
 		return irServiceUri;
 	}
 
