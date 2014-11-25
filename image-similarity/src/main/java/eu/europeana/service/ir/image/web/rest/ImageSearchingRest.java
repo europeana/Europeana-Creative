@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import eu.europeana.api2.web.model.json.ApiError;
 import eu.europeana.api2.web.model.json.abstracts.ApiResponse;
-import eu.europeana.service.ir.image.IRConfigurationImpl;
+import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
 import eu.europeana.service.ir.image.domain.Tools;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
@@ -39,7 +39,7 @@ public class ImageSearchingRest extends BaseRestService {
 	ImageSearchingService imageSearching;
 
 	@Autowired
-	IRConfigurationImpl configuration;
+	IRConfiguration configuration;
 	
 	private static final int REQUEST_NUMBER_NOT_ACTIVE = -99;
 
@@ -52,14 +52,14 @@ public class ImageSearchingRest extends BaseRestService {
 	/**
 	 * @param configuration
 	 */
-	public void setConfiguration(IRConfigurationImpl configuration) {
+	public void setConfiguration(IRConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
 	/**
 	 * @return
 	 */
-	public IRConfigurationImpl getConfiguration() {
+	public IRConfiguration getConfiguration() {
 		return configuration;
 	}
 

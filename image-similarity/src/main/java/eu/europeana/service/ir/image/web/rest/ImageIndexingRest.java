@@ -42,7 +42,7 @@ public class ImageIndexingRest extends BaseRestService {
 	ImageIndexingService imageIndexing;
 	
 	@Autowired
-	IRConfigurationImpl configuration;
+	IRConfiguration configuration;
 
 	public void setImageIndexingService(ImageIndexingService imageIndexing) {
 		this.imageIndexing = imageIndexing;
@@ -51,14 +51,14 @@ public class ImageIndexingRest extends BaseRestService {
 	/**
 	 * @param configuration
 	 */
-	public void setConfiguration(IRConfigurationImpl configuration) {
+	public void setConfiguration(IRConfiguration configuration) {
 		this.configuration = configuration;
 	}
 	
 	/**
 	 * @return
 	 */
-	public IRConfigurationImpl getConfiguration() {
+	public IRConfiguration getConfiguration() {
 		if (configuration == null)
 			configuration = new IRConfigurationImpl();
 
