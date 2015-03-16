@@ -62,22 +62,58 @@ public class LocalImageIndexingTest extends
 		
 	}
 
-
-	
-
 	@Test
 	public void indexThumbnails() throws FileNotFoundException, IOException {
 
 		ensureParmsInit();
 		
+		File datasetFile = getDatasetFileToIndex();
+		if(datasetFile == null || !datasetFile.exists())
+			System.out.println("Skip test missing file: " + datasetFile);
+		else
+			updateIndex(datasetFile, false);
+		
+	}
+
+	
+	/**
+	 * This method should be enabled for testing in subclasses. By default the indexThumbnails is marked as testcase 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public void removeThumbnails() throws FileNotFoundException, IOException {
+
+		ensureParmsInit();
+		
+		File datasetFile = getDatasetFileToRemove();
+		if(datasetFile == null || !datasetFile.exists())
+			System.out.println("Skip test missing file: " + datasetFile);
+		else
+			updateIndex(datasetFile, true);
+	}
+
+	protected File getDatasetFileToRemove() {
+		//overwrite in subclasses
+		return null;
+	}
+
+
+	protected File getDatasetFileToIndex() {
 		IRConfiguration config = getConfig();
 		//File datasetFile = config.getDatasetFile(DATASET_EU_CREATIVE_COLOR);
 		File datasetFile = config.getDatasetFile(getDataset());
-		System.out.println("using configuration file : " + datasetFile.getAbsolutePath());
+		return datasetFile;
+	}
+
+
+	protected void updateIndex(File datasetFile, boolean deleteItems) throws FileNotFoundException,
+			IOException {
+		
+		System.out.println("using image set file : " + datasetFile.getAbsolutePath());
 		//setDataset("test");
 		
 		LargeThumbnailsetProcessing datasetProcessor = new LargeThumbnailsetProcessing(datasetFile);
-		ImageIndexingObserver observer = new ImageIndexingObserver(getImageIndexingService());
+		ImageIndexingObserver observer = new ImageIndexingObserver(getImageIndexingService(), deleteItems);
 		
 		datasetProcessor.addObserver(observer);
 		datasetProcessor.processThumbnailset(start, limit, blockSize);
@@ -85,7 +121,7 @@ public class LocalImageIndexingTest extends
 		System.out.println("Skipped items: " + datasetProcessor.getFailureCount());
 	}
 
-	private void ensureParmsInit() {
+	protected void ensureParmsInit() {
 		//ensure blocksize set to a positive value
 		if(blockSize < 0)
 			blockSize = DEFAULT_BLOCKSIZE;

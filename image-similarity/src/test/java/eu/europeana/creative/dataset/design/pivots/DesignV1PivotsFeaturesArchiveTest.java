@@ -35,7 +35,7 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 
 	@Before
 	public void init() {
-		String dataset = "design_v1";
+		String dataset = "culturecam";
 		setDataset(dataset);
 		blockSize = 1000;
 		pivotManager = new PivotManagementServiceImpl(getDataset());

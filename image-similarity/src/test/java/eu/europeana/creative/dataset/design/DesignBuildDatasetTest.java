@@ -11,11 +11,11 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import eu.europeana.api.client.MyEuropeanaClient;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
-import eu.europeana.api.client.myeuropeana.MyEuropeanaClient;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.myeuropeana.impl.MyEuropeanaClientImpl;
-import eu.europeana.api.client.myeuropeana.result.TagsApiResponse;
+import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 import eu.europeana.api.client.myeuropeana.thumbnails.ThumbnailFromTagsResponseAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
@@ -50,7 +50,7 @@ public class DesignBuildDatasetTest extends ThumbnailAccessorUtils{
 		for (Map.Entry<String, Map<String, String>> entry : thumbnailsByTag.entrySet()) {
 			descriptor = new DatasetDescriptor(getDataset(), entry.getKey());
 			descriptor.setClassifications(new String[]{entry.getKey()});
-			writeThumbnailsToCsvFile(descriptor, entry.getValue(), datasetFile, true);
+			writeThumbnailsToCsvFile(descriptor, entry.getValue(), datasetFile, POLICY_APPEND_TO_FILE);
 			objectCount += entry.getValue().size();
 			System.out.println("TAG: " + entry.getKey() + " - " + entry.getValue().size());
 		}	

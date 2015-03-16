@@ -16,6 +16,7 @@ public class ImageIndexingObserver implements
 
 	Logger log = Logger.getLogger(this.getClass());
 	ImageIndexingService imageIndexingService;
+	boolean deleteItems = false;
 	
 	public ImageIndexingService getImageIndexingService() {
 		return imageIndexingService;
@@ -24,6 +25,12 @@ public class ImageIndexingObserver implements
 	public ImageIndexingObserver(ImageIndexingService imageIndexingService){
 		super();
 		this.imageIndexingService = imageIndexingService; 
+	}
+	
+	public ImageIndexingObserver(ImageIndexingService imageIndexingService, boolean deleteItems){
+		super();
+		this.imageIndexingService = imageIndexingService;
+		this.deleteItems = deleteItems;
 	}
 	
 	@Override
@@ -35,14 +42,17 @@ public class ImageIndexingObserver implements
 		Map<String, String> thumbnailMap = (Map<String, String>) arg; 
 		
 		
-		int indexedCount = 0;
+		int succededCount = 0;
 		try {
-			indexedCount = getImageIndexingService().insertDatasetByIds(thumbnailMap.keySet());
+			if(deleteItems)
+				succededCount = getImageIndexingService().deleteDatasetByIds(thumbnailMap.keySet());
+			else
+				succededCount = getImageIndexingService().insertDatasetByIds(thumbnailMap.keySet());
 		} catch (ImageIndexingException e) {
 			e.printStackTrace();
 		}
 		
-		int failureCount = thumbnailMap.size() - indexedCount;
+		int failureCount = thumbnailMap.size() - succededCount;
 		((LargeThumbnailsetProcessing) o).increaseFailureCount(failureCount);
 	}
 

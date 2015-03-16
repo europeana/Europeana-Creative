@@ -1,6 +1,5 @@
 package eu.europeana.creative.dataset.demo;
 
-import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,10 +11,7 @@ import java.net.MalformedURLException;
 
 import org.junit.Test;
 
-import eu.europeana.api.client.Api2QueryInterface;
-import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
-import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 
 /**
@@ -100,19 +96,6 @@ public class EuCreativeDemoDatasetTest extends ThumbnailAccessorUtils implements
 
 		String portalUrl = "http://www.europeana.eu/portal/search.html?query=*%3A*&qf=TYPE%3AIMAGE&qf=DATA_PROVIDER%3A%22Progetto+ArtPast-+CulturaItalia%22&start=13&rows=48";
 		createSubset("culturitalia", "Progetto_art", portalUrl, 0, 474071);
-	}
-
-	protected void createSubset(String imageSetName, String collectionName,
-			String portalUrl, int start, int expectedResults)
-			throws MalformedURLException, UnsupportedEncodingException,
-			IOException {
-
-		DatasetDescriptor dataset = new DatasetDescriptor(imageSetName,
-				collectionName);
-		Api2QueryInterface query = getQueryBuilder().buildQuery(portalUrl);
-		int objects = buildImageSet(dataset, query, start, -1,
-				ThumbnailsAccessor.ERROR_POLICY_CONTINUE);
-		assertEquals(expectedResults, objects);
 	}
 
 	@Test

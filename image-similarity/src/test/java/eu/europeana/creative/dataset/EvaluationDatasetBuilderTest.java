@@ -14,8 +14,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import eu.europeana.api.client.Api2QueryInterface;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
+import eu.europeana.api.client.search.query.Api2QueryInterface;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessorTest;
 import eu.europeana.service.ir.image.IRConfiguration;
