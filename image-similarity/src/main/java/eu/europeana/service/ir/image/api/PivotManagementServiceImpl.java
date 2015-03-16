@@ -6,17 +6,14 @@ import it.cnr.isti.vir.features.FeaturesCollectorArr;
 import it.cnr.isti.vir.features.IFeaturesCollector;
 import it.cnr.isti.vir.features.mpeg7.LireObject;
 import it.cnr.isti.vir.file.FeaturesCollectorsArchive;
-import it.cnr.isti.vir.id.IDInteger;
 import it.cnr.isti.vir.id.IDString;
 import it.cnr.isti.vir.readers.CoPhIRv2Reader;
 import it.cnr.isti.vir.similarity.metric.LireMetric;
 import it.cnr.isti.vir.util.Reordering;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +43,6 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 	boolean cleanPivotsFCArchive = false;
 	FeaturesCollectorsArchive pivotsFCArchive;
 	private File lireObjectPivotsFile;
-
 	// FeaturesCollectorsArchive lireObjectPivotsArchive;
 
 	public PivotManagementServiceImpl() {
@@ -158,12 +153,17 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		initPivotsFCArchive();
 
 		File pivotThumbnailFile = null;
+		int cnt = 0;
 		try {
 			for (String pivotId : pivotThumbnailIds) {
+				log.debug("extracting features for pivot with ID: " + pivotId);
 				pivotThumbnailFile = getConfiguration().getImageFile(
 						getDataset(), pivotId);
 				storePivotFeatures(pivotId, new FileInputStream(
 						pivotThumbnailFile));
+				cnt++;
+				if(cnt % 1000 == 0)
+				log.debug("Features extracted for #pivots: " + cnt);
 			}
 			// write index files an close
 			getPivotsFCArchive().close();
@@ -253,10 +253,15 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 					new FileOutputStream(pivotsFile)));
 
 			Object[] features = pivotFeatures.toArray().clone();
-			if (order != null)
+			//int indexingPivots =
+			int pivotsCount = features.length;
+			
+			if (order != null){
 				Reordering.reorder(Arrays.asList(order), features);
-
-			for (int i = 0; i < features.length; i++) {
+				pivotsCount = order.length;
+			}
+			
+			for (int i = 0; i < pivotsCount; i++) {
 				positionAsId = i + 1;
 				pivot = new LireObject(positionAsId, (IFeaturesCollector) features[i]);
 				pivot.writeData(out);

@@ -93,7 +93,6 @@ public interface ImageIndexingService extends ContentRetrievalService {
 	 * Images to be indexed should have a size of at least 500x500 pixels and available
 	 * in one of the following formats: JPG, TIFF, PNG, GIF, BMP, PPM, PGM, PBM
 	 * The image files will be determined from the ID 
-	 * @param dataset - the name of the dataset, see {@link #getDataset()} 
 	 * @param ids - the set containing the <object id> of the images to be indexed   
 	 * @throws ImageIndexingException if something went wrong
 	 * @return the number of images successfully inserted into the index
@@ -101,12 +100,23 @@ public interface ImageIndexingService extends ContentRetrievalService {
 	public int insertDatasetByIds(Set<String> ids)
 			throws ImageIndexingException;
 
+	/**
+	 * Delete from the image index all images identified by the Strings available in the given set.
+	 * 
+	 @param ids - the set containing the <object id> of the images to be removed from the index   
+	 * @throws ImageIndexingException if something went wrong
+	 * @return the number of images successfully removed from the index
+	 */
+	public int deleteDatasetByIds(Set<String> ids) throws ImageIndexingException;
+	
 	
 	/**
 	 * 
 	 * @return the name of dataset used by the current instance of the service
 	 */
 	public String getDataset();
+
+	
 	
 	
 }

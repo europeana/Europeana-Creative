@@ -97,4 +97,8 @@ public class IRConfigurationImpl extends IndexConfigurationImpl implements IRCon
 		return getPivotsFolder(dataset) + "/" + getConfigProperty(PROP_IR_IMAGE_PIVOTS_ARCHIVE, "FCArchivePivots-default.dat");
 	}
 
+	@Override
+	public String getSubsetFCArchive(String dataset, String subset) {
+		return getBaseFolder()+"/subsets/"+ dataset + "/" + subset + "-FCArchive.dat";
+	}
 }

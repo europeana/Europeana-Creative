@@ -33,4 +33,6 @@ import java.util.Map;
 		
 		public String getPivotsFCArchive(String dataset);
 		
+		public String getSubsetFCArchive(String dataset, String subset);
+		
 }

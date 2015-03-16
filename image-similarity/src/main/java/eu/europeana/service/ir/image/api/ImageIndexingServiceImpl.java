@@ -235,6 +235,25 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		}
 	}
 
+	protected void deleteImage(String docID)
+			throws ImageIndexingException {
+	
+		try {
+				//settings || indexer = null?
+				if (settings == null) {
+					setVariables();
+				}
+
+//				LireObject obj = new LireObject(features);
+//				obj.setThmbURL(thumbnailUrl);
+
+				mp7cIndex.deleteDocument(docID);
+			} catch (Exception e) {
+				throw new ImageIndexingException(
+						"Removing image by ID thows exception:", e);
+			
+		}
+	}
 	private void setVariables() throws IOException, VIRException {
 		// File home =
 		// this.configuration.getConfigProperty("image_index_home"));
@@ -347,6 +366,40 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 		closeIndex();
 		return indexedImageCount;
+	}
+
+	@Override
+	public int deleteDatasetByIds(Set<String> ids)
+			throws ImageIndexingException {
+		int removedCount = 0;
+		int skipedCount = 0;
+		
+		// open index
+		openIndex(dataset);
+		
+		for (String imageId: ids) {
+			try {
+				
+				deleteImage(imageId);
+				removedCount++;
+			}catch (ImageIndexingException e) {
+				log.warn("Cannot remove thumbnail from index. id:" + imageId, e);
+				skipedCount++;
+				// e.printStackTrace();
+			}
+
+			if ((removedCount % 1000) == 0) {
+				// mp7cIndex.commit(); - not needed. auto flush is used
+				log.info("Processed items count: "
+						+ removedCount);
+			}
+		}
+
+		log.info("Skiped wrong thumbnail URLs :" + skipedCount);
+		log.info("Successfully indexed thumbnail URLs :" + removedCount);
+
+		closeIndex();
+		return removedCount;
 	}
 
 }
