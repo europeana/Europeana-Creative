@@ -144,7 +144,7 @@
 		</dependency>
 	</dependencies>
 
-	<build>
+  <build>
 		<plugins>
 			<!-- 
 			<plugin>
@@ -199,6 +199,8 @@
 	</build>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  
 		<version.core>2.0</version.core>
 		<version.springAop>3.1.2.RELEASE</version.springAop>
 		<version.spring.tx>3.1.2.RELEASE</version.spring.tx>
