@@ -51,6 +51,13 @@
 		<appender-ref ref="console" />
 	</logger>
 	 
+	<logger name="eu.europeana">
+		<level value="DEBUG" />
+		<!-- 
+		<appender-ref ref="console" />
+		 -->
+	</logger>
+	
 	<root>
 		<level value="INFO" />
 		<appender-ref ref="console" />
