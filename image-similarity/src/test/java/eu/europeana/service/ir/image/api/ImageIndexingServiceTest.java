@@ -1,4 +1,4 @@
-package eu.europeana.assets.ir.image.api;
+package eu.europeana.service.ir.image.api;
 
 import static org.junit.Assert.assertEquals;
 import it.cnr.isti.indexer.IndexHelper;

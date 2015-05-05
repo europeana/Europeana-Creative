@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -29,6 +30,7 @@ public class GrayScaleSepiaDetector implements
 	File imageBaseFolder;
 	int thresholdDominantColorShare, thresholdDominantColorCount;
 	Map<String, String> thumbnailCategoryMap;
+	//Set<String> reportedCategories; 
 	
 	
 	public GrayScaleSepiaDetector(File imageBaseFolder, int thresholdDominantColorShare, int thresholdDominantColorCount){
@@ -79,6 +81,8 @@ public class GrayScaleSepiaDetector implements
 				}
 			}
 			
+			//all categories or selected categories
+			//if(getReportedCategories() == null || getReportedCategories().contains(imageCategorization))
 			thumbnailCategoryMap.put(thumbnail.getKey(), imageCategorization);
 		}
 		
@@ -157,5 +161,6 @@ public class GrayScaleSepiaDetector implements
 		this.outputFile = outputFile;
 	}
 
+	
 	
 }

@@ -1,0 +1,5 @@
+#properties for accessing flickr api
+flickr.apiKey = xy
+#not used
+flickr.authToken = zw
+flickr.apiSig = ?!	
