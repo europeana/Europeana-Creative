@@ -65,4 +65,17 @@ public interface ImageSearchingService extends ContentRetrievalService {
 	 */
 	public abstract void init();
 
+	void searchSimilar(String resourceId, String queryType)
+			throws ImageSearchingException;
+
+	void searchSimilar(InputStream imageQueryObj, String queryType)
+			throws ImageSearchingException;
+
+	void searchSimilar(URL imageQueryURL, String queryType)
+			throws ImageSearchingException;
+
+	public static final String QUERY_TYPE_DC = "dc";
+	public static final String QUERY_TYPE_MP7 = "mp7";
+	public static final String QUERY_TYPE_MP7_DC = "mp7_dc";
+	
 }

@@ -20,7 +20,7 @@ public class BaseCreativeDatasetUtil extends
 	public final String DATASET_EU_CREATIVE_CLASSIFIED = "eucreative_classified";
 	public final String DATASET_EU_CREATIVE_COLOR = "eucreative_color";
 	private String dataset = DATASET_EU_CREATIVE;
-	
+	IRConfiguration config;
 	
 	public void setDataset(String dataset) {
 		this.dataset = dataset;
@@ -75,14 +75,15 @@ public class BaseCreativeDatasetUtil extends
 			return config.getDatasetFile(getDataset());
 	}
 	
-	protected IRConfiguration getConfig() {
-		IRConfiguration config = new IRConfigurationImpl();
-		return config;
-	}
-
 	@Override
 	public ThumbnailAccessConfiguration getConfiguration() {
 		return (ThumbnailAccessConfiguration) getConfig();
 	}
 
+	protected IRConfiguration getConfig() {
+		if(config == null)
+			config = new IRConfigurationImpl();
+
+		return config;
+	}
 }

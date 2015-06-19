@@ -96,12 +96,13 @@ public class ImageSearchingRest extends BaseRestService {
 			@RequestParam(value = "queryImageId", required = true) String queryImageId,
 			@RequestParam(value = "start", required = false, defaultValue="0") int start,
 			@RequestParam(value = "rows", required = false, defaultValue="12") int rows,
+			@RequestParam(value = "qt", required = false) String queryType,
 			@RequestParam(value = "wskey", required = false) String wskey,
 			@RequestParam(value = "profile", required = false, defaultValue="similarimage") String profile,
 			HttpServletResponse response) {
 
 		try {
-			imageSearching.searchSimilar(queryImageId);
+			imageSearching.searchSimilar(queryImageId, queryType);
 			return prepareSearchResults(start, rows, wskey, "/image/searchById.json");
 			
 		} catch (ImageSearchingException e) {
@@ -139,12 +140,13 @@ public class ImageSearchingRest extends BaseRestService {
 			@RequestParam(value = "imgFile", required = true) InputStream queryImage,
 			@RequestParam(value = "start", required = false, defaultValue="0") int start,
 			@RequestParam(value = "rows", required = false, defaultValue="12") int rows,
+			@RequestParam(value = "qt", required = false) String queryType,
 			@RequestParam(value = "wskey", required = false) String wskey,
 			@RequestParam(value = "profile", required = false, defaultValue="similarimage") String profile,
 			HttpServletResponse response ) {
 		
 		try {
-			imageSearching.searchSimilar(queryImage);
+			imageSearching.searchSimilar(queryImage, queryType);
 			return prepareSearchResults(start, rows, wskey, "/image/searchByObj.json");
 			
 		} catch (ImageSearchingException e) {
@@ -180,6 +182,7 @@ public class ImageSearchingRest extends BaseRestService {
 			@RequestParam(value = "queryImageUrl", required = true) String queryImageUrl,
 			@RequestParam(value = "start", required = false, defaultValue="0") int start,
 			@RequestParam(value = "rows", required = false, defaultValue="12") int rows,
+			@RequestParam(value = "qt", required = false) String queryType,
 			@RequestParam(value = "wskey", required = false) String wskey,
 			@RequestParam(value = "profile", required = false, defaultValue="similarimage") String profile,
 			HttpServletResponse response) {
@@ -188,7 +191,7 @@ public class ImageSearchingRest extends BaseRestService {
 		try {
 			//encodedUrl = Tools.encodeUrl(queryImageUrl);
 			//URLEncoder.
-			imageSearching.searchSimilar(new URL(queryImageUrl));
+			imageSearching.searchSimilar(new URL(queryImageUrl), queryType);
 			return prepareSearchResults(start, rows, wskey, "/image/searchByUrl.json");
 					
 		} catch (ImageSearchingException e) {

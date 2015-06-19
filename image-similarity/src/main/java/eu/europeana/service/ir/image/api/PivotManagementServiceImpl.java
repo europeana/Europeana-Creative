@@ -2,6 +2,7 @@ package eu.europeana.service.ir.image.api;
 
 import it.cnr.isti.feature.extraction.FeatureExtractionException;
 import it.cnr.isti.feature.extraction.Image2Features;
+import it.cnr.isti.vir.features.FeatureClassCollector;
 import it.cnr.isti.vir.features.FeaturesCollectorArr;
 import it.cnr.isti.vir.features.IFeaturesCollector;
 import it.cnr.isti.vir.features.mpeg7.LireObject;
@@ -80,16 +81,22 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		// File indexConfFolder = getConfiguration().getIndexConfFolder(
 		// getDataset());
 		// init feature extraction bean
+		
+			initFeaturesExtractor();
+		
+
+	}
+
+	protected void initFeaturesExtractor(){
 		try {
 			if (img2ftx == null)
 				img2ftx = new Image2Features(getConfiguration()
-						.getIndexConfFolder(getDataset()));
+					.getIndexConfFolder(getDataset()));
 		} catch (Exception e) {
 			throw new TechnicalRuntimeException(
 					"Cannot instantiate feature extractor!", e);
 			// log.warn("Cannot instantiate feature extractor!", e);
 		}
-
 	}
 
 	protected void initPivotsFCArchive() {
@@ -107,13 +114,17 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		try {
 			pivotsFCArchive = new FeaturesCollectorsArchive(
 					getPivotsFCArchiveFile(),
-					new LireMetric().getRequestedFeaturesClasses(),
+					getFeatureClassCollector(),
 					IDString.class, FeaturesCollectorArr.class);
 		} catch (Exception e) {
 			throw new TechnicalRuntimeException(
 					"Cannot instantiate (pivots) feature collection archive!",
 					e);
 		}
+	}
+
+	protected FeatureClassCollector getFeatureClassCollector() {
+		return new LireMetric().getRequestedFeaturesClasses();
 	}
 
 	protected File initLireObjectPivotFile(boolean resetFile) {
@@ -175,8 +186,10 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 	}
 
 	protected void storePivotFeatures(String pivotID, InputStream imageObj)
-			throws FeatureExtractionException {
+			throws FeatureExtractionException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 
+		initFeaturesExtractor();
+		
 		String imgFeatures;
 
 		imgFeatures = img2ftx.extractFeatures(imageObj);
@@ -192,6 +205,7 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 			InputStream is = new ByteArrayInputStream(imgFeatures.getBytes());
 			// read it with BufferedReader
 			br = new BufferedReader(new InputStreamReader(is));
+			registerFeatureClassColector();
 			FeaturesCollectorArr features = CoPhIRv2Reader.getObj(br);
 			// System.out.println("writting");
 			// LireObject object = new LireObject(features);
@@ -216,6 +230,10 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 				}
 		}
 
+	}
+
+	protected void registerFeatureClassColector() {
+		CoPhIRv2Reader.setFeatures(null);
 	}
 
 	@Override

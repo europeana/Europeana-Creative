@@ -31,7 +31,6 @@ public class LocalImageIndexingTest extends
 	public static final int DEFAULT_BLOCKSIZE = 1000;
 	
 	ImageIndexingService imageIndexingService; 
-	IRConfiguration config;
 	// public static String CLASS_WW1 = "ww1";
 
 	public static void main(String[] args) throws Exception {                    
@@ -128,14 +127,6 @@ public class LocalImageIndexingTest extends
 		
 		if(paramDataset != null)
 			setDataset(paramDataset);
-	}
-
-
-	protected IRConfiguration getConfig() {
-		if(config == null)
-			config = new IRConfigurationImpl();
-
-		return config;
 	}
 
 	public ImageIndexingService getImageIndexingService() {

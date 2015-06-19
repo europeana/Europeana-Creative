@@ -6,7 +6,7 @@ public class ColorBin implements Comparable<ColorBin>, Cloneable{
 	String name;
 	int count;
 	long distSumm;
-	int hCentroid, sCentorid, vCentroid;
+	int hCentroid, sCentroid, vCentroid;
 	int hSize, sSize, vSize;
 	
 	private int percentage = -1;
@@ -20,7 +20,7 @@ public class ColorBin implements Comparable<ColorBin>, Cloneable{
 	public ColorBin(String name, int h, int s, int v, int hSize, int sSize, int vSize) {
 		this.name = name;
 		this.hCentroid = h;
-		this.sCentorid = s;
+		this.sCentroid = s;
 		this.vCentroid = v;
 		this.sSize = sSize;
 		this.hSize = hSize;
@@ -73,7 +73,7 @@ public class ColorBin implements Comparable<ColorBin>, Cloneable{
 	}
 
 	private int computeDist(int h, int s, int v) {
-		return Math.abs(h - hCentroid) + Math.abs(s - sCentorid)
+		return Math.abs(h - hCentroid) + Math.abs(s - sCentroid)
 				+ Math.abs(v - vCentroid);
 	}
 

@@ -47,7 +47,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	private Image2Features img2ftx;
 
 	private ImageLocator imageLocator;
-
+	
 	public ImageSearchingServiceImpl(IRConfiguration configuration) {
 		this(configuration.getDefaultDataset(), configuration);
 	}
@@ -118,26 +118,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	 */
 	public void searchSimilar(String resourceId) throws ImageSearchingException {
 
-		ArrayList<String> vals = new ArrayList<String>();
-		ArrayList<String> flds = new ArrayList<String>();
-
-		flds.add(it.cnr.isti.melampo.index.Parameters.LIRE_MP7ALL);
-		vals.add(resourceId);
-
-		try {
-			index.query(vals, flds, true);
-			queryResults = new QueryResults();
-			List<SearchResultItem> results = getSearchResultsList(index
-					.getResults(0, NUM_RESULTS));
-			queryResults.setResults(results);
-
-		} catch (VIRException e) {
-			throw new ImageSearchingException("Error performing search by id "
-					+ resourceId, e);
-		} catch (IOException e) {
-			throw new ImageSearchingException("Error performing search by id "
-					+ resourceId, e);
-		}
+		this.searchSimilar(resourceId, null);
 	}
 
 	/*
@@ -149,17 +130,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	 */
 	public void searchSimilar(InputStream imageQueryObj)
 			throws ImageSearchingException {
-		log.info("searching by obj ");
-
-		try {
-			String features = img2ftx.extractFeatures(imageQueryObj);
-			searchByImageFeatures(features);
-
-		} catch (FeatureExtractionException e) {
-			throw new ImageSearchingException(
-					"Cannot extract features from (image) input stream! ", e);
-		}
-
+		this.searchSimilar(imageQueryObj, null);
 	}
 
 	/**
@@ -168,13 +139,14 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	 * @param features
 	 * @throws ImageSearchingException
 	 */
-	private void searchByImageFeatures(String features)
+	private void searchByImageFeatures(String features, String queryType)
 			throws ImageSearchingException {
 		try {
 			ArrayList<String> vals = new ArrayList<String>();
 			ArrayList<String> flds = new ArrayList<String>();
 
-			flds.add(it.cnr.isti.melampo.index.Parameters.LIRE_MP7ALL);
+			addFieldByQueryType(flds, queryType);
+			
 			vals.add(features);
 			index.query(vals, flds, false);
 
@@ -231,16 +203,7 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 	 * (java.net.URL)
 	 */
 	public void searchSimilar(URL imageQueryURL) throws ImageSearchingException {
-		log.info("searching by URL " + imageQueryURL.toString());
-		try {
-			String features = img2ftx.extractFeatures(imageQueryURL);
-			searchByImageFeatures(features);
-
-		} catch (FeatureExtractionException e) {
-			throw new ImageSearchingException(
-					"Cannot extract features from (image) input stream! ", e);
-		}
-
+		this.searchSimilar(imageQueryURL, null);
 	}
 
 	public List<SearchResultItem> getResults(int startFrom, int numResults) {
@@ -286,5 +249,69 @@ public class ImageSearchingServiceImpl implements ImageSearchingService {
 		}
 
 		return imageLocator;
+	}
+
+	@Override
+	public void searchSimilar(String resourceId, String queryType)
+			throws ImageSearchingException {
+		ArrayList<String> vals = new ArrayList<String>();
+		ArrayList<String> flds = new ArrayList<String>();
+
+		addFieldByQueryType(flds, queryType);
+		vals.add(resourceId);
+		
+		try {
+			index.query(vals, flds, true);
+			queryResults = new QueryResults();
+			List<SearchResultItem> results = getSearchResultsList(index
+					.getResults(0, NUM_RESULTS));
+			queryResults.setResults(results);
+
+		} catch (VIRException e) {
+			throw new ImageSearchingException("Error performing search by id "
+					+ resourceId, e);
+		} catch (IOException e) {
+			throw new ImageSearchingException("Error performing search by id "
+					+ resourceId, e);
+		}
+		
+	}
+
+	protected void addFieldByQueryType(ArrayList<String> flds, String queryType) {
+		if(queryType == null || QUERY_TYPE_MP7.equals(queryType))
+			flds.add(it.cnr.isti.melampo.index.Parameters.LIRE_MP7ALL);
+		else	
+			flds.add(it.cnr.isti.melampo.index.Parameters.CC_DCD);
+	}
+
+	@Override
+	public void searchSimilar(InputStream imageQueryObj, String queryType)
+			throws ImageSearchingException {
+		
+		log.info("searching by obj ");
+
+		try {
+			String features = img2ftx.extractFeatures(imageQueryObj);
+			searchByImageFeatures(features, queryType);
+
+		} catch (FeatureExtractionException e) {
+			throw new ImageSearchingException(
+					"Cannot extract features from (image) input stream! ", e);
+		}
+		
+	}
+
+	@Override
+	public void searchSimilar(URL imageQueryURL, String queryType)
+			throws ImageSearchingException {
+		log.info("searching by URL " + imageQueryURL.toString());
+		try {
+			String features = img2ftx.extractFeatures(imageQueryURL);
+			searchByImageFeatures(features, queryType);
+
+		} catch (FeatureExtractionException e) {
+			throw new ImageSearchingException(
+					"Cannot extract features from (image) input stream! ", e);
+		}		
 	}
 }

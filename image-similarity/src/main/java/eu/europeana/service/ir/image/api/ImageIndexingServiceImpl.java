@@ -5,8 +5,11 @@ import it.cnr.isti.feature.extraction.Image2Features;
 import it.cnr.isti.melampo.index.indexing.LireIndexer;
 import it.cnr.isti.melampo.index.settings.LireSettings;
 import it.cnr.isti.melampo.vir.exceptions.VIRException;
+import it.cnr.isti.vir.features.FeatureClassCollector;
 import it.cnr.isti.vir.features.FeaturesCollectorArr;
+import it.cnr.isti.vir.features.FeaturesCollectorException;
 import it.cnr.isti.vir.features.mpeg7.LireObject;
+import it.cnr.isti.vir.features.mpeg7.vd.MPEG7VDFormatException;
 import it.cnr.isti.vir.file.ArchiveException;
 import it.cnr.isti.vir.file.FeaturesCollectorsArchive;
 import it.cnr.isti.vir.id.IDString;
@@ -21,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -28,6 +32,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +110,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	}
 
 	public void openIndex(String dataset) throws ImageIndexingException {
-		CoPhIRv2Reader.setFeatures(LireMetric.reqFeatures);
+		registerFeaturesCollector();
 
 		File featuresArchiveFile = getConfiguration().getFeaturesArchiveFile(
 				dataset);
@@ -115,18 +120,37 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 		try {
 			//img2Features = new Image2Features(dataset, configuration);
-			img2Features = new Image2Features(configuration.getIndexConfFolder(dataset));
+			img2Features = initFeatureExtractor(dataset);
 			// features archive, Feature classes, VirId, FeaturesCollection
 			// array
-			featuresArchive = new FeaturesCollectorsArchive(featuresArchiveFile,
-					new LireMetric().getRequestedFeaturesClasses(),
-					IDString.class, FeaturesCollectorArr.class);
+			featuresArchive = initFeaturesArchive(featuresArchiveFile);
 			setVariables();
 		} catch (Exception e) {
 			throw new ImageIndexingException(
 					"Exception when opening image index for dataset: "
 							+ dataset, e);
 		}
+	}
+
+	protected void registerFeaturesCollector() {
+		CoPhIRv2Reader.setFeatures(LireMetric.reqFeatures);
+	}
+
+	protected FeaturesCollectorsArchive initFeaturesArchive(
+			File featuresArchiveFile) throws Exception {
+		return new FeaturesCollectorsArchive(featuresArchiveFile,
+				getVirFeatureClasses(),
+				IDString.class, FeaturesCollectorArr.class);
+	}
+
+	protected FeatureClassCollector getVirFeatureClasses() {
+		return new LireMetric().getRequestedFeaturesClasses();
+	}
+
+	protected Image2Features initFeatureExtractor(String dataset)
+			throws IOException, InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
+		return new Image2Features(configuration.getIndexConfFolder(dataset));
 	}
 
 	public void closeIndex() throws ImageIndexingException {
@@ -169,7 +193,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 			// read it with BufferedReader
 			br = new BufferedReader(new InputStreamReader(is));
-			FeaturesCollectorArr features = CoPhIRv2Reader.getObj(br);
+			FeaturesCollectorArr features = readFeatures(br);
 			features.setID(new IDString(docID));
 			if (featuresArchive != null)
 				featuresArchive.add(features);
@@ -203,6 +227,16 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		
 	}
 
+	protected FeaturesCollectorArr readFeatures(BufferedReader br)
+			throws IOException, FactoryConfigurationError,
+			MPEG7VDFormatException, XMLStreamException, InstantiationException,
+			IllegalAccessException, InvocationTargetException,
+			NoSuchMethodException, FeaturesCollectorException {
+		registerFeaturesCollector();
+		FeaturesCollectorArr features = CoPhIRv2Reader.getObj(br);
+		return features;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see eu.europeana.service.ir.image.api.ImageIndexingService#insertImage(java.lang.String, java.io.InputStream)
@@ -211,17 +245,32 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 	public void insertImage(String docID, InputStream imageObj)
 			throws ImageIndexingException {
 
+		String imgFeatures = extractFeatures(docID, imageObj);
+		
+		String thumbnailUrl="image/"+docID;
+		insertFeatures(docID, thumbnailUrl, imgFeatures);
+
+	}
+
+	protected String extractFeatures(String docID, InputStream imageObj)
+			throws ImageIndexingException {
 		String imgFeatures;
+		//ensure initialized feature extractor
+		try{
+		if(img2Features == null)
+			img2Features = initFeatureExtractor(getDataset());
+		} catch (Exception e) {
+			throw new ImageIndexingException(
+					"Cannot init feature extractor for dataset!" + getDataset(), e);
+		}
+		//perform feature extraction
 		try {
 			imgFeatures = img2Features.extractFeatures(imageObj);
 		} catch (FeatureExtractionException e) {
 			throw new ImageIndexingException(
 					"Cannot extract features from input stream. docId" + docID, e);
 		}
-		
-		String thumbnailUrl="image/"+docID;
-		insertFeatures(docID, thumbnailUrl, imgFeatures);
-
+		return imgFeatures;
 	}
 	
 	public void insertImage(String docID, File imageFile)
@@ -265,8 +314,12 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		
 		//TODO: move to method open new indexer
 		// mp7cIndex = new LireIndexer();
-		mp7cIndex = new ExtendedLireIndexer();
+		mp7cIndex = initFeatureIndexer();
 		mp7cIndex.OpenIndex(settings);
+	}
+
+	protected ExtendedLireIndexer initFeatureIndexer() {
+		return new ExtendedLireIndexer();
 	}
 
 	@Override

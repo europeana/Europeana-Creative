@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,8 +17,10 @@ import javax.imageio.ImageIO;
 
 import net.semanticmetadata.lire.imageanalysis.LireFeature;
 import net.semanticmetadata.lire.imageanalysis.ScalableColor;
+import net.semanticmetadata.lire.utils.ConversionUtils;
+import net.semanticmetadata.lire.utils.SerializationUtils;
 
-public class ScalableAndDominantColorExtractor extends ScalableColor {
+public class DominantColor extends ScalableColor {
 
 	// <index, centroidValue>
 	public static Map<Integer, Integer> hCentroidMap = new HashMap<Integer, Integer>();
@@ -113,10 +116,17 @@ public class ScalableAndDominantColorExtractor extends ScalableColor {
 
 	private String buildBinNameForCentroid(int hCentroid, int sCentroid,
 			int vCentroid) {
-		return Integer.toHexString(hCentroid) + Integer.toHexString(sCentroid)
-				+ Integer.toHexString(vCentroid);
+		return toHexString(hCentroid) + toHexString(sCentroid)
+				+ toHexString(vCentroid);
 	}
 
+	private String toHexString(int b) {
+		String ret = Integer.toHexString(b);
+		if(ret.length() == 1)
+			ret = "0"+ret;
+		return ret;
+	}
+	
 	private static void initGrayCentroids() {
 		if (!grayCentroidValues.isEmpty())
 			return; // the static set was already initialized
@@ -200,7 +210,7 @@ public class ScalableAndDominantColorExtractor extends ScalableColor {
 		return s < 32 || v < 32;
 	}
 
-	public ScalableAndDominantColorExtractor() {
+	public DominantColor() {
 		super();
 		// init();
 		// throw new RuntimeException("To test!");
@@ -281,5 +291,55 @@ public class ScalableAndDominantColorExtractor extends ScalableColor {
 	public DominantColorDescriptor getDescriptor() {
 		return descriptor;
 	}
+	
+	 public byte[] getByteArrayRepresentation() {
+	       
+//		 out.writeByte(version);
+//			out.writeByte(length);
+//			for (int i = 0; i < length; i++) {
+//				out.writeByte(h[i]);
+//				out.writeByte(s[i]);
+//				out.writeByte(v[i]);
+//				out.writeShort(score[i]);
+//			}
+//		 
+//	      return SerializationUtils.toByteArray(null);
+		 throw new RuntimeException("Not suported yet");
+	    }
 
+	    public void setByteArrayRepresentation(byte[] in) {
+	    	 throw new RuntimeException("Not suported yet");
+	    }
+
+	    public void setByteArrayRepresentation(byte[] in, int offset, int length) {
+	    	 throw new RuntimeException("Not suported yet");
+	    }
+
+	    public double[] getDoubleHistogram() {
+	    	 throw new RuntimeException("Not suported yet");
+	    }
+
+	    @Override
+	    public String getStringRepresentation() {
+	    	
+	    	StringBuilder builder = new StringBuilder();
+	    	Collection<ColorBin> bins = getDescriptor().getBins();
+	    	int length = 10;
+	    	int i = 0;
+	    	for (ColorBin colorBin : bins) {
+	    			
+	    		builder.append(colorBin.hCentroid).append(' ');
+				builder.append(colorBin.sCentroid).append(' ');
+				builder.append(colorBin.vCentroid).append(' ');
+				builder.append(colorBin.getNormalizedScore());
+				
+				//keep top 10 only and do not append last empty space
+	    		if(++i >= length)
+	    			break;
+	    		
+	    		builder.append(' ');
+			}
+	    	return builder.toString();
+	    	
+	    }
 }

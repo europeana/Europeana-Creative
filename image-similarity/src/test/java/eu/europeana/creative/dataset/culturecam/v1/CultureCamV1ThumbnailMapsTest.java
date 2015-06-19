@@ -463,29 +463,6 @@ public class CultureCamV1ThumbnailMapsTest extends ThumbnailAccessorUtils implem
 		this.processingStep = processingStep;
 	}
 	
-	protected void copyFile(File sourceFile, File destFile) throws IOException {
-	    if(!destFile.exists()) {
-	        destFile.createNewFile();
-	    }
-
-	    FileChannel source = null;
-	    FileChannel destination = null;
-
-	    try {
-	        source = new FileInputStream(sourceFile).getChannel();
-	        destination = new FileOutputStream(destFile).getChannel();
-	        destination.transferFrom(source, 0, source.size());
-	    }
-	    finally {
-	        if(source != null) {
-	            source.close();
-	        }
-	        if(destination != null) {
-	            destination.close();
-	        }
-	    }
-	}
-	
 	@Test
 		public void buildIndexedUrlsFile() throws FileNotFoundException,
 				IOException, ImageSearchingException {

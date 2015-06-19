@@ -37,7 +37,7 @@ import net.semanticmetadata.lire.imageanalysis.LireFeature;
  * (http://vizir.ims.tuwien.ac.at) project of the IMS (Interactive Media Systems Group) www.ims.tuwien.ac.at, at the TU Wien
  * www.tuwien.ac.at
  */
-public class DominantColorExtractor {
+public class DominantColorLogic {
 
 	private int imageHeight;
 	private int imageWidth;
@@ -94,7 +94,7 @@ public class DominantColorExtractor {
 	private int[] interleavedArray;
 
 	// ---------------------------------------------------//
-	public DominantColorExtractor() {
+	public DominantColorLogic() {
 	}
 
 	public DominantColorValues extractDescriptor(File imageFile) throws IOException{

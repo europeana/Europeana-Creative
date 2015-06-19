@@ -18,7 +18,7 @@ public class ScalableAndDominatColorExtractorTest {
 		File testImagesFolder = new File("/tmp/dcd");
 		String[] fileNames = testImagesFolder.list();
 		File imageFile;
-		ScalableAndDominantColorExtractor extractor = new ScalableAndDominantColorExtractor();
+		DominantColor extractor = new DominantColor();
 
 		for (int i = 0; i < fileNames.length; i++) {
 			//skip non image files
@@ -36,7 +36,7 @@ public class ScalableAndDominatColorExtractorTest {
 			System.out.println("<table>");
 			for (ColorBin bin : descriptor.bins) {
 				float h = (float) bin.hCentroid / 255;
-				float s = (float) bin.sCentorid / 255;
+				float s = (float) bin.sCentroid / 255;
 				float v = (float) bin.vCentroid / 255;
 
 				int rgbVal = Color.HSBtoRGB(h, s, v);

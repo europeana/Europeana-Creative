@@ -37,7 +37,7 @@
    
    <!-- web service image index implementation:  eu.europeana.assets.service.ir.image.api.ImageSearchingServiceWsImpl --> 
    <!-- stand-alone image index implementation: eu.europeana.assets.service.ir.image.api.ImageSearchingServiceImpl -->
-    <beans:bean id="imageSearchingService" class="eu.europeana.service.ir.image.api.SmkImageSearchingServiceImpl" init-method="init">
+    <beans:bean id="imageSearchingService" class="eu.europeana.service.ir.image.api.ImageSearchingServiceImpl" init-method="init">
     	<beans:constructor-arg ref="configuration"/>
     </beans:bean>
     
@@ -46,7 +46,7 @@
 		<beans:property name="configuration" ref="configuration"/>
     </beans:bean>	
     
-    <beans:bean id="imageIndexingService" class="eu.europeana.service.ir.image.api.SmkImageIndexingServiceImpl" init-method="init">
+    <beans:bean id="imageIndexingService" class="eu.europeana.service.ir.image.api.ImageIndexingServiceImpl" init-method="init">
     	<beans:constructor-arg ref="configuration"/>
     	 
     </beans:bean>

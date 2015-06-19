@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.apache.log4j.Logger;
 
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
@@ -19,7 +18,6 @@ import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing
 public class FileSizeFilteringObserver extends ThumbnailDownloader implements
 		Observer {
 
-	Logger log = Logger.getLogger(this.getClass());
 	private int minSize, placeholderSize;
 	File filteredImages;
 

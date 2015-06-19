@@ -15,22 +15,29 @@ import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import eu.europeana.api.client.MyEuropeanaClient;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
+import eu.europeana.api.client.metadata.MetadataAccessor;
+import eu.europeana.api.client.model.search.CommonMetadata;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.myeuropeana.impl.MyEuropeanaClientImpl;
 import eu.europeana.api.client.myeuropeana.response.TagsApiResponse;
 import eu.europeana.api.client.myeuropeana.thumbnails.ThumbnailFromTagsResponseAccessor;
+import eu.europeana.api.client.search.query.Api2QueryBuilder;
+import eu.europeana.api.client.search.query.Api2QueryInterface;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
+import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
 import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 import eu.europeana.creative.dataset.culturecam.input.SelectionDescriptionEnum;
 import eu.europeana.creative.dataset.culturecam.input.SelectionDescriptionImpl;
 import eu.europeana.creative.dataset.culturecam.v2.download.CimecThumbnailDownloader;
+import eu.europeana.creative.dataset.culturecam.v2.download.OnbImageDownloader;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 
@@ -40,6 +47,7 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 	// private boolean overwriteThumbnails = false;
 	String tagSelectionFilename = "/selection/input/tags/new.csv";
 	String cimecIdsFilename = "/selection/input/tags/cimec_ids.csv";
+	String onbIdsFilename = "/selection/input/tags/onb_ids.csv";
 
 	
 	// String colectionThumbnailsFilename =
@@ -67,6 +75,38 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 		setDataset(dataset);
 	}
 
+	@Test
+	public void buildOnbSelection() throws MyEuropeanaApiException,
+				IOException {
+			
+			Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
+			String portalUrl = "http://www.europeana.eu/portal/search.html?query=europeana_collectionName%3A9200388*&rows=24&start=193&qt=false";
+			Api2QueryInterface apiQuery = queryBuilder.buildQuery(portalUrl);
+			apiQuery.setProfile("rich");
+			
+			MetadataAccessor ma = new MetadataAccessor(apiQuery, null);
+			Map<String, String> contentMap = ma.getContentMap(CommonMetadata.EDM_FIELD_IS_SHOWN_BY, -1, -1, MetadataAccessor.ERROR_POLICY_CONTINUE);
+			
+			DatasetDescriptor descriptor = new DatasetDescriptor("onb", "cc");
+			File file = new File(getCollectionsCvsFolder(), onbIdsFilename);
+					
+			writeMapToCsvFile(descriptor, contentMap, file, POLICY_OVERWRITE_FILE);
+			System.out.println("Items found in onb selection: " + contentMap.size());
+			System.out.println("Items written to file: " + file.getAbsolutePath());
+
+		}
+
+	@Test
+	public void downloadOnbImages() throws FileNotFoundException, IOException {
+		File onbMapFile = new File(getCollectionsCvsFolder(), onbIdsFilename);
+		Map<String, String> thumbnailMap = readThumbnailsMap(onbMapFile);
+		
+		final File downloadFolder = new File("/tmp/eucreative/onb/");
+		OnbImageDownloader downloader = new OnbImageDownloader(downloadFolder);
+		downloader.downloadImages(thumbnailMap);
+	}
+	
+	
 	//@Test
 	public void buildNewTagSelection() throws MyEuropeanaApiException,
 			IOException {
@@ -558,6 +598,67 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 		log.trace("Closing dataset file");
 		datasetWriter.close();
 	}
+	
+	@Test
+	public void buildOnbHtmlView() throws IOException{
+		
+		//setDataset("smk");
+		DatasetDescriptor descriptor = new DatasetDescriptor("onb", "cc");
+		File csvInput = new File(getCollectionsCvsFolder(), onbIdsFilename);
+		File outputFolder = new File("/tmp/eucreative/design/onb_view/");
+		
+		createSubsetHtml(descriptor, csvInput, outputFolder);
+	}
+	
+	protected void createSubsetHtml(DatasetDescriptor descriptor,
+			File csvInput, File outputFolder) throws IOException{
+
+//		DatasetDescriptor dataset = new DatasetDescriptor(subsetName,
+//				collectionName);
+		Map<String, String> thumbnailMap = readThumbnailsMap(csvInput);
+		File thumbnailsFolder = getConfig().getImageFolderAsFile(getDataset());
+		
+		
+		File thumbnailFile;
+		File imagesFile;
+		File csvFile;
+		File htmlFile;
+		
+		//write csv header
+		csvFile = new File(outputFolder, descriptor.getStringId()+".csv");
+		if(csvFile.exists())
+			csvFile.delete();
+		FileUtils.writeStringToFile(csvFile, "#nr;id\n", "utf-8", true);
+		
+		//write html header
+		htmlFile = new File(outputFolder, descriptor.getStringId()+".html");
+		if(htmlFile.exists())
+			htmlFile.delete();
+		String head = "<html charset='utf-8'> <body> image #nr;id<br>\n";
+		FileUtils.writeStringToFile(htmlFile, head, "utf-8", true);
+		
+		int count = 0;
+		String htmlRow;
+		String csvRow;
+		
+		for (Map.Entry<String, String> thumbnail : thumbnailMap.entrySet()) {
+			// copy thumbnail
+			count++;
+			thumbnailFile = new File(thumbnailsFolder, thumbnail.getKey()+".jpg");
+			imagesFile = new File(outputFolder, "/image"+thumbnail.getKey() + ".jpg");
+			copyFile(thumbnailFile, imagesFile);
+			//write thumbnail to html file
+			htmlRow = "<img src='./image" + thumbnail.getKey()+".jpg" + "'/><BR>";
+			htmlRow += count + ";" + thumbnail.getKey()+"<BR>\n";
+			FileUtils.writeStringToFile(htmlFile, htmlRow, "utf-8", true);
+			//write thumbnail to csv file
+			csvRow = count + ";" + thumbnail.getKey() + "\n";
+			FileUtils.writeStringToFile(csvFile, csvRow, "utf-8", true);
+			
+		}
+		//write html footer
+		FileUtils.writeStringToFile(htmlFile, "</html>", "utf-8", true);
+	}
 
 	protected IRConfiguration getConfig() {
 		IRConfiguration config = new IRConfigurationImpl();
@@ -586,27 +687,5 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 
 	public void setProcessingStep(String processingStep) {
 		this.processingStep = processingStep;
-	}
-
-	protected void copyFile(File sourceFile, File destFile) throws IOException {
-		if (!destFile.exists()) {
-			destFile.createNewFile();
-		}
-
-		FileChannel source = null;
-		FileChannel destination = null;
-
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-			destination.transferFrom(source, 0, source.size());
-		} finally {
-			if (source != null) {
-				source.close();
-			}
-			if (destination != null) {
-				destination.close();
-			}
-		}
 	}
 }
