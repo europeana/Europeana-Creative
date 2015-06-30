@@ -78,7 +78,7 @@ public class CultureCamV1PivotsTest extends ThumbnailAccessorUtils {
 			System.out.println("successfully extracted features for pivots: "
 					+ pivots);
 
-			pivotManager.generateLireObjectPivots();
+			pivotManager.generateLireObjectPivotsBin();
 			
 			
 			List<IFeaturesCollector> features = ((PivotManagementServiceImpl) pivotManager)

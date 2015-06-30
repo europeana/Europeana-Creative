@@ -69,7 +69,7 @@ public class SmkFeaturesArchiveTest extends ThumbnailAccessorUtils {
 				.getPivotsFCArchive(getDataset()));
 		assertTrue(inFile.exists());
 
-		pivotManager.generateLireObjectPivots();
+		pivotManager.generateLireObjectPivotsBin();
 
 		checkTopNPivots();
 
@@ -96,7 +96,7 @@ public class SmkFeaturesArchiveTest extends ThumbnailAccessorUtils {
 	// @Test
 	public void checkTopNPivots() throws FileNotFoundException, IOException {
 		File outFile = ((PivotManagementServiceImpl) pivotManager)
-				.getLireObjectPivotsFile();
+				.getPivotsFCArchiveFile();
 
 		// readTop5 pivots
 		int topN = 5;

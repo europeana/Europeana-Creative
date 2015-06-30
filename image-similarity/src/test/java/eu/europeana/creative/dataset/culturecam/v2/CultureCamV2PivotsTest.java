@@ -1,4 +1,4 @@
-package eu.europeana.creative.dataset.design.pivots;
+package eu.europeana.creative.dataset.culturecam.v2;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
 import eu.europeana.service.ir.image.api.PivotManagementService;
 import eu.europeana.service.ir.image.api.PivotManagementServiceImpl;
 
-public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
+public class CultureCamV2PivotsTest extends ThumbnailAccessorUtils {
 
 	PivotManagementService pivotManager;
 
@@ -42,10 +43,12 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 		pivotManager.init();
 	}
 
-	// @Test
+	@Test
 	public void extractPivotFeatures() throws Exception {
-		File pivotCsvFile = new File(pivotManager.getConfiguration()
-				.getPivotsCsvFile(getDataset()));
+//		File pivotCsvFile = new File(pivotManager.getConfiguration()
+//				.getPivotsCsvFile(getDataset()));
+		File pivotCsvFile = pivotManager.getConfiguration().getDatasetFile(getDataset());
+		//				
 		Map<String, String> pivotThumbnails = readThumbnailsMap(pivotCsvFile);
 		pivotManager.extractPivotFeatures(pivotThumbnails.keySet());
 		int pivots = ((PivotManagementServiceImpl) pivotManager)
@@ -53,7 +56,8 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 		assertEquals(pivotThumbnails.size(), pivots);
 		System.out.println("successfully extracted features for pivots: "
 				+ pivots);
-
+		System.out.println("Fivot features writen to archive: " + pivotManager.getPivotsFCArchiveFile());
+		
 		List<IFeaturesCollector> features = ((PivotManagementServiceImpl) pivotManager)
 				.getPivotsFCArchive().getAll();
 		assertEquals(pivotThumbnails.size(), features.size());
@@ -70,13 +74,13 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 
 		pivotManager.generateLireObjectPivotsBin();
 
-		checkTopNPivots();
+		checkTopNPivots(pivotManager.getTopN());
 
 	}
 	
-//	@Test
-//	public void generateLireObjectPivotsArchiveWithOrder() throws Exception {
-//		// test copy FeatureArchives
+	@Test
+	public void generateLireObjectPivotsBinWithOrder() throws Exception {
+		// test copy FeatureArchives
 //		File inFile = new File(pivotManager.getConfiguration()
 //				.getPivotsFCArchive(getDataset()));
 //		assertTrue(inFile.exists());
@@ -85,21 +89,25 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 //				35, 9, 10, 40, 49, 2, 26, 31, 25, 12, 3, 24, 6, 16, 13, 23, 1,
 //				43, 36, 37, 45, 21, 17, 61, 56, 62, 53, 66, 70, 51, 64, 58, 60,
 //				54, 67, 63, 69, 52, 59, 55, 57, 50, 68, 22, 71, 65 };
-//
-//		pivotManager.generateLireObjectPivots(order);
-//
-//		checkTopNPivots();
-//
-//	}
+
+		//FileUtils
+		File orderCsvFile = new File("/tmp/pivotorder/pivots_positions_350.csv"); 
+		
+		pivotManager.generateLirePivotsBinWithOrder(orderCsvFile);
+		pivotManager.getPivotsFCArchiveFile();
+
+		checkTopNPivots(350);
+
+	}
 
 	// @Test
-	public void checkTopNPivots() throws FileNotFoundException, IOException {
-		File outFile = ((PivotManagementServiceImpl) pivotManager)
-				.getPivotsFCArchiveFile();
+	public void checkTopNPivots(int topK) throws FileNotFoundException, IOException {
+		File pivotBinFile = ((PivotManagementServiceImpl) pivotManager)
+				.getLireObjectPivotsFile(topK);
 
 		// readTop5 pivots
 		int topN = 5;
-		LireObject[] pivots = readTopNPivots(outFile, topN);
+		LireObject[] pivots = readTopNPivots(pivotBinFile, topN);
 		for (int i = 0; i < pivots.length; i++) {
 			LireObject lireObject = pivots[i];
 			assertNotNull(lireObject);
@@ -147,8 +155,9 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 				.getAll(inFile);
 		// FeaturesCollectorsArchive.
 
-		final int k = 50;
-		final int tries = 40;
+		final int k = 350;
+		final int tries = 13;
+		System.out.println("Starting pivot order generation! Pivot archive size = " + featuresCollection.size());
 		MultipleKNNPQueueID multipleKnnQueue = new MultipleKNNPQueueID(
 				featuresCollection, // Collection queryColl,
 				k, // Integer k,
@@ -169,9 +178,20 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 		ISimilarityResults[] results = multipleKnnQueue.getResults();
 		// multipleKnnQueue.writeResultsIDs();
 
+		StringBuffer buf = new StringBuffer(); 
 		for (int i = 0; i < results.length; i++) {
-			System.out.println("ISimilarityResult [" + i + "]: " + results[i]);
+			if(i == k)
+				System.out.println(buf.toString());
+				
+			buf.append("ISimilarityResult [").append(i).append("]: ").append(results[i]).append("\n");
 		}
+		
+		
+		final File outFile = new File("/tmp/pivotorder/"+getDataset()+".txt");
+		if(outFile.exists())
+			outFile.delete();
+		FileUtils.write(outFile, buf.toString());
+		System.out.println();
 
 		// System.out.println("Top k results : " + multipleKnnQueue.get(k));
 		// for (int i = 0; i < k; i++) {
@@ -179,6 +199,16 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 		// }
 
 		// multipleKnnQueue.get(index);
+		
+		
+//		final File similarityFile = new File("/tmp/pivotorder/"+getDataset()+"_similarity.txt");
+//		FileUtils.write(outFile, "Isimilarity");
+//		
+//		for (int i = 0; i < results.length; i++) {
+//			FileUtils.write(similarityFile, results[i].getResultsIDs().);
+//		}
+//		
+		//public Collection<IFeaturesCollector_Labeled_HasID> getFCs(FeaturesCollectorsArchives archive) throws ArchiveException;
 
 	}
 

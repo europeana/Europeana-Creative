@@ -68,7 +68,7 @@ public class CultureCamPivotsFeaturesArchiveTest extends ThumbnailAccessorUtils 
 				.getPivotsFCArchive(getDataset()));
 		assertTrue(inFile.exists());
 
-		pivotManager.generateLireObjectPivots();
+		pivotManager.generateLireObjectPivotsBin();
 
 		checkTopNPivots();
 
@@ -91,7 +91,7 @@ public class CultureCamPivotsFeaturesArchiveTest extends ThumbnailAccessorUtils 
 		                            	  7311, 310, 270, 286, 91, 4352, 5522, 11203, 8447, 10209, 3232, 
 		                            	  886, 3209, 8915, 8540, 344, 361, 277, 25, 3897, 77, 10994, 11249};
 
-		pivotManager.generateLireObjectPivots(order);
+		//pivotManager.generateLireObjectPivots(order);
 
 		checkTopNPivots();
 
@@ -100,7 +100,7 @@ public class CultureCamPivotsFeaturesArchiveTest extends ThumbnailAccessorUtils 
 	// @Test
 	public void checkTopNPivots() throws FileNotFoundException, IOException {
 		File outFile = ((PivotManagementServiceImpl) pivotManager)
-				.getLireObjectPivotsFile();
+				.getPivotsFCArchiveFile();
 
 		// readTop5 pivots
 		int topN = 5;

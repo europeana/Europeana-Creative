@@ -2,6 +2,7 @@ package eu.europeana.creative.dataset.smk.indexing;
 
 import it.cnr.isti.feature.extraction.FeatureExtractionException;
 import it.cnr.isti.indexer.IndexHelper;
+import it.cnr.isti.melampo.vir.exceptions.VIRException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,11 +91,11 @@ public class SmkImageIndexingTest {
 	}
 
 	@Test
-	public void testPivotFeaturesExtraction() throws IOException, FeatureExtractionException{
+	public void testPivotFeaturesExtraction() throws IOException, FeatureExtractionException, VIRException{
 		initPivotManagementService("smk");
 		Map<String, String> thumbnails = getThumbnailsMap("smk");
 		pivotManager.extractPivotFeatures(thumbnails.keySet());
-		pivotManager.generateLireObjectPivots();
+		pivotManager.generateLireObjectPivotsBin();
 		
 	}
 	

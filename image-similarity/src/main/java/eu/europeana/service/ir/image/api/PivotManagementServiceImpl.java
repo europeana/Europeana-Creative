@@ -2,15 +2,16 @@ package eu.europeana.service.ir.image.api;
 
 import it.cnr.isti.feature.extraction.FeatureExtractionException;
 import it.cnr.isti.feature.extraction.Image2Features;
+import it.cnr.isti.melampo.vir.exceptions.VIRException;
 import it.cnr.isti.vir.features.FeatureClassCollector;
 import it.cnr.isti.vir.features.FeaturesCollectorArr;
 import it.cnr.isti.vir.features.IFeaturesCollector;
+import it.cnr.isti.vir.features.IFeaturesCollector_Labeled_HasID;
 import it.cnr.isti.vir.features.mpeg7.LireObject;
 import it.cnr.isti.vir.file.FeaturesCollectorsArchive;
 import it.cnr.isti.vir.id.IDString;
 import it.cnr.isti.vir.readers.CoPhIRv2Reader;
 import it.cnr.isti.vir.similarity.metric.LireMetric;
-import it.cnr.isti.vir.util.Reordering;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -23,11 +24,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import eu.europeana.service.ir.image.IRConfiguration;
@@ -40,10 +43,13 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 	private IRConfiguration configuration;
 	private String dataset = null;
 	private Image2Features img2ftx;
+	// boolean cleanPivotsFCArchive = false;
 	private File pivotsFCArchiveFile;
-	boolean cleanPivotsFCArchive = false;
 	FeaturesCollectorsArchive pivotsFCArchive;
-	private File lireObjectPivotsFile;
+
+	private File lireObjectPivotsTopNFile;
+
+	// private File pivotFeaturesFCArchiveFile;
 	// FeaturesCollectorsArchive lireObjectPivotsArchive;
 
 	public PivotManagementServiceImpl() {
@@ -81,26 +87,20 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		// File indexConfFolder = getConfiguration().getIndexConfFolder(
 		// getDataset());
 		// init feature extraction bean
-		
-			initFeaturesExtractor();
-		
 
+		initFeaturesExtractor();
 	}
 
-	protected void initFeaturesExtractor(){
+	protected void initFeaturesExtractor() {
 		try {
 			if (img2ftx == null)
 				img2ftx = new Image2Features(getConfiguration()
-					.getIndexConfFolder(getDataset()));
+						.getIndexConfFolder(getDataset()));
 		} catch (Exception e) {
 			throw new TechnicalRuntimeException(
 					"Cannot instantiate feature extractor!", e);
 			// log.warn("Cannot instantiate feature extractor!", e);
 		}
-	}
-
-	protected void initPivotsFCArchive() {
-		initPivotsFCArchive(cleanPivotsFCArchive);
 	}
 
 	protected void initPivotsFCArchive(boolean resetFile) {
@@ -113,8 +113,7 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 
 		try {
 			pivotsFCArchive = new FeaturesCollectorsArchive(
-					getPivotsFCArchiveFile(),
-					getFeatureClassCollector(),
+					getPivotsFCArchiveFile(), getFeatureClassCollector(),
 					IDString.class, FeaturesCollectorArr.class);
 		} catch (Exception e) {
 			throw new TechnicalRuntimeException(
@@ -127,15 +126,27 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		return new LireMetric().getRequestedFeaturesClasses();
 	}
 
-	protected File initLireObjectPivotFile(boolean resetFile) {
+	protected File initPivotFCArchiveFile(boolean resetFile) {
 
 		// create file path if needed
-		if (!getLireObjectPivotsFile().exists())
-			getLireObjectPivotsFile().getParentFile().mkdirs();
+		if (!getPivotsFCArchiveFile().exists())
+			getPivotsFCArchiveFile().getParentFile().mkdirs();
 		else if (resetFile)
-			getLireObjectPivotsFile().delete();
+			getPivotsFCArchiveFile().delete();
 
-		return getLireObjectPivotsFile();
+		return getPivotsFCArchiveFile();
+	}
+
+	protected File initLireObjectPivotsTopNFile(boolean resetFile, int topK) {
+
+		// create file path if needed
+		final File lireObjectPivotsFile = getLireObjectPivotsFile(topK);
+		if (!lireObjectPivotsFile.exists())
+			lireObjectPivotsFile.getParentFile().mkdirs();
+		else if (resetFile)
+			lireObjectPivotsFile.delete();
+
+		return lireObjectPivotsFile;
 	}
 
 	public String getDataset() {
@@ -146,6 +157,7 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		this.dataset = dataset;
 	}
 
+	@Override
 	public File getPivotsFCArchiveFile() {
 		if (pivotsFCArchiveFile == null)
 			pivotsFCArchiveFile = new File(getConfiguration()
@@ -161,7 +173,7 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 	public void extractPivotFeatures(Set<String> pivotThumbnailIds)
 			throws FeatureExtractionException {
 		// init file
-		initPivotsFCArchive();
+		initPivotsFCArchive(true);
 
 		File pivotThumbnailFile = null;
 		int cnt = 0;
@@ -173,8 +185,8 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 				storePivotFeatures(pivotId, new FileInputStream(
 						pivotThumbnailFile));
 				cnt++;
-				if(cnt % 1000 == 0)
-				log.debug("Features extracted for #pivots: " + cnt);
+				if (cnt % 1000 == 0)
+					log.debug("Features extracted for #pivots: " + cnt);
 			}
 			// write index files an close
 			getPivotsFCArchive().close();
@@ -186,10 +198,12 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 	}
 
 	protected void storePivotFeatures(String pivotID, InputStream imageObj)
-			throws FeatureExtractionException, IOException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+			throws FeatureExtractionException, IOException,
+			InstantiationException, IllegalAccessException,
+			ClassNotFoundException {
 
 		initFeaturesExtractor();
-		
+
 		String imgFeatures;
 
 		imgFeatures = img2ftx.extractFeatures(imageObj);
@@ -245,23 +259,167 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 	}
 
 	@Override
-	public void generateLireObjectPivots(Integer[] order)
-			throws FileNotFoundException, FeatureExtractionException {
+	public void generateLirePivotsBinWithOrder(File orderCsvFile)
+			throws IOException, FeatureExtractionException {
+		
+		if(getPivotsFCArchive() == null)
+			initPivotsFCArchive(false);
+		
+		DataOutputStream out = null;
+		File lirePivotsBinFile = null;
+		
+		try {
+			//read position map and features collector list
+			Map<String, Integer> pivotPositionMap = readPivotPositionsMap(orderCsvFile);
+			List<IFeaturesCollector> allPivotFeatures = getPivotsFCArchive().getAll();
+			//Object[] features = allPivotFeatures.toArray().clone();
+			
+			if (allPivotFeatures.size() < pivotPositionMap.size())
+				throw new ArrayIndexOutOfBoundsException(
+						"The feature collector list was expected to have more than "
+								+ pivotPositionMap.size()
+								+ " elements, but only found: "
+						+ allPivotFeatures.size());
+	
+			//top N pivots file and output stream
+			int topK = pivotPositionMap.size();
+			lirePivotsBinFile = initLireObjectPivotsTopNFile(true, topK);
+			out = new DataOutputStream(new BufferedOutputStream(
+					new FileOutputStream(lirePivotsBinFile)));
+			
+			LireObject pivot;
+			// IFeaturesCollector pivot;
+			int positionAsId = 0;
+			IFeaturesCollector_Labeled_HasID pivotFeaturesCollector;
+			
+			
+			for (Map.Entry<String, Integer> pivotPosition : pivotPositionMap.entrySet()) {
+				//take the features at the position indicated by the order
+				pivotFeaturesCollector = (IFeaturesCollector_Labeled_HasID) allPivotFeatures.get(pivotPosition.getValue());
+				
+				//check thumbnail id
+				if(!pivotPosition.getKey().equals(pivotFeaturesCollector.getID().toString())){
+						throw new IllegalArgumentException("pivotPosition doesn't match pivot feature archive! PivotPosition " + pivotPosition + "Feature Collector IID:" +  pivotFeaturesCollector.getID().toString());
+				}
+				
+				//increment pivot numeric id, 
+				pivot = new LireObject(++positionAsId, pivotFeaturesCollector);
+				//write pivot to file
+				pivot.writeData(out);
+			}
+		} catch (Exception e) {
+			throw new FeatureExtractionException(
+					"cannot generate lire pivots file from feature collection archive!",
+					e);
+		} finally {
+			out.flush();
+			
+			try {
+				if (out != null)
+					out.close();
+			} catch (Exception e) {
+				log.warn("Cannot close out Stream for file: " + lirePivotsBinFile, e);
+			}
+		}
+		
+		
+		
 
-		File pivotsFile = initLireObjectPivotFile(true);
-		// initPivotsFCArchive(false);
+				
+	}
+
+	@Override
+	public void generateLirePivotsBinWithOrder(Integer[] order)
+			throws IOException, FeatureExtractionException {
+
+		File featureArchiveFile = initPivotFCArchiveFile(false);
+
+		int topK = order.length;
+
+		// top N pivots file
+		File lirePivotsBinFile = initLireObjectPivotsTopNFile(true, topK);
+
+		DataOutputStream out = null;
+
+		try {
+			List<IFeaturesCollector> allPivotFeatures = FeaturesCollectorsArchive
+					.getAll(featureArchiveFile);
+			// getPivotsFCArchive().getAll();
+			if (order != null && allPivotFeatures.size() < order.length)
+				throw new ArrayIndexOutOfBoundsException(
+						"The feature collector list was expected to have more than "
+								+ order.length + " elements, but only found: "
+								+ allPivotFeatures.size());
+
+			LireObject pivot;
+			// IFeaturesCollector pivot;
+			int positionAsId = 0;
+
+			out = new DataOutputStream(new BufferedOutputStream(
+					new FileOutputStream(lirePivotsBinFile)));
+
+			Object[] features = allPivotFeatures.toArray().clone();
+			// int indexingPivots =
+			int pivotsCount = features.length;
+			IFeaturesCollector curentPivot;
+
+			for (int i = 0; i < order.length; i++) {
+				positionAsId = i + 1;
+				// take the features at the position indicated by the order
+				curentPivot = (IFeaturesCollector) features[order[i]];
+				pivot = new LireObject(positionAsId, curentPivot);
+				// write pivot to file
+				pivot.writeData(out);
+			}
+
+			// if (order != null){
+			// Reordering.reorder(Arrays.asList(order), features);
+			// pivotsCount = order.length;
+			// }
+			//
+			out.flush();
+			// lireObjectPivotsArchive.close();
+
+		} catch (Exception e) {
+			throw new FeatureExtractionException(
+					"cannot generate lire pivots file from feature collection archive!",
+					e);
+		} finally {
+			try {
+				if (out != null)
+					out.close();
+			} catch (Exception e) {
+				log.warn("Cannot close out Stream for file: "
+						+ lirePivotsBinFile, e);
+			}
+		}
+	}
+
+	@Override
+	public void generateLireObjectPivotsBin(int topK,
+			boolean forceFeatureExtraction) throws IOException,
+			FeatureExtractionException {
+
+		// might delete (reset) file
+		File featureArchiveFile = initPivotFCArchiveFile(forceFeatureExtraction);
+		// ensure feature extraction
+		if (!featureArchiveFile.exists())
+			extractPivotFeatures();
+
+		// top N pivots file
+		File pivotsFile = initLireObjectPivotsTopNFile(true, topK);
 
 		DataOutputStream out = null;
 
 		try {
 			List<IFeaturesCollector> pivotFeatures = FeaturesCollectorsArchive
-					.getAll(getPivotsFCArchiveFile());
+					.getAll(featureArchiveFile);
 			// getPivotsFCArchive().getAll();
-			if (order != null && pivotFeatures.size() < order.length)
-				throw new ArrayIndexOutOfBoundsException(
-						"The feature collector list was expected to have more than "
-								+ order.length + " elements, but only found: "
-								+ pivotFeatures.size());
+			// if (order != null && pivotFeatures.size() < order.length)
+			// throw new ArrayIndexOutOfBoundsException(
+			// "The feature collector list was expected to have more than "
+			// + order.length + " elements, but only found: "
+			// + pivotFeatures.size());
 
 			LireObject pivot;
 			// IFeaturesCollector pivot;
@@ -271,17 +429,18 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 					new FileOutputStream(pivotsFile)));
 
 			Object[] features = pivotFeatures.toArray().clone();
-			//int indexingPivots =
+			// int indexingPivots =
 			int pivotsCount = features.length;
-			
-			if (order != null){
-				Reordering.reorder(Arrays.asList(order), features);
-				pivotsCount = order.length;
-			}
-			
+
+			// if (order != null){
+			// Reordering.reorder(Arrays.asList(order), features);
+			// pivotsCount = order.length;
+			// }
+
 			for (int i = 0; i < pivotsCount; i++) {
 				positionAsId = i + 1;
-				pivot = new LireObject(positionAsId, (IFeaturesCollector) features[i]);
+				pivot = new LireObject(positionAsId,
+						(IFeaturesCollector) features[i]);
 				pivot.writeData(out);
 			}
 
@@ -302,21 +461,74 @@ public class PivotManagementServiceImpl implements PivotManagementService {
 		}
 	}
 
-	public File getLireObjectPivotsFile() {
-		if (lireObjectPivotsFile == null)
-			lireObjectPivotsFile = new File(getConfiguration().getPivotsFolder(
-					getDataset()), "LireObjectPivots.dat");
+	@Override
+	public void extractPivotFeatures() throws IOException,
+			FeatureExtractionException {
+		Set<String> ids = readThumbnailIds();
+		// extract
+		extractPivotFeatures(ids);
+	}
 
-		return lireObjectPivotsFile;
+	Set<String> readThumbnailIds() throws IOException {
+		List<String> items = FileUtils.readLines(getConfiguration()
+				.getDatasetFile(getDataset()));
+		Set<String> ids = new TreeSet<String>();
+		for (String thumbnail : items) {
+			// id is on the first position
+			ids.add(thumbnail.split(";", 2)[0]);
+		}
+		// release memory
+		items = null;
+
+		return ids;
+	}
+
+	protected Map<String, Integer> readPivotPositionsMap(File pivotPositionMap)
+			throws IOException {
+		List<String> items = FileUtils.readLines(pivotPositionMap);
+		Map<String, Integer> pivotPositionsMap = new LinkedHashMap<String, Integer>();
+		String[] parts;
+		Integer positionInCollection;
+		// String thumbnailId;
+		// Integer position;
+		for (String pivotPosition : items) {
+			parts = pivotPosition.split(";", 3);
+			// id is on the first position
+			// pivot position is on the second position
+			positionInCollection = Integer.parseInt(parts[1]);
+			pivotPositionsMap.put(parts[0], positionInCollection);
+		}
+		// release memory
+		//items = null;
+
+		return pivotPositionsMap;
+	}
+
+	public File getLireObjectPivotsFile(int topK) {
+		if (lireObjectPivotsTopNFile == null)
+			lireObjectPivotsTopNFile = new File(getConfiguration()
+					.getPivotsFolder(getDataset()), "LireObjectPivots_" + topK
+					+ ".dat");
+
+		return lireObjectPivotsTopNFile;
+	}
+
+	public File getLireObjectPivotsFile() throws IOException, VIRException {
+		return getLireObjectPivotsFile(getTopN());
 	}
 
 	@Override
-	public void generateLireObjectPivots() throws FileNotFoundException,
-			FeatureExtractionException {
-		generateLireObjectPivots(null);
+	public int getTopN() throws IOException, VIRException {
+		return getConfiguration().getLireSettings(
+				getDataset()).getnPivots();
 	}
 
-	// protected FeaturesCollectorsArchive getLireobjectPivotsArchive() {
-	// return lireObjectPivotsArchive;
-	// }
+	@Override
+	public void generateLireObjectPivotsBin()
+			throws FeatureExtractionException, IOException, VIRException {
+		generateLireObjectPivotsBin(
+				getTopN(),
+				true);
+	}
+
 }
