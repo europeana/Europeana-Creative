@@ -1,4 +1,4 @@
-<%@page import="eu.europeana.api.client.result.EuropeanaApi2Results"%>
+<%@page import="eu.europeana.api.client.model.EuropeanaApi2Results"%>
 <%@page import="java.util.ArrayList"%>
 <%@page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -39,6 +39,8 @@ ArrayList<String> links = new ArrayList<String>();
 if(country != null && !"".equals(country.trim())){
 	results = searchBean.getEuropeanaResults(searchTerms, country);
 }
+
+String previewImage = null;
 %>
 	
 	<h5 align="center">Europeana Items</h5>
@@ -60,7 +62,9 @@ if(country != null && !"".equals(country.trim())){
 				else {%>
 					<li data-target="#mozart-carousel" data-slide-to="<%=i%>"></li>
 				<%}
-				links.add(results.getAllItems().get(i).getEdmPreview().get(0).split("&")[0]);
+				previewImage = results.getAllItems().get(i).getEdmPreview().get(0);
+				previewImage = previewImage.replace("LARGE", "BRIEF_DOC");
+				links.add(previewImage);
 			}
 		}%>		
   		</ol>

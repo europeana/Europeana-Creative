@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Europeana Creative - Geomapping Service</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 <link href="css/css1.css" rel="stylesheet" type="text/css" />
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <link href="css/main_002.css" rel="stylesheet" type="text/css" />
@@ -13,7 +14,7 @@
 <link href="annotorious-0.6.1/css/semantic-tagging-plugin.css" rel="stylesheet" type="text/css" />
 <link href="annotorious-0.6.1/css/anno-parse-plugin.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyChSsvmHKsYg2ymcJXbkS9G1wEw3JcP76E&sensor=false"></script>
 <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.8.min.js"></script>
 <script type="text/javascript" src="http://annotorious.github.io/latest/annotorious.dev.js"></script>
 <script type="text/javascript" src="http://annotorious.github.io/demos/semantic-tagging-plugin.js"></script>
@@ -39,7 +40,7 @@ String test = "Geo-mapping-service";
 						<td valign="top" align="center" width="250px">
 							<div id="mozart" style="height: 330; vertical-align: top; position:relative; top:0; overflow:auto;">
 								<h5>Details about Mozart Places</h5>
-      							<img src="http://62.218.164.177:8080/geomapping/img/mozart.jpeg" width="300" class="annotatable" alt="anno">
+      							<img src="./img/mozart.jpeg" width="300" class="annotatable" alt="anno">
       						</div>
 							<div id="iframe-wrapper" style="height: 400; vertical-align: top; position:absolute; bottom:0; ">
 								<iframe id="iframe-carousel" src="europeanaCarousel.jsp" height="400" frameborder="0" scrolling="no"></iframe>
@@ -69,12 +70,16 @@ String test = "Geo-mapping-service";
 	var semanticPlugitInitialized = false;
 	
 	function initialize() {
- 		var mapOptions = {
- 			mapTypeId: google.maps.MapTypeId.ROADMAP
+ 		
+		var vienna = new google.maps.LatLng(48.208412, 16.373470);
+		var mapOptions = {
+ 			mapTypeId: google.maps.MapTypeId.ROADMAP,
+ 			zoom: 10,
+ 			center: vienna
  		};
  		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
  		var kmlLayer = new google.maps.KmlLayer({
- 			url: 'http://62.218.164.177:8080/geomapping/mozart.kml'
+ 			url: 'http://image-similarity.ait.ac.at/geomapping/mozart.kml'
  		});
  		kmlLayer.setMap(map);
  		var start = new google.maps.LatLng(48.206615, 16.382010);
@@ -96,7 +101,7 @@ String test = "Geo-mapping-service";
  			location: new google.maps.LatLng(48.205597, 16.368534),
  			stopover: true
  		});
- 		var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+ 		var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true, suppressInfoWindows: true});
  		directionsDisplay.setMap(map);
  		var directionsService = new google.maps.DirectionsService();
  		var request = {
@@ -114,14 +119,21 @@ String test = "Geo-mapping-service";
  		});
  		google.maps.event.addListener(kmlLayer, 'click', function (kmlEvent) {
  			//change right side content
- 			setDetails(kmlEvent.featureData.id, kmlEvent.featureData.name, kmlEvent.featureData.description);
+ 			//alert('clicked' + kmlEvent);
+ 			setDetails(kmlEvent);
  			//make waypoint images annotatable
  			//reset annotations
  			window.setTimeout( function(){setAnnotatableClasses(); window.setTimeout( function(){anno.reset();}, 500);}, 1000);
  			
  		});
+ 		
+ 		google.maps.event.addListener
+ 		
+ 		
 	}
 	function setAnnotatableClasses() {
+		
+		//alert('make annotatable');
 		var my_img = document.getElementsByTagName("img");
 		for (i=0;i<my_img.length;i++){
 			var str=my_img[i].alt;
@@ -136,11 +148,16 @@ String test = "Geo-mapping-service";
 	  	} */
 	  	
 	}
-	function setDetails(id, name, text) {
+	function setDetails(kmlEvent) {
+		var wp_id = kmlEvent.featureData.id;
+		var wp_name = kmlEvent.featureData.name;
+		var wp_description = kmlEvent.featureData.description;
+		
+		
 		details = document.getElementById("mozart");
-		if(id == "mozarthaus") {
+		if(wp_id == "mozarthaus") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/w/index.php?title=Mozarthaus_Vienna" target="new"><h5>Mozarthaus Vienna</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/mozarthaus.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/mozarthaus.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -149,9 +166,9 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 			
 		} 
-		else if(id == "cementary") {
+		else if(wp_id == "cementary") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Sankt_Marxer_Friedhof#Das_Mozartgrab" target="new"><h5>Mozart\'s Tomb</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/cemetery_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/cemetery_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -160,9 +177,9 @@ String test = "Geo-mapping-service";
 			searchForm.submit();
 			
 		}
-		else if(id == "burggarten") {
+		else if(wp_id == "burggarten") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Burggarten_%28Wien%29" target="new"><h5>Burggarten (Palmenhaus)</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/burggarten_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -170,9 +187,9 @@ String test = "Geo-mapping-service";
 			searchTerms.value = "Wien 1, Mozart-Denkmal";
 			searchForm.submit();
 		}
-		else if(id == "stadtpark") {
+		else if(wp_id == "stadtpark") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Kursalon_H%C3%BCbner" target="new"><h5>Kursalon Hübner</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/stadtpark_main.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -180,9 +197,9 @@ String test = "Geo-mapping-service";
 			searchTerms.value = "Wien 1, Stadtpark";
 			searchForm.submit();
 		}
-		else if(id == "stephens_cathedral") {
+		else if(wp_id == "stephens_cathedral") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Constanze_Mozart" target="new"><h5>Constanze Mozart</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/constanze.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/constanze.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -190,9 +207,9 @@ String test = "Geo-mapping-service";
 			searchTerms.value = "Stephansdom";
 			searchForm.submit();
 		}
-		else if(id == "rauhensteingasse") {
+		else if(wp_id == "rauhensteingasse") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Steffl_%28Kaufhaus%29" target="new"><h5>Steffl Store (Kaufhaus Steffl)</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/steffl.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/steffl.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -200,9 +217,9 @@ String test = "Geo-mapping-service";
 			searchTerms.value = "Rauhensteingasse Mozart";
 			searchForm.submit();
 		}
-		else if(id == "theatermuseum") {
+		else if(wp_id == "theatermuseum") {
 			details.innerHTML = '<a href="http://de.wikipedia.org/wiki/Palais_Lobkowitz_%28Wien%29#Geschichte" target="new"><h5>Lobkowitz Palace (1760)</h5></a>';
-			details.innerHTML += '<img src="http://62.218.164.177:8080/geomapping/img/palais_lobkowitz_1760.jpg" valign="top" width="300" class="annotatable" alt="anno">';
+			details.innerHTML += '<img src="./img/palais_lobkowitz_1760.jpg" valign="top" width="300" class="annotatable" alt="anno">';
 			ifr = document.getElementById("iframe-carousel");
 			ifrDoc = ifr.contentDocument;
 			searchForm = ifrDoc.getElementById("search_form");
@@ -215,7 +232,7 @@ String test = "Geo-mapping-service";
 	google.maps.event.addDomListener(window, 'load', initialize);
 	anno.addPlugin('Parse', { app_id: '5eTcrECtbp3iy0qt6Qpin7LImq8UtoGmfQ0LMXc3', js_key: 'YlDGi93ebuyRBpGAmnTafD3pE5VjDo4XzeV3Csum', debug: 'true' });
   	anno.addPlugin('SemanticTagging', { endpoint_url: 'http://samos.mminf.univie.ac.at:8080/wikipediaminer' });
-	//semanticPlugitInitialized = true;
+	semanticPlugitInitialized = true;
 	
 </script>
 
