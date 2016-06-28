@@ -47,6 +47,7 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 	String cimecIdsFilename = "/selection/input/tags/cimec_ids.csv";
 	String onbIdsFilename = "/selection/input/tags/onb_ids.csv";
 	String e280IdsFilename = "/selection/input/tags/e280_ids.csv";
+	String e280SetFilename = "/selection/input/tags/e280_dataset.csv";
 
 	
 	// String colectionThumbnailsFilename =
@@ -150,6 +151,32 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 		final File downloadFolder = new File("/tmp/eucreative/e280/");
 		ThumbnailDownloader downloader = new ThumbnailDownloader(downloadFolder);
 		downloader.downloadImages(thumbnailMap);
+	}
+	
+	@Test
+	public void buildEuropeana280Dataset() throws FileNotFoundException, IOException {
+		File e280MapFile= new File(getCollectionsCvsFolder(), e280IdsFilename);
+		File e280DatasetFile= new File(getCollectionsCvsFolder(), e280SetFilename);
+		Map<String, String> e280ThumbnailMap = readThumbnailsMap(e280MapFile);
+		
+		//read CultureCam dataset (V2) 
+		Map<String, String> ccThumbnailMap = readThumbnailsMap(getDataSetFile(false));
+		
+		for (String id : ccThumbnailMap.keySet()) {
+			if(e280ThumbnailMap.containsKey(id)){
+				System.out.println("removing dupplicated item in dataset: " + id);
+				e280ThumbnailMap.remove(id);
+			}
+		}
+
+		System.out.println("new dataset size: " + e280ThumbnailMap.size());
+		
+		DatasetDescriptor descriptor = new DatasetDescriptor("e280", "openreuse");
+		writeMapToCsvFile(descriptor, e280ThumbnailMap, e280DatasetFile, POLICY_OVERWRITE_FILE);
+		
+//		final File downloadFolder = new File("/tmp/eucreative/e280/");
+//		ThumbnailDownloader downloader = new ThumbnailDownloader(downloadFolder);
+//		downloader.downloadImages(thumbnailMap);
 	}
 	
 	//@Test
