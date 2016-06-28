@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import eu.europeana.api.client.dataset.DatasetDescriptor;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
@@ -47,7 +48,7 @@ public class CultureCamThumbnailMapsTest extends ThumbnailAccessorUtils implemen
 	}
 	
 	//@Test
-	public void buildSelectedCollections() throws MyEuropeanaApiException, IOException{
+	public void buildSelectedCollections() throws IOException, EuropeanaApiProblem{
 		File colSelectionCvsFile = new File(getCollectionsCvsFolder() + colSelectionFilename);
 		//we misuse the readThumbnailsMap as this is the same implementation as readCollectionsMap
 		DatasetDescriptor descriptor;

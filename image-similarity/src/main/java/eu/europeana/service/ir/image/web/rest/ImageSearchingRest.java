@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +20,6 @@ import eu.europeana.api2.web.model.json.ApiError;
 import eu.europeana.api2.web.model.json.abstracts.ApiResponse;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.api.ImageSearchingService;
-import eu.europeana.service.ir.image.domain.Tools;
 import eu.europeana.service.ir.image.exceptions.ImageSearchingException;
 import eu.europeana.service.ir.image.web.model.json.ImageSimilaritySearchResults;
 import eu.europeana.service.ir.image.web.model.json.SearchResultItem;

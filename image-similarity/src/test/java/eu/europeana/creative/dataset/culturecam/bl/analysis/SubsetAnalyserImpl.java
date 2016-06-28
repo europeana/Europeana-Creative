@@ -8,7 +8,6 @@ import it.cnr.isti.vir.file.FeaturesCollectorsArchive;
 import it.cnr.isti.vir.id.IDString;
 import it.cnr.isti.vir.id.IHasID;
 import it.cnr.isti.vir.readers.CoPhIRv2Reader;
-import it.cnr.isti.vir.similarity.knn.IntDouble;
 import it.cnr.isti.vir.similarity.knn.IntDoubleString;
 import it.cnr.isti.vir.similarity.metric.LireMetric;
 import it.cnr.isti.vir.similarity.metric.Metric;

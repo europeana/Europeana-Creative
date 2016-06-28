@@ -27,8 +27,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import net.semanticmetadata.lire.imageanalysis.LireFeature;
-
 /*
  * DominantColorLogic.java
  *
@@ -732,7 +730,8 @@ public class DominantColorLogic {
 		int ISize = imsize * dim;
 		for (count = 0; count < ISize; count += dim) {
 			i = (count / dim) % width; // width
-			j = (count / dim) / width; // height
+			//NOTE sergiu updated from width to height ... not sure if correct
+			j = (count / dim) / height; // height
 			float l1, u1, v1;
 			l1 = ColorData[count];
 			u1 = ColorData[count + 1];

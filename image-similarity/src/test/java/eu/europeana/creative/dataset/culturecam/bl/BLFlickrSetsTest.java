@@ -9,8 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.BeforeClass;
-
 import eu.europeana.api.client.EuropeanaApi2Client;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;

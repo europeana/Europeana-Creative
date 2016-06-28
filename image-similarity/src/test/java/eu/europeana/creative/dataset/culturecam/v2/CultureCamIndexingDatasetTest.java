@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.junit.Before;
 
-import eu.europeana.creative.dataset.design.DesignIndexingDatasetTest;
 import eu.europeana.creative.dataset.indexing.LocalImageIndexingTest;
 import eu.europeana.service.ir.image.api.ImageIndexingService;
 import eu.europeana.service.ir.image.api.SmkImageIndexingServiceImpl;

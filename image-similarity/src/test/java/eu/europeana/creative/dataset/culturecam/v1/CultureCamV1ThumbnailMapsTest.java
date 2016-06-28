@@ -1,19 +1,15 @@
 package eu.europeana.creative.dataset.culturecam.v1;
 
 import static org.junit.Assert.assertEquals;
-
 import it.cnr.isti.indexer.IndexHelper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,10 +24,7 @@ import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.model.EuropeanaApi2Results;
 import eu.europeana.api.client.model.search.EuropeanaApi2Item;
 import eu.europeana.api.client.model.search.parts.BaseAggregation;
-import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.search.query.Api2Query;
-import eu.europeana.api.client.search.query.EuropeanaQuery;
-import eu.europeana.api.client.search.query.EuropeanaQueryInterface;
 import eu.europeana.api.client.search.query.SubQuery;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
@@ -79,7 +72,7 @@ public class CultureCamV1ThumbnailMapsTest extends ThumbnailAccessorUtils implem
 	}
 	
 	//1@Test
-	public void buildSelectedCollections() throws MyEuropeanaApiException, IOException{
+	public void buildSelectedCollections() throws IOException, EuropeanaApiProblem{
 		File colSelectionCvsFile = new File(getCollectionsCvsFolder() + colSelectionFilename);
 		//we misuse the readThumbnailsMap as this is the same implementation as readCollectionsMap
 		DatasetDescriptor descriptor;

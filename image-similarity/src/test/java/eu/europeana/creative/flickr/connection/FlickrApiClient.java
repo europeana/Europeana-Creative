@@ -6,13 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,10 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
-import eu.europeana.api.client.connection.EuropeanaConnection;
 import eu.europeana.api.client.connection.HttpConnector;
 import eu.europeana.api.client.exception.TechnicalRuntimeException;
-import eu.europeana.api.client.model.ProvidersResponse;
 import eu.europeana.creative.flickr.om.FlickrSetResponse;
 
 public class FlickrApiClient {

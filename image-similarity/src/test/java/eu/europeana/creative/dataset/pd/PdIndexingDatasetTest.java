@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.junit.Before;
 
-import eu.europeana.creative.dataset.design.DesignIndexingDatasetTest;
 import eu.europeana.creative.dataset.indexing.LocalImageIndexingTest;
 import eu.europeana.service.ir.image.IRConfiguration;
 

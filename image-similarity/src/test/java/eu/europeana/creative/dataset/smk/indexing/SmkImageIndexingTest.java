@@ -5,7 +5,6 @@ import it.cnr.isti.indexer.IndexHelper;
 import it.cnr.isti.melampo.vir.exceptions.VIRException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 

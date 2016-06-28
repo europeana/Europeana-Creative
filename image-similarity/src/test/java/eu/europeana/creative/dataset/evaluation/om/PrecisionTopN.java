@@ -1,8 +1,5 @@
 package eu.europeana.creative.dataset.evaluation.om;
 
-import java.text.NumberFormat;
-
-import com.sun.xml.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
 
 public class PrecisionTopN {
 	private static String PRECISION_AT = "P@";

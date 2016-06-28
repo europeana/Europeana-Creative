@@ -5,14 +5,12 @@ import static org.junit.Assert.assertEquals;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -21,6 +19,8 @@ import org.junit.Test;
 
 import eu.europeana.api.client.MyEuropeanaClient;
 import eu.europeana.api.client.dataset.DatasetDescriptor;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
+import eu.europeana.api.client.exception.TechnicalRuntimeException;
 import eu.europeana.api.client.metadata.MetadataAccessor;
 import eu.europeana.api.client.model.search.CommonMetadata;
 import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
@@ -30,14 +30,12 @@ import eu.europeana.api.client.myeuropeana.thumbnails.ThumbnailFromTagsResponseA
 import eu.europeana.api.client.search.query.Api2QueryBuilder;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
-import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
 import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 import eu.europeana.creative.dataset.culturecam.input.SelectionDescriptionEnum;
 import eu.europeana.creative.dataset.culturecam.input.SelectionDescriptionImpl;
 import eu.europeana.creative.dataset.culturecam.v2.download.CimecThumbnailDownloader;
-import eu.europeana.creative.dataset.culturecam.v2.download.OnbImageDownloader;
 import eu.europeana.service.ir.image.IRConfiguration;
 import eu.europeana.service.ir.image.IRConfigurationImpl;
 
@@ -48,6 +46,7 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 	String tagSelectionFilename = "/selection/input/tags/new.csv";
 	String cimecIdsFilename = "/selection/input/tags/cimec_ids.csv";
 	String onbIdsFilename = "/selection/input/tags/onb_ids.csv";
+	String e280IdsFilename = "/selection/input/tags/e280_ids.csv";
 
 	
 	// String colectionThumbnailsFilename =
@@ -67,17 +66,54 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 	private String processingStep = null;
 	private boolean overwriteThumbnails = false;
 
-	final String IMAGE_FOLDER = "/app/eucreative/imagesimilarityhome/culturecam/image/";
+	final String IMAGE_FOLDER = "/app/eucreative/imagesimilarityhome/culturecam/image_e280/";
 
 	@Before
 	public void init() {
 		String dataset = "culturecam";
 		setDataset(dataset);
 	}
+	
+	@Test
+	public void buildEuropeana280Selection() throws IOException, TechnicalRuntimeException, EuropeanaApiProblem {
+			
+			Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
+			String query = "(PROVIDER:\"Europeana 280\" AND TYPE:IMAGE)";
+			
+			String e280Search = "http://www.europeana.eu/portal/search?query="+ URLEncoder.encode(query, "UTF8");
+			File file = new File(getCollectionsCvsFolder(), e280IdsFilename);
+			
+			//write open access
+			String searchUrl = 	e280Search + "&reusability=open";
+			Api2QueryInterface apiQuery = queryBuilder.buildQuery(searchUrl);
+			apiQuery.setProfile("rich");
+			MetadataAccessor ma = new MetadataAccessor(apiQuery, null);
+			Map<String, String> contentMap = ma.getContentMap(CommonMetadata.EDM_FIELD_PREVIEW, -1, -1, MetadataAccessor.ERROR_POLICY_CONTINUE);
+			
+			DatasetDescriptor descriptor = new DatasetDescriptor("e280", "open");
+					
+			writeMapToCsvFile(descriptor, contentMap, file, POLICY_OVERWRITE_FILE);
+			System.out.println("Items found in e280 open selection: " + contentMap.size());
+			System.out.println("Items written to file: " + file.getAbsolutePath());
+
+//			//write restricted access
+//			searchUrl = "(PROVIDER:\"Europeana 280\" AND TYPE:IMAGE AND (RIGHTS:*/by/*)";
+//			apiQuery = queryBuilder.buildQuery(searchUrl);
+//			apiQuery.setProfile("rich");
+//			ma = new MetadataAccessor(apiQuery, null);
+//			contentMap = ma.getContentMap(CommonMetadata.EDM_FIELD_PREVIEW, -1, -1, MetadataAccessor.ERROR_POLICY_CONTINUE);
+//			
+//			descriptor = new DatasetDescriptor("e280", "restricted");
+//					
+//			writeMapToCsvFile(descriptor, contentMap, file, POLICY_APPEND_TO_FILE);
+//			System.out.println("Items found in e280 restricted selection: " + contentMap.size());
+//			System.out.println("Items written to file: " + file.getAbsolutePath());
+
+		}
+
 
 	@Test
-	public void buildOnbSelection() throws MyEuropeanaApiException,
-				IOException {
+	public void buildOnbSelection() throws IOException, TechnicalRuntimeException, EuropeanaApiProblem {
 			
 			Api2QueryBuilder queryBuilder = new Api2QueryBuilder();
 			String portalUrl = "http://www.europeana.eu/portal/search.html?query=europeana_collectionName%3A9200388*&rows=24&start=193&qt=false";
@@ -102,10 +138,19 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 		Map<String, String> thumbnailMap = readThumbnailsMap(onbMapFile);
 		
 		final File downloadFolder = new File("/tmp/eucreative/onb/");
-		OnbImageDownloader downloader = new OnbImageDownloader(downloadFolder);
+		ThumbnailDownloader downloader = new ThumbnailDownloader(downloadFolder);
 		downloader.downloadImages(thumbnailMap);
 	}
 	
+	@Test
+	public void downloadE280Images() throws FileNotFoundException, IOException {
+		File e280MapFile= new File(getCollectionsCvsFolder(), e280IdsFilename);
+		Map<String, String> thumbnailMap = readThumbnailsMap(e280MapFile);
+		
+		final File downloadFolder = new File("/tmp/eucreative/e280/");
+		ThumbnailDownloader downloader = new ThumbnailDownloader(downloadFolder);
+		downloader.downloadImages(thumbnailMap);
+	}
 	
 	//@Test
 	public void buildNewTagSelection() throws MyEuropeanaApiException,

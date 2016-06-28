@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.europeana.creative.dataset.design.DesignIndexingDatasetTest;
 import eu.europeana.creative.dataset.indexing.LocalImageIndexingTest;
 
 public class CultureCamV1RemoveBadThumbnailsTest extends LocalImageIndexingTest{

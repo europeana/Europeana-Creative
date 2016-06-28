@@ -1,7 +1,5 @@
 package eu.europeana.creative.dataset.pd;
 
-import it.cnr.isti.vir.features.mpeg7.imageanalysis.ScalableColorPlusImpl;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,10 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +23,6 @@ import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.model.EuropeanaApi2Results;
 import eu.europeana.api.client.model.search.Facet;
 import eu.europeana.api.client.model.search.FacetField;
-import eu.europeana.api.client.myeuropeana.exception.MyEuropeanaApiException;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
 import eu.europeana.api.client.thumbnails.download.ThumbnailDownloader;
 import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing;
@@ -97,7 +92,7 @@ public class PdThumbnailMapsTest extends ThumbnailAccessorUtils implements IRTes
 	
 	
 	//@Test
-	public void buildSelectedCollections() throws MyEuropeanaApiException, IOException{
+	public void buildSelectedCollections() throws IOException, EuropeanaApiProblem{
 		File selectedPdCollections = new File(getCollectionsCvsFolder() + selectedCollectionsInputFilename);
 		//we misuse the readThumbnailsMap as this is the same implementation as readCollectionsMap
 		

@@ -149,6 +149,7 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 
 		final int k = 50;
 		final int tries = 40;
+		@SuppressWarnings("rawtypes")
 		MultipleKNNPQueueID multipleKnnQueue = new MultipleKNNPQueueID(
 				featuresCollection, // Collection queryColl,
 				k, // Integer k,
@@ -166,6 +167,7 @@ public class DesignV1PivotsFeaturesArchiveTest extends ThumbnailAccessorUtils {
 		System.out.println(multipleKnnQueue.getAvgIntDist());
 
 		// System.out.println(multipleKnnQueue.getAvgLastDist());
+		@SuppressWarnings("rawtypes")
 		ISimilarityResults[] results = multipleKnnQueue.getResults();
 		// multipleKnnQueue.writeResultsIDs();
 

@@ -11,7 +11,6 @@ import eu.europeana.api.client.thumbnails.processing.LargeThumbnailsetProcessing
 import eu.europeana.creative.dataset.BaseCreativeDatasetUtil;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 import eu.europeana.service.ir.image.IRConfiguration;
-import eu.europeana.service.ir.image.IRConfigurationImpl;
 import eu.europeana.service.ir.image.api.ImageIndexingService;
 import eu.europeana.service.ir.image.api.ImageIndexingServiceImpl;
 

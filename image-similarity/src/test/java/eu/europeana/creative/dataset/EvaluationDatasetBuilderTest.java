@@ -15,6 +15,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import eu.europeana.api.client.dataset.DatasetDescriptor;
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.search.query.Api2QueryInterface;
 import eu.europeana.api.client.thumbnails.ThumbnailsAccessor;
 import eu.europeana.api.client.thumbnails.ThumbnailsForCollectionAccessorTest;
@@ -60,7 +61,7 @@ public class EvaluationDatasetBuilderTest extends
 	private ImageSearchingService imageSearchingService;
 
 	// @Test
-	public void createDemoDataset() throws IOException {
+	public void createDemoDataset() throws IOException, EuropeanaApiProblem {
 		
 		setDataset(DATASET_DEMO);
 		

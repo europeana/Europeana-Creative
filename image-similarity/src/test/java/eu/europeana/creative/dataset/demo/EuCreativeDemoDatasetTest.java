@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 
 import org.junit.Test;
 
+import eu.europeana.api.client.exception.EuropeanaApiProblem;
 import eu.europeana.api.client.thumbnails.ThumbnailAccessorUtils;
 import eu.europeana.creative.dataset.IRTestConfigurations;
 
@@ -42,7 +43,7 @@ public class EuCreativeDemoDatasetTest extends ThumbnailAccessorUtils implements
 
 	// @Test
 	public void createGallicaSubset() throws MalformedURLException,
-			UnsupportedEncodingException, IOException {
+			UnsupportedEncodingException, IOException, EuropeanaApiProblem {
 
 		// Gallica:http://www.europeana.eu/portal/search.html?query=*:*&qf=DATA_PROVIDER:%22French+National+Library+-+Biblioth%C3%A8que+Nationale+de+France%22&qf=TYPE:IMAGE&rows=24
 		// assertEquals(246683, objects1);
@@ -52,7 +53,7 @@ public class EuCreativeDemoDatasetTest extends ThumbnailAccessorUtils implements
 
 	// @Test
 	public void createAmsterdamMuseumSubset() throws MalformedURLException,
-			UnsupportedEncodingException, IOException {
+			UnsupportedEncodingException, IOException, EuropeanaApiProblem {
 
 		// Amsterdam
 		// museum:http://www.europeana.eu/portal/search.html?query=*:*&qf=TYPE:IMAGE&qf=PROVIDER:%22Digitale+Collectie%22&qf=DATA_PROVIDER:%22Amsterdam+Museum%22&rows=12
@@ -67,7 +68,7 @@ public class EuCreativeDemoDatasetTest extends ThumbnailAccessorUtils implements
 
 	@Test
 	public void createKbSubset() throws MalformedURLException,
-			UnsupportedEncodingException, IOException {
+			UnsupportedEncodingException, IOException, EuropeanaApiProblem {
 
 		// National Library of
 		// Netherlands:http://www.europeana.eu/portal/search.html?query=*:*&qf=TYPE:IMAGE&qf=DATA_PROVIDER:%22National+Library+of+the+Netherlands+-+Koninklijke+Bibliotheek%22&rows=12
@@ -77,7 +78,7 @@ public class EuCreativeDemoDatasetTest extends ThumbnailAccessorUtils implements
 
 	@Test
 	public void createOnbSubset() throws MalformedURLException,
-			UnsupportedEncodingException, IOException {
+			UnsupportedEncodingException, IOException, EuropeanaApiProblem {
 
 		// Austrian National
 		// Library:http://www.europeana.eu/portal/search.html?query=*:*&qf=TYPE:IMAGE&qf=DATA_PROVIDER:%22%C3%96sterreichische+Nationalbibliothek+-+Austrian+National+Library%22&rows=12
@@ -88,7 +89,7 @@ public class EuCreativeDemoDatasetTest extends ThumbnailAccessorUtils implements
 
 	@Test
 	public void createCulturitaliaSubset() throws MalformedURLException,
-			UnsupportedEncodingException, IOException {
+			UnsupportedEncodingException, IOException, EuropeanaApiProblem {
 
 		// Progetto Art
 		// Past:http://www.europeana.eu/portal/search.html?query=*%3A*&start=13&rows=48&qf=TYPE%3AIMAGE&qf=DATA_PROVIDER%3A%22Progetto+ArtPast-+CulturaItalia%22

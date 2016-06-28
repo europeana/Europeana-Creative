@@ -158,6 +158,7 @@ public class CultureCamV2PivotsTest extends ThumbnailAccessorUtils {
 		final int k = 350;
 		final int tries = 13;
 		System.out.println("Starting pivot order generation! Pivot archive size = " + featuresCollection.size());
+		@SuppressWarnings("rawtypes")
 		MultipleKNNPQueueID multipleKnnQueue = new MultipleKNNPQueueID(
 				featuresCollection, // Collection queryColl,
 				k, // Integer k,
@@ -175,6 +176,7 @@ public class CultureCamV2PivotsTest extends ThumbnailAccessorUtils {
 		System.out.println(multipleKnnQueue.getAvgIntDist());
 
 		// System.out.println(multipleKnnQueue.getAvgLastDist());
+		@SuppressWarnings("rawtypes")
 		ISimilarityResults[] results = multipleKnnQueue.getResults();
 		// multipleKnnQueue.writeResultsIDs();
 

@@ -1,7 +1,6 @@
 package eu.europeana.service.ir.image.api;
 
 import it.cnr.isti.vir.features.FeatureClassCollector;
-import it.cnr.isti.vir.features.lire.vd.CcDominantColor;
 import it.cnr.isti.vir.features.lire.vd.LireColorLayout;
 import it.cnr.isti.vir.features.lire.vd.LireEdgeHistogram;
 import it.cnr.isti.vir.features.lire.vd.LireScalableColor;

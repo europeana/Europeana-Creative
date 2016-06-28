@@ -7,7 +7,6 @@ import it.cnr.isti.melampo.vir.exceptions.VIRException;
 import it.cnr.isti.vir.features.mpeg7.LireObject;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;

@@ -17,8 +17,6 @@ import javax.imageio.ImageIO;
 
 import net.semanticmetadata.lire.imageanalysis.LireFeature;
 import net.semanticmetadata.lire.imageanalysis.ScalableColor;
-import net.semanticmetadata.lire.utils.ConversionUtils;
-import net.semanticmetadata.lire.utils.SerializationUtils;
 
 public class DominantColor extends ScalableColor {
 

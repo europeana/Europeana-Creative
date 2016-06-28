@@ -91,7 +91,8 @@ public class CultureCamPivotsFeaturesArchiveTest extends ThumbnailAccessorUtils 
 		                            	  7311, 310, 270, 286, 91, 4352, 5522, 11203, 8447, 10209, 3232, 
 		                            	  886, 3209, 8915, 8540, 344, 361, 277, 25, 3897, 77, 10994, 11249};
 
-		//pivotManager.generateLireObjectPivots(order);
+//		
+//		pivotManager.generateLireObjectPivots(order);
 
 		checkTopNPivots();
 
@@ -154,6 +155,7 @@ public class CultureCamPivotsFeaturesArchiveTest extends ThumbnailAccessorUtils 
 
 		final int k = 100;
 		final int tries = 30;
+		@SuppressWarnings("rawtypes")
 		MultipleKNNPQueueID multipleKnnQueue = new MultipleKNNPQueueID(
 				featuresCollection, // Collection queryColl,
 				k, // Integer k,
@@ -171,6 +173,7 @@ public class CultureCamPivotsFeaturesArchiveTest extends ThumbnailAccessorUtils 
 		System.out.println(multipleKnnQueue.getAvgIntDist());
 
 		// System.out.println(multipleKnnQueue.getAvgLastDist());
+		@SuppressWarnings("rawtypes")
 		ISimilarityResults[] results = multipleKnnQueue.getResults();
 		// multipleKnnQueue.writeResultsIDs();
 

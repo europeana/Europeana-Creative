@@ -3,7 +3,6 @@ package eu.europeana.creative.dataset.culturecam.bl;
 import it.cnr.isti.feature.extraction.FeatureExtractionException;
 import it.cnr.isti.vir.features.IFeaturesCollector;
 import it.cnr.isti.vir.features.mpeg7.imageanalysis.ScalableColorPlusImpl.ImageType;
-import it.cnr.isti.vir.similarity.knn.IntDouble;
 import it.cnr.isti.vir.similarity.knn.IntDoubleString;
 import it.cnr.isti.vir.similarity.metric.LireMetric;
 

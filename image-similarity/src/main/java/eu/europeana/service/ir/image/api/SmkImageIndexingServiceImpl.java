@@ -6,13 +6,9 @@ import it.cnr.isti.vir.features.lire.vd.CcDominantColor;
 import it.cnr.isti.vir.features.lire.vd.LireColorLayout;
 import it.cnr.isti.vir.features.lire.vd.LireEdgeHistogram;
 import it.cnr.isti.vir.features.lire.vd.LireScalableColor;
-import it.cnr.isti.vir.file.FeaturesCollectorsArchive;
 import it.cnr.isti.vir.readers.CoPhIRv2Reader;
-import it.cnr.isti.vir.similarity.metric.LireMetric;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.xml.stream.FactoryConfigurationError;
 

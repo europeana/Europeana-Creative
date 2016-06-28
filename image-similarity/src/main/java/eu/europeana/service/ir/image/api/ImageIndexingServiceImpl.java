@@ -332,7 +332,12 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 
 		ThumbnailsForCollectionAccessor tfca = new ThumbnailsForCollectionAccessor(
 				collectionName);
-		Map<String, String> thumbnails = tfca.getThumbnailsForCollection(0, -1, ThumbnailsAccessor.ERROR_POLICY_RETHROW);
+		Map<String, String> thumbnails;
+		try {
+			thumbnails = tfca.getThumbnailsForCollection(0, -1, ThumbnailsAccessor.ERROR_POLICY_RETHROW);
+		} catch (Throwable th) {
+			throw new ImageIndexingException("Cannot access thumbnails map!", th);
+		}
 		return insertCollectionByUrls(getDataset(), thumbnails);
 	}
 
