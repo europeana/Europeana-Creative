@@ -688,4 +688,8 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 	public void setProcessingStep(String processingStep) {
 		this.processingStep = processingStep;
 	}
+	
+	protected File getImageFile(String id) {
+		return getConfig().getImageFile(getDataset(), id);
+	}
 }

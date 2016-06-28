@@ -510,4 +510,8 @@ public class CultureCamV1ThumbnailMapsTest extends ThumbnailAccessorUtils implem
 			return imageSearchingService;
 		}
 
+		protected File getImageFile(String id) {
+			return getConfig().getImageFile(getDataset(), id);
+		}
+
 }

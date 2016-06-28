@@ -201,24 +201,36 @@ public class SmkThumbnailMapsTest extends ThumbnailAccessorUtils implements IRTe
 //	}
 	
 	
-	@Test
+	//@Test
 	public void copyThumbnails() throws FileNotFoundException, IOException{
+		//setDataset("culturecam");
 		File datasetFile = getDataSetFile(false);
 		Map<String, String> thumbnailMap = readThumbnailsMap(datasetFile);
 		File imageFile;
-		File destFile;
+		File destFile = null;
+		int cnt = 0;
 		for (String id : thumbnailMap.keySet()) {
 			System.out.println("copying image with id: " + id);
-			imageFile = getConfig().getImageFile(getDataset(), id);
+			imageFile = getImageFile(id);
 			if(!imageFile.exists())
 				System.out.println("Error: file not found + " + imageFile.getCanonicalPath());
 			else{
 				destFile = new File(imageFile.getPath().replaceFirst("app", "inst"));
 				copyFile(imageFile, destFile);
+				cnt++;
 			}
 				
 		}
+		String parentFolder = null;
+		if(destFile != null)
+			parentFolder = destFile.getParentFile().getParentFile().getPath();
 		
+		System.out.println("Successfully copied: " + cnt + " files to folder: " + parentFolder);
+	}
+
+
+	protected File getImageFile(String id) {
+		return getConfig().getImageFile(getDataset(), id);
 	}
 	
 	

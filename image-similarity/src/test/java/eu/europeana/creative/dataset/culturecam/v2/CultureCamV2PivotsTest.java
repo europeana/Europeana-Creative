@@ -211,5 +211,9 @@ public class CultureCamV2PivotsTest extends ThumbnailAccessorUtils {
 		//public Collection<IFeaturesCollector_Labeled_HasID> getFCs(FeaturesCollectorsArchives archive) throws ArchiveException;
 
 	}
+	
+	protected File getImageFile(String id) {
+		return pivotManager.getConfiguration().getImageFile(getDataset(), id);
+	}
 
 }
