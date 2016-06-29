@@ -17,7 +17,7 @@ import eu.europeana.service.ir.image.api.ImageIndexingServiceImpl;
 public class LocalImageIndexingTest extends
 		BaseCreativeDatasetUtil implements IRTestConfigurations {
 
-	private static int blockSize=-2;
+	protected static int blockSize=-2;
 	private static int limit=-2;
 	private static int start=-2;
 	private static String paramDataset=null;
@@ -68,12 +68,13 @@ public class LocalImageIndexingTest extends
 		File datasetFile = getDatasetFileToIndex();
 		if(datasetFile == null || !datasetFile.exists())
 			System.out.println("Skip test missing file: " + datasetFile);
-		else
+		else {
 			updateIndex(datasetFile, false);
+		}
 		
 	}
 
-	
+
 	/**
 	 * This method should be enabled for testing in subclasses. By default the indexThumbnails is marked as testcase 
 	 * @throws FileNotFoundException

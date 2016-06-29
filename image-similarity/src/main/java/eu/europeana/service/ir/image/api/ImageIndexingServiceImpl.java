@@ -266,7 +266,7 @@ public class ImageIndexingServiceImpl implements ImageIndexingService {
 		//perform feature extraction
 		try {
 			imgFeatures = img2Features.extractFeatures(imageObj);
-		} catch (FeatureExtractionException e) {
+		} catch (Exception e) {
 			throw new ImageIndexingException(
 					"Cannot extract features from input stream. docId" + docID, e);
 		}
