@@ -67,7 +67,7 @@ public class CultureCamV2ThumbnailMapsTest extends ThumbnailAccessorUtils
 	private String processingStep = null;
 	private boolean overwriteThumbnails = false;
 
-	final String IMAGE_FOLDER = "/app/eucreative/imagesimilarityhome/culturecam/image_e280/";
+	final String IMAGE_FOLDER = "/app/eucreative/imagesimilarityhome/culturecam/";
 
 	@Before
 	public void init() {
